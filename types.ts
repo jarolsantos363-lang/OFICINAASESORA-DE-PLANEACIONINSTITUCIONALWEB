@@ -27,6 +27,7 @@ export enum VerificationStatus {
 export interface VerificationItem {
   name: string;
   status: VerificationStatus;
+  value?: string | number;
 }
 
 export interface ActivityTrackingItem {
