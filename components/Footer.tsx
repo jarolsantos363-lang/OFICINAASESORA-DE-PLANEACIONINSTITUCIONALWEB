@@ -1,6 +1,16 @@
+
 import React from 'react';
 
-const Footer: React.FC = () => {
+interface FooterProps {
+    onGoHome: () => void;
+}
+
+const Footer: React.FC<FooterProps> = ({ onGoHome }) => {
+    const handleHomeClick = (event: React.MouseEvent<HTMLAnchorElement>) => {
+        event.preventDefault();
+        onGoHome();
+    };
+
     return (
         <footer className="bg-black/40 backdrop-blur-sm border-t border-white/10 mt-16">
             <div className="container mx-auto px-6 py-12">
@@ -13,16 +23,7 @@ const Footer: React.FC = () => {
                         <h3 className="text-white font-semibold tracking-wide">Enlaces Rápidos</h3>
                         <ul className="mt-4 space-y-2">
                             <li>
-                                <a href="#top" className="text-gray-400 hover:text-lime-400 transition-colors">Inicio</a>
-                            </li>
-                             <li>
-                                <a href="#mission-vision" className="text-gray-400 hover:text-lime-400 transition-colors">Misión y Visión</a>
-                            </li>
-                            <li>
-                                <a href="#planning" className="text-gray-400 hover:text-lime-400 transition-colors">Instrumentos de Planeación</a>
-                            </li>
-                            <li>
-                                <a href="#documentation" className="text-gray-400 hover:text-lime-400 transition-colors">Verificación de Documentación</a>
+                                <a href="#top" onClick={handleHomeClick} className="text-gray-400 hover:text-lime-400 transition-colors">Inicio</a>
                             </li>
                         </ul>
                     </div>

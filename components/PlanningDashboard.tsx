@@ -1,7 +1,6 @@
 
 import React from 'react';
-import { MENSUAL_DATA, TRIMESTRAL_DATA, CUATRIMESTRAL_DATA, SEMESTRAL_DATA, ANUAL_DATA } from '../constants';
-import { Plan } from '../types';
+import { ProcessData } from '../types';
 import { ProgressCard } from './ProgressCard';
 
 interface SectionProps {
@@ -19,38 +18,66 @@ const Section: React.FC<SectionProps> = ({ title, children, gridCols = 'lg:grid-
     </div>
 );
 
+interface PlanningDashboardProps {
+  data: ProcessData['planning'];
+}
 
-const PlanningDashboard: React.FC = () => {
+const PlanningDashboard: React.FC<PlanningDashboardProps> = ({ data }) => {
+  const { mensual, trimestral, cuatrimestral, semestral, anual } = data;
+
+  const hasData = [mensual, trimestral, cuatrimestral, semestral, anual].some(arr => arr.length > 0);
+
+  if (!hasData) {
+    return (
+      <section className="my-8">
+        <h2 className="text-3xl font-bold mb-8">Instrumentos de Planeación</h2>
+        <div className="bg-gray-900 rounded-xl p-8 text-center border border-gray-800">
+            <p className="text-gray-400">No hay datos de planeación para este proceso.</p>
+        </div>
+      </section>
+    );
+  }
+
   return (
     <section className="my-8">
-      <h2 className="text-4xl font-bold text-center mb-2">Instrumentos de Planeación</h2>
-      <p className="text-center text-gray-300 mb-12 max-w-2xl mx-auto">Visualización interactiva del progreso de las actividades planificadas para el año 2025.</p>
+      <h2 className="text-3xl font-bold mb-8">Instrumentos de Planeación</h2>
       
-      <Section title="Mensual">
-        {MENSUAL_DATA.map(plan => <ProgressCard key={plan.title} plan={plan} />)}
-      </Section>
+      {mensual.length > 0 && (
+        <Section title="Mensual">
+          {mensual.map(plan => <ProgressCard key={plan.title} plan={plan} />)}
+        </Section>
+      )}
       
-      <div className="grid grid-cols-1 xl:grid-cols-2 gap-x-8">
-        <div>
-            <Section title="Trimestral" gridCols="lg:grid-cols-1">
-                {TRIMESTRAL_DATA.map(plan => <ProgressCard key={plan.title} plan={plan} />)}
-            </Section>
-            
-            <Section title="Semestral" gridCols="lg:grid-cols-1">
-                {SEMESTRAL_DATA.map(plan => <ProgressCard key={plan.title} plan={plan} />)}
-            </Section>
+      {(trimestral.length > 0 || semestral.length > 0 || cuatrimestral.length > 0) && (
+        <div className="grid grid-cols-1 xl:grid-cols-2 gap-x-8">
+            <div>
+                {trimestral.length > 0 && (
+                    <Section title="Trimestral" gridCols="lg:grid-cols-1">
+                        {trimestral.map(plan => <ProgressCard key={plan.title} plan={plan} />)}
+                    </Section>
+                )}
+                
+                {semestral.length > 0 && (
+                    <Section title="Semestral" gridCols="lg:grid-cols-1">
+                        {semestral.map(plan => <ProgressCard key={plan.title} plan={plan} />)}
+                    </Section>
+                )}
+            </div>
+            <div>
+                {cuatrimestral.length > 0 && (
+                    <Section title="Cuatrimestral" gridCols="lg:grid-cols-1">
+                        {cuatrimestral.map(plan => <ProgressCard key={plan.title} plan={plan} />)}
+                    </Section>
+                )}
+            </div>
         </div>
-        <div>
-            <Section title="Cuatrimestral" gridCols="lg:grid-cols-1">
-                {CUATRIMESTRAL_DATA.map(plan => <ProgressCard key={plan.title} plan={plan} />)}
+      )}
+
+       {anual.length > 0 && (
+            <Section title="Anual" gridCols="lg:grid-cols-3">
+                {anual.map(plan => <ProgressCard key={plan.title} plan={plan} />)}
             </Section>
-        </div>
-      </div>
-
-       <Section title="Anual" gridCols="lg:grid-cols-3">
-            {ANUAL_DATA.map(plan => <ProgressCard key={plan.title} plan={plan} />)}
-       </Section>
-
+       )}
     </section>
   );
 };

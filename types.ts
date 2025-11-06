@@ -29,4 +29,23 @@ export interface VerificationItem {
   status: VerificationStatus;
 }
 
-export type ActiveView = 'planning' | 'documentation';
+export interface ActivityTrackingItem {
+  name: string;
+  months: boolean[]; // 12 months, true for completed, false for pending
+}
+
+export interface ProcessData {
+  planning: {
+    mensual: Plan[];
+    trimestral: Plan[];
+    cuatrimestral: Plan[];
+    semestral: Plan[];
+    anual: Plan[];
+  };
+  documentation: VerificationItem[];
+  tracking: ActivityTrackingItem[];
+}
+
+export interface AllProcessData {
+  [key: string]: ProcessData;
+}
