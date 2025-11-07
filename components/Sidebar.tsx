@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { strategicProcesses, misionalProcesses, supportProcesses, evaluationProcesses } from '../constants';
 import { ChevronUp } from './icons/ChevronUp';
+import { EyeOffIcon } from './icons/EyeOffIcon';
 
 interface SidebarProps {
     selectedProcess: string;
     onSelectProcess: (process: string) => void;
+    onHideMenu: () => void;
 }
 
 interface AccordionSectionProps {
@@ -44,7 +46,7 @@ const AccordionSection: React.FC<AccordionSectionProps> = ({ title, processes, s
 };
 
 
-const Sidebar: React.FC<SidebarProps> = ({ selectedProcess, onSelectProcess }) => {
+const Sidebar: React.FC<SidebarProps> = ({ selectedProcess, onSelectProcess, onHideMenu }) => {
     const [openSection, setOpenSection] = useState<string | null>(null);
 
     const sections = [
@@ -66,9 +68,11 @@ const Sidebar: React.FC<SidebarProps> = ({ selectedProcess, onSelectProcess }) =
     };
 
     return (
-        <div className="bg-gray-900/70 backdrop-blur-sm rounded-xl p-4 border border-gray-800 sticky top-28">
-            <h3 className="text-xl font-bold mb-4 px-2">Seleccionar Proceso</h3>
-            <div className="space-y-1">
+        <div className="bg-gray-900/70 backdrop-blur-sm rounded-xl border border-gray-800 sticky top-28 h-[calc(100vh-8rem)] flex flex-col">
+            <div className="p-4 flex-shrink-0">
+                <h3 className="text-xl font-bold mb-4 px-2">Seleccionar Proceso</h3>
+            </div>
+            <div className="flex-grow overflow-y-auto px-4">
                {sections.map((section) => (
                    <AccordionSection 
                         key={section.title}
@@ -80,6 +84,15 @@ const Sidebar: React.FC<SidebarProps> = ({ selectedProcess, onSelectProcess }) =
                         onToggle={() => handleToggle(section.title)}
                    />
                ))}
+            </div>
+            <div className="p-4 mt-auto border-t border-gray-800 flex-shrink-0">
+                <button
+                    onClick={onHideMenu}
+                    className="w-full flex items-center justify-center gap-2 px-4 py-2 text-sm font-semibold text-gray-300 bg-gray-700/50 hover:bg-gray-700 rounded-lg transition-colors"
+                >
+                    <EyeOffIcon className="w-5 h-5" />
+                    Ocultar Menú
+                </button>
             </div>
         </div>
     );

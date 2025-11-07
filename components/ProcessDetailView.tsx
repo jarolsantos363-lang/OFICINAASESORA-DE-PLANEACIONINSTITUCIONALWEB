@@ -1,0 +1,78 @@
+
+import React, { useState, useEffect } from 'react';
+import { ProcessData } from '../types';
+import ActivityTracking from './ActivityTracking';
+import PlanningDashboard from './PlanningDashboard';
+import DocumentationChecklist from './DocumentationChecklist';
+import DevelopmentPlanGoals from './DevelopmentPlanGoals';
+
+type ActiveTab = 'planning' | 'documentation' | 'goals';
+
+interface ProcessDetailViewProps {
+  processData: ProcessData;
+  processName: string;
+}
+
+const ProcessDetailView: React.FC<ProcessDetailViewProps> = ({ processData, processName }) => {
+    const [activeTab, setActiveTab] = useState<ActiveTab>('planning');
+    
+    const hasDevelopmentGoals = processData.developmentPlanGoals && processData.developmentPlanGoals.length > 0;
+    const hasDocumentation = processData.documentation && processData.documentation.length > 0;
+
+    useEffect(() => {
+        if (activeTab === 'goals' && !hasDevelopmentGoals) {
+            setActiveTab('planning');
+        }
+         if (activeTab === 'documentation' && !hasDocumentation) {
+            setActiveTab('planning');
+        }
+    }, [processName, hasDevelopmentGoals, hasDocumentation, activeTab]);
+
+    return (
+        <div className="pt-6">
+            <div className="flex items-center justify-center flex-wrap gap-2 sm:gap-4 mb-8">
+                <button
+                  onClick={() => setActiveTab('planning')}
+                  className={`w-full sm:w-auto text-sm md:text-base flex-1 sm:flex-none px-4 sm:px-8 py-3 rounded-lg font-semibold transition-all duration-300 transform focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-black/50 focus:ring-blue-500 ${activeTab === 'planning' ? 'bg-blue-600 text-white shadow-lg scale-105' : 'bg-slate-800 text-gray-300 hover:bg-slate-700'}`}
+                >
+                  Instrumentos de Planeación
+                </button>
+                {hasDocumentation && (
+                    <button
+                        onClick={() => setActiveTab('documentation')}
+                        className={`w-full sm:w-auto text-sm md:text-base flex-1 sm:flex-none px-4 sm:px-8 py-3 rounded-lg font-semibold transition-all duration-300 transform focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-black/50 focus:ring-blue-500 ${activeTab === 'documentation' ? 'bg-blue-600 text-white shadow-lg scale-105' : 'bg-slate-800 text-gray-300 hover:bg-slate-700'}`}
+                    >
+                        Verificación de Documentación
+                    </button>
+                )}
+                {hasDevelopmentGoals && (
+                  <button
+                    onClick={() => setActiveTab('goals')}
+                    className={`w-full sm:w-auto text-sm md:text-base flex-1 sm:flex-none px-4 sm:px-8 py-3 rounded-lg font-semibold transition-all duration-300 transform focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-black/50 focus:ring-blue-500 ${activeTab === 'goals' ? 'bg-blue-600 text-white shadow-lg scale-105' : 'bg-slate-800 text-gray-300 hover:bg-slate-700'}`}
+                  >
+                    Metas de Plan de Desarrollo
+                  </button>
+                )}
+              </div>
+
+              {activeTab === 'planning' && (
+                <div className="animate-fade-in">
+                  <ActivityTracking data={processData.tracking} processName={processName} />
+                  <PlanningDashboard data={processData.planning} />
+                </div>
+              )}
+              {activeTab === 'documentation' && (
+                 <div className="animate-fade-in">
+                  <DocumentationChecklist data={processData.documentation} />
+                </div>
+              )}
+              {activeTab === 'goals' && (
+                 <div className="animate-fade-in">
+                  <DevelopmentPlanGoals data={processData.developmentPlanGoals} />
+                </div>
+              )}
+        </div>
+    );
+};
+
+export default ProcessDetailView;

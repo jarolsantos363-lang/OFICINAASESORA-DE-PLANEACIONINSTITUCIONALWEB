@@ -12,12 +12,7 @@ export const strategicProcesses = [
 export const misionalProcesses = [
   "Gestión de Operaciones Financieras",
   "Gestión de Proyectos de Promoción y Desarrollo",
-  "Alumbrado Público",
-  "Plazas de Mercado",
-  "Parques y Zonas Verdes",
-  "Relleno Sanitario",
-  "Gestión Cultural Panóptico",
-  "Atención al ciudadano"
+  "Operacion De Esquemas Empresariales",
 ];
 
 export const supportProcesses = [
@@ -34,22 +29,50 @@ export const evaluationProcesses = [
   "Evaluación Independiente"
 ];
 
+export const allProcessCategories = [
+    ...strategicProcesses,
+    ...misionalProcesses,
+    ...supportProcesses,
+    ...evaluationProcesses,
+];
+
+const defaultDocumentation = [
+    { name: "ACTUALIZACIÓN CARACTERIZACIÓN VIGENCIA 2025", status: VerificationStatus.PENDIENTE },
+    { name: "ACTUALIZACIÓN INDICADORES Feb-2025", status: VerificationStatus.PENDIENTE },
+    { name: "SEGUIMIENTO INDICADORES 1er TRIMESTRE", status: VerificationStatus.NO },
+    { name: "ACTUALIZACIÓN MATRIZ DE REQUISITOS LEGALES PRIMER SEMESTRE", status: VerificationStatus.NO },
+    { name: "ACTUALIZACIÓN DE FORMATOS", status: VerificationStatus.SI },
+    { name: "ACTUALIZACIÓN DE PROCEDIMIENTOS", status: VerificationStatus.NO },
+    { name: "ACTUALIZACION MATRIZ DE RIESGOS Y OPORTUNIDADES 2025", status: VerificationStatus.PENDIENTE },
+    { name: "PUBLICADO EN INTEGRA", status: VerificationStatus.SI }
+];
+
+
 const defaultData = {
     planning: {
-        mensual: [],
-        trimestral: [],
+        mensual: [
+            { title: "Reporte de Actividades Mensual", items: [], total: 0.0 }
+        ],
+        trimestral: [
+            { title: "Informe Trimestral de Gestión", items: [], total: 0.0 }
+        ],
         cuatrimestral: [],
-        semestral: [],
-        anual: [],
+        semestral: [
+            { title: "Evaluación Semestral de Objetivos", items: [], total: 0.0 }
+        ],
+        anual: [
+            { title: "Plan de Acción Anual", items: [], total: 0.0 }
+        ],
     },
-    documentation: [],
+    documentation: defaultDocumentation,
     tracking: [
         { name: "Plan de Acción", months: [false, false, false, false, false, false, false, false, false, false, false, false] },
         { name: "Presupuesto", months: [false, false, false, false, false, false, false, false, false, false, false, false] },
         { name: "Indicadores de Gestión", months: [false, false, false, false, false, false, false, false, false, false, false, false] },
         { name: "Plan de Mejoramiento", months: [false, false, false, false, false, false, false, false, false, false, false, false] },
         { name: "Matriz de Riesgos", months: [false, false, false, false, false, false, false, false, false, false, false, false] },
-    ]
+    ],
+    developmentPlanGoals: [],
 };
 
 export const ALL_PROCESS_DATA: AllProcessData = {
@@ -229,7 +252,27 @@ export const ALL_PROCESS_DATA: AllProcessData = {
             { name: "Indicadores de Gestión", months: [true, true, true, true, true, true, true, false, false, false, false, false] },
             { name: "Plan de Mejoramiento", months: [true, true, true, true, true, false, false, false, false, false, false, false] },
             { name: "Matriz de Riesgos", months: [true, true, true, true, false, false, false, false, false, false, false, false] },
-        ]
+        ],
+        developmentPlanGoals: [
+            {
+                producto: "3206002-Documentos de lineamientos técnicos",
+                metaProductoCuatrienio: 1,
+                meta2025Programado: 0,
+                meta2025Ejecutado: 0,
+            },
+            {
+                producto: "3206002-Documentos de lineamientos técnicos",
+                metaProductoCuatrienio: 1,
+                meta2025Programado: 0,
+                meta2025Ejecutado: 0,
+            },
+            {
+                producto: "4599018-Documentos de lineamientos técnicos realizados",
+                metaProductoCuatrienio: 4,
+                meta2025Programado: 2,
+                meta2025Ejecutado: 0,
+            },
+        ],
     },
     "Gestión Integral de Riesgos": {
         planning: {
@@ -256,8 +299,15 @@ export const ALL_PROCESS_DATA: AllProcessData = {
             { name: "Indicadores de Gestión", months: [true, true, true, true, true, true, true, true, true, false, false, false] },
             { name: "Plan de Mejoramiento", months: [true, false, false, false, false, false, false, false, false, false, false, false] },
             { name: "Matriz de Riesgos", months: [true, true, true, true, true, true, true, true, true, true, true, true] },
-        ]
+        ],
+        developmentPlanGoals: [],
     },
+    "Gestión del Conocimiento y la Innovación": defaultData,
+    "Gestión del SIG": defaultData,
+    "Comunicación y Participación Ciudadana": defaultData,
+    "Gestión Tecnológica": defaultData,
+    "Gestión de Operaciones Financieras": defaultData,
+    "Gestión de Proyectos de Promoción y Desarrollo": defaultData,
     "Gestión Humana": {
        planning: {
             mensual: [],
@@ -282,7 +332,66 @@ export const ALL_PROCESS_DATA: AllProcessData = {
             { name: "Indicadores de Gestión", months: [true, true, true, false, false, false, false, false, false, false, false, false] },
             { name: "Plan de Mejoramiento", months: [true, true, true, true, false, false, false, false, false, false, false, false] },
             { name: "Matriz de Riesgos", months: [true, true, false, false, false, false, false, false, false, false, false, false] },
-        ]
+        ],
+        developmentPlanGoals: [],
+    },
+    "Gestión Financiera": defaultData,
+    "Gestión Contractual": defaultData,
+    "Gestión Jurídica": defaultData,
+    "Gestión de Recursos Físicos": defaultData,
+    "Gestión Documental": defaultData,
+    "Gestión Control Disciplinario": defaultData,
+    "Evaluación Independiente": defaultData,
+    "Operacion De Esquemas Empresariales": {
+        planning: {
+            mensual: [],
+            trimestral: [],
+            cuatrimestral: [],
+            semestral: [],
+            anual: [
+                 {
+                    title: "Reporte General de Esquemas",
+                    items: [{ name: "ANUAL", status: PlanStatus.Missing, value: 0.0 }],
+                    total: 0.0,
+                },
+            ],
+        },
+        documentation: [
+            { name: "INFORME CONSOLIDADO DE OPERACIÓN 2025", status: VerificationStatus.PENDIENTE },
+            { name: "PLAN ESTRATÉGICO DE ESQUEMAS EMPRESARIALES", status: VerificationStatus.SI },
+            { name: "EVALUACIÓN DE DESEMPEÑO DE CONCESIONES", status: VerificationStatus.NO },
+        ],
+        tracking: defaultData.tracking,
+        developmentPlanGoals: [],
+        subProcesses: {
+            "Alumbrado Público": {
+                ...defaultData,
+                documentation: [
+                    { name: "CONTRATO DE CONCESIÓN VIGENTE", status: VerificationStatus.SI },
+                    { name: "INFORME DE EXPANSIÓN Y MODERNIZACIÓN", status: VerificationStatus.PENDIENTE },
+                    { name: "CERTIFICADO RETILAP", status: VerificationStatus.NO },
+                ],
+                developmentPlanGoals: [
+                    {
+                        producto: "2102013-Redes de alumbrado público mejoradas",
+                        metaProductoCuatrienio: 6523,
+                        meta2025Programado: 2174,
+                        meta2025Ejecutado: 1196,
+                    },
+                    {
+                        producto: "2102010-Redes de alumbrado público ampliadas",
+                        metaProductoCuatrienio: 300,
+                        meta2025Programado: 93,
+                        meta2025Ejecutado: 201,
+                    },
+                ],
+            },
+            "Plazas de Mercado": defaultData,
+            "Parques y Zonas Verdes": defaultData,
+            "Relleno Sanitario": defaultData,
+            "Gestión Cultural Panóptico": defaultData,
+            "Atención al ciudadano": defaultData,
+        },
     },
      "default": defaultData,
 }

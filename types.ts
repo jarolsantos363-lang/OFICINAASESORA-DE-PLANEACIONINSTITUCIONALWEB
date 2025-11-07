@@ -35,6 +35,13 @@ export interface ActivityTrackingItem {
   months: boolean[]; // 12 months, true for completed, false for pending
 }
 
+export interface DevelopmentPlanGoal {
+  producto: string;
+  metaProductoCuatrienio: number;
+  meta2025Programado: number;
+  meta2025Ejecutado: number;
+}
+
 export interface ProcessData {
   planning: {
     mensual: Plan[];
@@ -45,6 +52,8 @@ export interface ProcessData {
   };
   documentation: VerificationItem[];
   tracking: ActivityTrackingItem[];
+  developmentPlanGoals: DevelopmentPlanGoal[];
+  subProcesses?: { [key: string]: ProcessData };
 }
 
 export interface AllProcessData {
