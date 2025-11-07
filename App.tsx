@@ -2,10 +2,13 @@ import React, { useState } from 'react';
 import { ALL_PROCESS_DATA, allProcessCategories } from './constants';
 import HomePage from './components/HomePage';
 import Dashboard from './components/Dashboard';
+import { AllProcessData } from './types';
+import { fetchDataFromGoogleSheets } from './services/googleSheets';
 
 const App: React.FC = () => {
     const [selectedProcess, setSelectedProcess] = useState<string | null>(null);
     const [selectedSubProcess, setSelectedSubProcess] = useState<string | null>(null);
+    const [processData, setProcessData] = useState<AllProcessData>(ALL_PROCESS_DATA);
 
     const handleProcessSelect = (processName: string) => {
         setSelectedProcess(processName);
@@ -29,6 +32,11 @@ const App: React.FC = () => {
         } else {
             handleGoHome();
         }
+    };
+    
+    const handleUpdateData = async () => {
+        const newData = await fetchDataFromGoogleSheets();
+        setProcessData(newData);
     };
 
     // This is for the sidebar.
@@ -61,10 +69,10 @@ const App: React.FC = () => {
     };
     
     const { previousSubProcess, nextSubProcess } = (() => {
-        if (!selectedProcess || !selectedSubProcess || !ALL_PROCESS_DATA[selectedProcess]?.subProcesses) {
+        if (!selectedProcess || !selectedSubProcess || !processData[selectedProcess]?.subProcesses) {
             return { previousSubProcess: null, nextSubProcess: null };
         }
-        const subProcessNames = Object.keys(ALL_PROCESS_DATA[selectedProcess].subProcesses!);
+        const subProcessNames = Object.keys(processData[selectedProcess].subProcesses!);
         const currentIndex = subProcessNames.indexOf(selectedSubProcess);
         const previous = currentIndex > 0 ? subProcessNames[currentIndex - 1] : null;
         const next = currentIndex < subProcessNames.length - 1 ? subProcessNames[currentIndex + 1] : null;
@@ -88,7 +96,7 @@ const App: React.FC = () => {
         return <HomePage onProcessClick={handleProcessSelect} onGoHome={handleGoHome} />;
     }
 
-    const parentProcessData = ALL_PROCESS_DATA[selectedProcess] || ALL_PROCESS_DATA['default'];
+    const parentProcessData = processData[selectedProcess] || processData['default'];
     const isSubProcessView = !!(selectedSubProcess && parentProcessData.subProcesses?.[selectedSubProcess]);
 
     const currentProcessData = isSubProcessView
@@ -107,7 +115,6 @@ const App: React.FC = () => {
             currentProcessName={currentProcessName}
             processData={currentProcessData}
             onSelectProcess={handleDashboardProcessChange}
-            // FIX: The prop 'onGoHome' was being passed an undefined variable 'onGoHome'. It should be passed the 'handleGoHome' function.
             onGoHome={handleGoHome}
             onGoBack={handleGoBack}
             parentProcessName={isSubProcessView ? selectedProcess : undefined}
@@ -120,6 +127,7 @@ const App: React.FC = () => {
             nextSubProcess={nextSubProcess}
             onGoToPreviousSubProcess={handleGoToPreviousSubProcess}
             onGoToNextSubProcess={handleGoToNextSubProcess}
+            onUpdateData={handleUpdateData}
         />
     );
 };

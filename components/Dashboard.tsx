@@ -27,6 +27,7 @@ interface DashboardProps {
   nextSubProcess: string | null;
   onGoToPreviousSubProcess: () => void;
   onGoToNextSubProcess: () => void;
+  onUpdateData: () => Promise<void>;
 }
 
 const Dashboard: React.FC<DashboardProps> = ({ 
@@ -46,6 +47,7 @@ const Dashboard: React.FC<DashboardProps> = ({
   nextSubProcess,
   onGoToPreviousSubProcess,
   onGoToNextSubProcess,
+  onUpdateData,
 }) => {
   const [isSidebarVisible, setIsSidebarVisible] = useState(true);
   const [isUpdating, setIsUpdating] = useState(false);
@@ -55,15 +57,20 @@ const Dashboard: React.FC<DashboardProps> = ({
   
   const toggleSidebar = () => setIsSidebarVisible(v => !v);
   
-  const handleUpdateData = () => {
+  const handleUpdateData = async () => {
     setIsUpdating(true);
-    setTimeout(() => {
-      setIsUpdating(false);
-      setShowNotification(true);
-      setTimeout(() => {
-        setShowNotification(false);
-      }, 3000);
-    }, 1500);
+    try {
+        await onUpdateData();
+        setShowNotification(true);
+        setTimeout(() => {
+            setShowNotification(false);
+        }, 3000);
+    } catch (error) {
+        console.error("Failed to update data:", error);
+        // Here you could show an error notification
+    } finally {
+        setIsUpdating(false);
+    }
   };
 
   return (
