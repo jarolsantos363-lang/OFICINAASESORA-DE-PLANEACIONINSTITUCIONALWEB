@@ -128,7 +128,11 @@ const Dashboard: React.FC<DashboardProps> = ({
               </div>
               
               {processData.subProcesses ? (
-                <CompositeProcessDashboard processData={processData} onSelectSubProcess={onSelectSubProcess} />
+                <CompositeProcessDashboard
+                  processData={processData}
+                  onSelectSubProcess={onSelectSubProcess}
+                  processName={currentProcessName}
+                />
               ) : (
                 <ProcessDetailView processData={processData} processName={currentProcessName} />
               )}

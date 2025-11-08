@@ -281,7 +281,7 @@ export const ALL_PROCESS_DATA: AllProcessData = {
             cuatrimestral: [],
             semestral: [
                 {
-                    title: "Matriz de riesgos y oportunidades",
+                    title: "Matriz de riscos y oportunidades",
                     items: [ { name: "1 SEMESTRE", status: PlanStatus.Completed, value: 50 }, { name: "2 SEMESTRE", status: PlanStatus.NotStarted, value: 0 }, ],
                     total: 50
                 },
@@ -307,7 +307,88 @@ export const ALL_PROCESS_DATA: AllProcessData = {
     "Comunicación y Participación Ciudadana": defaultData,
     "Gestión Tecnológica": defaultData,
     "Gestión de Operaciones Financieras": defaultData,
-    "Gestión de Proyectos de Promoción y Desarrollo": defaultData,
+    "Gestión de Proyectos de Promoción y Desarrollo": {
+        planning: {
+            mensual: [],
+            trimestral: [
+                {
+                    title: "Seguimiento Contratos de Obra",
+                    items: [
+                        { name: "1 TRIMESTRE", status: PlanStatus.Completed, value: 33.1 },
+                        { name: "2 TRIMESTRE", status: PlanStatus.Completed, value: 33.1 },
+                        { name: "3 TRIMESTRE", status: PlanStatus.NotStarted, value: 0.0 },
+                    ],
+                    total: 66.2,
+                },
+            ],
+            cuatrimestral: [],
+            semestral: [],
+            anual: [
+                {
+                    title: "Reporte Anual de Proyectos",
+                    items: [{ name: "ANUAL", status: PlanStatus.NotStarted, value: 0.0 }],
+                    total: 0.0,
+                }
+            ],
+        },
+        documentation: [
+            { name: "ACTA DE INICIO PROYECTOS 2025", status: VerificationStatus.PENDIENTE },
+            { name: "REVISIÓN AVANCES DE OBRA", status: VerificationStatus.SI },
+            { name: "INFORME SUPERVISIÓN", status: VerificationStatus.NO },
+            { name: "PUBLICADO EN SECOP", status: VerificationStatus.SI }
+        ],
+        tracking: [
+            { name: "Ejecución Proyectos", months: [true, true, true, true, true, true, false, false, false, false, false, false] },
+            { name: "Contratación", months: [true, true, false, false, false, false, false, false, false, false, false, false] },
+        ],
+        developmentPlanGoals: [],
+        subProcesses: {
+            "Panóptico": {
+                ...defaultData,
+                planning: {
+                    ...defaultData.planning,
+                    anual: [
+                        {
+                            title: "Plan de Eventos Culturales 2025",
+                            items: [
+                                { name: "ANUAL", status: PlanStatus.NotStarted, value: 0.0 }
+                            ],
+                            total: 0.0,
+                        }
+                    ],
+                },
+                documentation: [
+                    { name: "CONVENIO INTERADMINISTRATIVO VIGENTE", status: VerificationStatus.SI },
+                    { name: "INFORME DE GESTIÓN SEMESTRAL", status: VerificationStatus.PENDIENTE },
+                    { name: "PÓLIZAS DE SEGURO AL DÍA", status: VerificationStatus.SI },
+                    { name: "PLAN DE MANEJO PMU", status: VerificationStatus.NO },
+                ],
+            },
+            "Bicicletas": {
+                ...defaultData,
+                planning: {
+                    ...defaultData.planning,
+                    semestral: [
+                        {
+                            title: "Mantenimiento Preventivo Flota",
+                            items: [
+                                { name: "1 SEMESTRE", status: PlanStatus.Completed, value: 50.0 },
+                                { name: "2 SEMESTRE", status: PlanStatus.NotStarted, value: 0.0 },
+                            ],
+                            total: 50.0,
+                        }
+                    ],
+                },
+                documentation: [
+                    { name: "MANUAL OPERATIVO SISTEMA", status: VerificationStatus.SI },
+                    { name: "CONTRATO DE SEGUROS VIGENTE", status: VerificationStatus.PENDIENTE },
+                    { name: "INFORME DE USO MENSUAL", status: VerificationStatus.PENDIENTE },
+                    { name: "ACTUALIZACIÓN PLATAFORMA", status: VerificationStatus.NO },
+                    { name: "REGISTRO FOTOGRÁFICO MANTENIMIENTO", status: VerificationStatus.SI },
+                ],
+            }
+        }
+    },
     "Gestión Humana": {
        planning: {
             mensual: [],
@@ -348,20 +429,10 @@ export const ALL_PROCESS_DATA: AllProcessData = {
             trimestral: [],
             cuatrimestral: [],
             semestral: [],
-            anual: [
-                 {
-                    title: "Reporte General de Esquemas",
-                    items: [{ name: "ANUAL", status: PlanStatus.Missing, value: 0.0 }],
-                    total: 0.0,
-                },
-            ],
+            anual: [],
         },
-        documentation: [
-            { name: "INFORME CONSOLIDADO DE OPERACIÓN 2025", status: VerificationStatus.PENDIENTE },
-            { name: "PLAN ESTRATÉGICO DE ESQUEMAS EMPRESARIALES", status: VerificationStatus.SI },
-            { name: "EVALUACIÓN DE DESEMPEÑO DE CONCESIONES", status: VerificationStatus.NO },
-        ],
-        tracking: defaultData.tracking,
+        documentation: [],
+        tracking: [],
         developmentPlanGoals: [],
         subProcesses: {
             "Alumbrado Público": {

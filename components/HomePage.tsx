@@ -26,23 +26,38 @@ const HomePage: React.FC<HomePageProps> = ({ onProcessClick, onGoHome }) => {
         }
 
         const lowerCaseQuery = searchQuery.toLowerCase();
+
+        const deepSearch = (obj: any, query: string): boolean => {
+            if (obj === null || obj === undefined) {
+                return false;
+            }
+            if (typeof obj === 'string' || typeof obj === 'number') {
+                return String(obj).toLowerCase().includes(query);
+            }
+            if (Array.isArray(obj)) {
+                return obj.some(item => deepSearch(item, query));
+            }
+            if (typeof obj === 'object') {
+                // Check both keys and values recursively
+                return Object.entries(obj).some(([key, value]) => {
+                    if (key.toLowerCase().includes(query)) {
+                        return true;
+                    }
+                    return deepSearch(value, query);
+                });
+            }
+            return false;
+        };
+
         const allProcesses = [...strategicProcesses, ...misionalProcesses, ...supportProcesses, ...evaluationProcesses];
         
         const matchingProcesses = allProcesses.filter(name => {
+            // Also search the process name itself
+            if (name.toLowerCase().includes(lowerCaseQuery)) {
+                return true;
+            }
             const processData = ALL_PROCESS_DATA[name] || ALL_PROCESS_DATA['default'];
-            if (name.toLowerCase().includes(lowerCaseQuery)) return true;
-
-            const hasMatchingDoc = processData.documentation.some(doc => doc.name.toLowerCase().includes(lowerCaseQuery));
-            if (hasMatchingDoc) return true;
-
-            const allPlans = [...processData.planning.mensual, ...processData.planning.trimestral, ...processData.planning.cuatrimestral, ...processData.planning.semestral, ...processData.planning.anual];
-            const hasMatchingPlan = allPlans.some(plan => plan.title.toLowerCase().includes(lowerCaseQuery));
-            if (hasMatchingPlan) return true;
-
-            const hasMatchingGoal = processData.developmentPlanGoals.some(goal => goal.producto.toLowerCase().includes(lowerCaseQuery));
-            if (hasMatchingGoal) return true;
-
-            return false;
+            return deepSearch(processData, lowerCaseQuery);
         });
 
         return {
