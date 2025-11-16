@@ -1,21 +1,14 @@
 import React, { useState } from 'react';
-import Header from './Header';
-import Footer from './Footer';
-import Sidebar from './Sidebar';
 import { ProcessData } from '../types';
 import { ArrowLeftIcon } from './icons/ArrowLeftIcon';
 import CompositeProcessDashboard from './CompositeProcessDashboard';
 import ProcessDetailView from './ProcessDetailView';
-import { ArrowRightIcon } from './icons/ArrowRightIcon';
-import { SidebarIcon } from './icons/SidebarIcon';
 import { RefreshIcon } from './icons/RefreshIcon';
+import NavButton from './NavButton';
 
 interface DashboardProps {
-  sidebarSelectedProcess: string;
   currentProcessName: string;
   processData: ProcessData;
-  onSelectProcess: (process: string) => void;
-  onGoHome: () => void;
   onGoBack: () => void;
   parentProcessName?: string;
   onSelectSubProcess: (subProcessName: string) => void;
@@ -28,14 +21,12 @@ interface DashboardProps {
   onGoToPreviousSubProcess: () => void;
   onGoToNextSubProcess: () => void;
   onUpdateData: () => Promise<void>;
+  isLoading: boolean;
 }
 
 const Dashboard: React.FC<DashboardProps> = ({ 
-  sidebarSelectedProcess,
   currentProcessName, 
   processData, 
-  onSelectProcess, 
-  onGoHome,
   onGoBack,
   parentProcessName,
   onSelectSubProcess,
@@ -48,158 +39,98 @@ const Dashboard: React.FC<DashboardProps> = ({
   onGoToPreviousSubProcess,
   onGoToNextSubProcess,
   onUpdateData,
+  isLoading,
 }) => {
-  const [isSidebarVisible, setIsSidebarVisible] = useState(true);
-  const [isUpdating, setIsUpdating] = useState(false);
   const [showNotification, setShowNotification] = useState(false);
   
   const backButtonText = parentProcessName ? `Volver a ${parentProcessName}` : 'Volver al Mapa de Procesos';
   
-  const toggleSidebar = () => setIsSidebarVisible(v => !v);
-  
   const handleUpdateData = async () => {
-    setIsUpdating(true);
-    try {
-        await onUpdateData();
-        setShowNotification(true);
-        setTimeout(() => {
-            setShowNotification(false);
-        }, 3000);
-    } catch (error) {
-        console.error("Failed to update data:", error);
-        // Here you could show an error notification
-    } finally {
-        setIsUpdating(false);
-    }
+    await onUpdateData();
+    setShowNotification(true);
+    setTimeout(() => {
+        setShowNotification(false);
+    }, 3000);
   };
 
   return (
-    <div className="relative min-h-screen font-sans selection:bg-lime-500 selection:text-black">
-      <div 
-        className="absolute inset-0 bg-cover bg-center bg-fixed" 
-        style={{ backgroundImage: "url('https://www.infibague.gov.co/wp-content/uploads/2025/08/7-scaled.jpg')" }}
-      />
-      <div className="absolute inset-0 bg-black/80 backdrop-blur-sm" />
-      <div className="relative z-10 text-white flex flex-col min-h-screen">
-        <Header onGoHome={onGoHome} />
-        <main className="flex-grow container mx-auto px-4 sm:px-6 lg:px-8 pt-24 md:pt-28">
-          <div className="flex items-center justify-between mb-6">
+    <div className="animate-slide-right">
+        <div className="flex items-center justify-between mb-6">
             <div className="flex items-center gap-4">
-              <button 
+                <button 
                 onClick={onGoBack} 
-                className="inline-flex items-center gap-2 px-4 py-2 text-sm font-semibold text-white bg-gray-700/50 hover:bg-gray-600/50 rounded-lg transition-colors border border-gray-600"
-              >
+                className="inline-flex items-center gap-2 px-4 py-2 text-sm font-semibold text-gray-300 bg-gray-800/50 hover:bg-gray-700/50 rounded-lg transition-colors border border-gray-700"
+                >
                 <ArrowLeftIcon className="w-4 h-4" />
                 {backButtonText}
-              </button>
-              <button
-                onClick={handleUpdateData}
-                disabled={isUpdating}
-                className="inline-flex items-center gap-2 px-4 py-2 text-sm font-semibold text-white bg-blue-600 hover:bg-blue-500 rounded-lg transition-colors border border-blue-500 disabled:opacity-70 disabled:cursor-wait"
-              >
-                <RefreshIcon className={`w-4 h-4 ${isUpdating ? 'animate-spin' : ''}`} />
-                {isUpdating ? 'Actualizando...' : 'Actualizar Datos'}
-              </button>
-            </div>
-             {!isSidebarVisible && (
-                <button
-                    onClick={toggleSidebar}
-                    className="inline-flex items-center gap-2 px-4 py-2 text-sm font-semibold text-white bg-gray-700/50 hover:bg-gray-600/50 rounded-lg transition-colors border border-gray-600"
-                    aria-label="Mostrar menú"
-                >
-                    <SidebarIcon className="w-5 h-5" />
-                    Mostrar Menú
                 </button>
-            )}
-          </div>
-          <div className="flex flex-col lg:flex-row gap-8">
-            {isSidebarVisible && (
-              <aside className="lg:w-1/4 xl:w-1/5">
-                <Sidebar 
-                    selectedProcess={sidebarSelectedProcess} 
-                    onSelectProcess={onSelectProcess}
-                    onHideMenu={toggleSidebar}
-                />
-              </aside>
-            )}
-            <div className={isSidebarVisible ? "lg:w-3/4 xl:w-4/5" : "w-full"}>
-              <div className="bg-blue-900/40 backdrop-blur-sm rounded-lg p-4 mb-6 text-center border border-blue-800">
-                <p className="text-lg">Proceso Seleccionado: <span className="font-bold text-lime-400">{currentProcessName}</span></p>
-              </div>
-              
-              {processData.subProcesses ? (
-                <CompositeProcessDashboard
-                  processData={processData}
-                  onSelectSubProcess={onSelectSubProcess}
-                  processName={currentProcessName}
-                />
-              ) : (
-                <ProcessDetailView processData={processData} processName={currentProcessName} />
-              )}
-              
-              {!parentProcessName && (
-                <div className="mt-12 flex justify-between items-center">
-                    <button
-                        onClick={onGoToPrevious}
-                        disabled={!previousProcess}
-                        className="inline-flex items-center gap-2 px-4 py-2 text-sm font-semibold text-white bg-gray-700/50 hover:bg-gray-600/50 rounded-lg transition-colors border border-gray-600 disabled:opacity-50 disabled:cursor-not-allowed"
-                    >
-                        <ArrowLeftIcon className="w-4 h-4" />
-                        Anterior
-                    </button>
-                    <button
-                        onClick={onGoToNext}
-                        disabled={!nextProcess}
-                        className="inline-flex items-center gap-2 px-4 py-2 text-sm font-semibold text-white bg-gray-700/50 hover:bg-gray-600/50 rounded-lg transition-colors border border-gray-600 disabled:opacity-50 disabled:cursor-not-allowed"
-                    >
-                        Siguiente
-                        <ArrowRightIcon className="w-4 h-4" />
-                    </button>
-                </div>
-              )}
-
-              {parentProcessName && (
-                <div className="mt-12 flex justify-between items-center">
-                    <button
-                        onClick={onGoToPreviousSubProcess}
-                        disabled={!previousSubProcess}
-                        className="inline-flex items-center gap-2 px-4 py-2 text-sm font-semibold text-white bg-gray-700/50 hover:bg-gray-600/50 rounded-lg transition-colors border border-gray-600 disabled:opacity-50 disabled:cursor-not-allowed"
-                    >
-                        <ArrowLeftIcon className="w-4 h-4" />
-                        Anterior
-                    </button>
-                    <button
-                        onClick={onGoToNextSubProcess}
-                        disabled={!nextSubProcess}
-                        className="inline-flex items-center gap-2 px-4 py-2 text-sm font-semibold text-white bg-gray-700/50 hover:bg-gray-600/50 rounded-lg transition-colors border border-gray-600 disabled:opacity-50 disabled:cursor-not-allowed"
-                    >
-                        Siguiente
-                        <ArrowRightIcon className="w-4 h-4" />
-                    </button>
-                </div>
-              )}
+                <button
+                onClick={handleUpdateData}
+                disabled={isLoading}
+                className="inline-flex items-center gap-2 px-4 py-2 text-sm font-semibold text-white bg-blue-600 hover:bg-blue-700 rounded-lg transition-colors border border-blue-500 disabled:opacity-70 disabled:cursor-wait"
+                >
+                <RefreshIcon className={`w-4 h-4 ${isLoading ? 'animate-spin' : ''}`} />
+                {isLoading ? 'Actualizando...' : 'Actualizar Datos'}
+                </button>
             </div>
-          </div>
-        </main>
-        <Footer onGoHome={onGoHome} />
-      </div>
-
-      {showNotification && (
-        <div className="fixed bottom-5 right-5 bg-green-600 text-white px-6 py-3 rounded-lg shadow-lg animate-fade-in z-50">
-            <p className="font-semibold">¡Éxito!</p>
-            <p className="text-sm">Los datos se han actualizado correctamente.</p>
         </div>
-      )}
+        
+        <div className="bg-gray-900/50 rounded-lg shadow-sm p-4 sm:p-6 md:p-8 border border-gray-800">
+            {processData.subProcesses ? (
+                <CompositeProcessDashboard
+                    processData={processData}
+                    onSelectSubProcess={onSelectSubProcess}
+                    processName={currentProcessName}
+                />
+            ) : (
+                <ProcessDetailView processData={processData} processName={currentProcessName} />
+            )}
+            
+            {!parentProcessName && (
+            <div className="mt-12 flex justify-between items-center">
+                <NavButton
+                    onClick={onGoToPrevious}
+                    disabled={!previousProcess || isLoading}
+                    direction="prev"
+                >
+                    Anterior
+                </NavButton>
+                <NavButton
+                    onClick={onGoToNext}
+                    disabled={!nextProcess || isLoading}
+                    direction="next"
+                >
+                    Siguiente
+                </NavButton>
+            </div>
+            )}
 
-      <style>{`
-        @keyframes fade-in {
-          from { opacity: 0; transform: translateY(10px); }
-          to { opacity: 1; transform: translateY(0); }
-        }
-        .animate-fade-in {
-          animation: fade-in 0.5s ease-out forwards;
-        }
-      `}</style>
+            {parentProcessName && (
+            <div className="mt-12 flex justify-between items-center">
+                <NavButton
+                    onClick={onGoToPreviousSubProcess}
+                    disabled={!previousSubProcess || isLoading}
+                    direction="prev"
+                >
+                    Anterior
+                </NavButton>
+                <NavButton
+                    onClick={onGoToNextSubProcess}
+                    disabled={!nextSubProcess || isLoading}
+                    direction="next"
+                >
+                    Siguiente
+                </NavButton>
+            </div>
+            )}
+        </div>
+
+        {showNotification && (
+            <div className="fixed bottom-5 right-5 bg-green-600 text-white px-6 py-3 rounded-lg shadow-lg animate-fade-in z-50">
+                <p className="font-semibold">¡Éxito!</p>
+                <p className="text-sm">Los datos se han actualizado correctamente.</p>
+            </div>
+        )}
     </div>
   );
 };

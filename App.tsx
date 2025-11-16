@@ -1,134 +1,128 @@
-import React, { useState } from 'react';
-import { ALL_PROCESS_DATA, allProcessCategories } from './constants';
+import React, { useState, useCallback } from 'react';
 import HomePage from './components/HomePage';
 import Dashboard from './components/Dashboard';
-import { AllProcessData } from './types';
+import Header from './components/Header';
+import Footer from './components/Footer';
+import Spinner from './components/Spinner';
+import { ALL_PROCESS_DATA, allProcessCategories } from './constants';
+import { AllProcessData, ProcessData } from './types';
 import { fetchDataFromGoogleSheets } from './services/googleSheets';
 
 const App: React.FC = () => {
-    const [selectedProcess, setSelectedProcess] = useState<string | null>(null);
-    const [selectedSubProcess, setSelectedSubProcess] = useState<string | null>(null);
-    const [processData, setProcessData] = useState<AllProcessData>(ALL_PROCESS_DATA);
+    const [processStack, setProcessStack] = useState<string[]>([]);
+    const [allData, setAllData] = useState<AllProcessData>(ALL_PROCESS_DATA);
+    const [isLoading, setIsLoading] = useState(false);
 
-    const handleProcessSelect = (processName: string) => {
-        setSelectedProcess(processName);
-        setSelectedSubProcess(null);
-        window.scrollTo(0, 0);
+    const withLoading = (action: () => void) => {
+        setIsLoading(true);
+        setTimeout(() => {
+            action();
+            setIsLoading(false);
+        }, 500); // Simulate loading time
     };
 
-    const handleSubProcessSelect = (subProcessName: string) => {
-        setSelectedSubProcess(subProcessName);
-        window.scrollTo(0, 0);
-    };
-
-    const handleGoHome = () => {
-        setSelectedProcess(null);
-        setSelectedSubProcess(null);
-    };
-
-    const handleGoBack = () => {
-        if (selectedSubProcess) {
-            setSelectedSubProcess(null);
-        } else {
-            handleGoHome();
-        }
-    };
+    const handleGoHome = useCallback(() => withLoading(() => setProcessStack([])), []);
+    const handleSelectProcess = (processName: string) => withLoading(() => setProcessStack([processName]));
+    const handleSelectSubProcess = (subProcessName: string) => withLoading(() => setProcessStack(stack => [...stack, subProcessName]));
+    const handleGoBack = () => withLoading(() => setProcessStack(stack => stack.slice(0, -1)));
     
     const handleUpdateData = async () => {
-        const newData = await fetchDataFromGoogleSheets();
-        setProcessData(newData);
-    };
-
-    // This is for the sidebar.
-    const handleDashboardProcessChange = (processName: string) => {
-        setSelectedProcess(processName);
-        setSelectedSubProcess(null); // Always reset sub-process when changing from sidebar
-        window.scrollTo(0, 0);
-    };
-
-    const { previousProcess, nextProcess } = (() => {
-        if (!selectedProcess || selectedSubProcess) {
-            return { previousProcess: null, nextProcess: null };
+        setIsLoading(true);
+        try {
+            const newData = await fetchDataFromGoogleSheets();
+            setAllData(newData);
+        } catch (error) {
+            console.error("Failed to update data:", error);
+        } finally {
+            setIsLoading(false);
         }
-        const currentIndex = allProcessCategories.indexOf(selectedProcess);
-        const previous = currentIndex > 0 ? allProcessCategories[currentIndex - 1] : null;
-        const next = currentIndex < allProcessCategories.length - 1 ? allProcessCategories[currentIndex + 1] : null;
-        return { previousProcess: previous, nextProcess: next };
-    })();
+    };
+
+    const isHomePage = processStack.length === 0;
+    const currentProcessName = processStack[processStack.length - 1];
+    const parentProcessName = processStack.length > 1 ? processStack[processStack.length - 2] : undefined;
     
-    const handleGoToPrevious = () => {
-        if (previousProcess) {
-            handleDashboardProcessChange(previousProcess);
+    const getProcessData = (): ProcessData | null => {
+        if (isHomePage) return null;
+        try {
+            let data = allData[processStack[0]];
+            if (!data) throw new Error("Process not found");
+            for (let i = 1; i < processStack.length; i++) {
+                data = data.subProcesses?.[processStack[i]];
+                if (!data) throw new Error("Sub-process not found");
+            }
+            return data;
+        } catch (error) {
+            console.error(error);
+            return allData['default'];
         }
     };
+    const currentProcessData = getProcessData();
 
-    const handleGoToNext = () => {
-        if (nextProcess) {
-            handleDashboardProcessChange(nextProcess);
+    // Navigation logic for main processes
+    const currentProcessIndex = allProcessCategories.indexOf(processStack[0]);
+    const previousProcess = currentProcessIndex > 0 ? allProcessCategories[currentProcessIndex - 1] : null;
+    const nextProcess = currentProcessIndex < allProcessCategories.length - 1 ? allProcessCategories[currentProcessIndex + 1] : null;
+
+    const handleGoToPrevious = () => previousProcess && withLoading(() => setProcessStack([previousProcess]));
+    const handleGoToNext = () => nextProcess && withLoading(() => setProcessStack([nextProcess]));
+
+    // Navigation logic for sub-processes
+    let subProcessSiblings: string[] = [];
+    if (parentProcessName) {
+        let parentData = allData[processStack[0]];
+        for (let i = 1; i < processStack.length - 1; i++) {
+            parentData = parentData.subProcesses?.[processStack[i]];
         }
-    };
-    
-    const { previousSubProcess, nextSubProcess } = (() => {
-        if (!selectedProcess || !selectedSubProcess || !processData[selectedProcess]?.subProcesses) {
-            return { previousSubProcess: null, nextSubProcess: null };
+        if(parentData && parentData.subProcesses) {
+            subProcessSiblings = Object.keys(parentData.subProcesses);
         }
-        const subProcessNames = Object.keys(processData[selectedProcess].subProcesses!);
-        const currentIndex = subProcessNames.indexOf(selectedSubProcess);
-        const previous = currentIndex > 0 ? subProcessNames[currentIndex - 1] : null;
-        const next = currentIndex < subProcessNames.length - 1 ? subProcessNames[currentIndex + 1] : null;
-        return { previousSubProcess: previous, nextSubProcess: next };
-    })();
+    }
+    const currentSubProcessIndex = subProcessSiblings.indexOf(currentProcessName);
+    const previousSubProcess = currentSubProcessIndex > 0 ? subProcessSiblings[currentSubProcessIndex - 1] : null;
+    const nextSubProcess = currentSubProcessIndex < subProcessSiblings.length - 1 ? subProcessSiblings[currentSubProcessIndex + 1] : null;
 
     const handleGoToPreviousSubProcess = () => {
         if (previousSubProcess) {
-            handleSubProcessSelect(previousSubProcess);
+            withLoading(() => setProcessStack(stack => [...stack.slice(0, -1), previousSubProcess]));
         }
     };
-
     const handleGoToNextSubProcess = () => {
         if (nextSubProcess) {
-            handleSubProcessSelect(nextSubProcess);
+            withLoading(() => setProcessStack(stack => [...stack.slice(0, -1), nextSubProcess]));
         }
     };
 
-
-    if (!selectedProcess) {
-        return <HomePage onProcessClick={handleProcessSelect} onGoHome={handleGoHome} />;
-    }
-
-    const parentProcessData = processData[selectedProcess] || processData['default'];
-    const isSubProcessView = !!(selectedSubProcess && parentProcessData.subProcesses?.[selectedSubProcess]);
-
-    const currentProcessData = isSubProcessView
-        ? parentProcessData.subProcesses![selectedSubProcess!]
-        : parentProcessData;
-
-    const currentProcessName = isSubProcessView ? selectedSubProcess! : selectedProcess;
-    
-    // The sidebar needs to know the top-level process to highlight it correctly
-    const sidebarSelectedProcess = selectedProcess;
-
     return (
-        <Dashboard
-            key={currentProcessName} // Force re-render when navigating between processes
-            sidebarSelectedProcess={sidebarSelectedProcess}
-            currentProcessName={currentProcessName}
-            processData={currentProcessData}
-            onSelectProcess={handleDashboardProcessChange}
-            onGoHome={handleGoHome}
-            onGoBack={handleGoBack}
-            parentProcessName={isSubProcessView ? selectedProcess : undefined}
-            onSelectSubProcess={handleSubProcessSelect}
-            previousProcess={previousProcess}
-            nextProcess={nextProcess}
-            onGoToPrevious={handleGoToPrevious}
-            onGoToNext={handleGoToNext}
-            previousSubProcess={previousSubProcess}
-            nextSubProcess={nextSubProcess}
-            onGoToPreviousSubProcess={handleGoToPreviousSubProcess}
-            onGoToNextSubProcess={handleGoToNextSubProcess}
-            onUpdateData={handleUpdateData}
-        />
+        <>
+            <Spinner isLoading={isLoading} />
+            <Header onGoHome={handleGoHome} />
+            <main className="container mx-auto px-4 sm:px-6 lg:px-8 pt-28 pb-12 min-h-[calc(100vh-15rem)]">
+                {isHomePage || !currentProcessData ? (
+                    <HomePage onProcessClick={handleSelectProcess} onGoHome={handleGoHome} allData={allData} />
+                ) : (
+                    <Dashboard
+                        key={processStack.join('-')}
+                        currentProcessName={currentProcessName}
+                        processData={currentProcessData}
+                        onGoBack={handleGoBack}
+                        parentProcessName={parentProcessName}
+                        onSelectSubProcess={handleSelectSubProcess}
+                        previousProcess={previousProcess}
+                        nextProcess={nextProcess}
+                        onGoToPrevious={handleGoToPrevious}
+                        onGoToNext={handleGoToNext}
+                        previousSubProcess={previousSubProcess}
+                        nextSubProcess={nextSubProcess}
+                        onGoToPreviousSubProcess={handleGoToPreviousSubProcess}
+                        onGoToNextSubProcess={handleGoToNextSubProcess}
+                        onUpdateData={handleUpdateData}
+                        isLoading={isLoading}
+                    />
+                )}
+            </main>
+            <Footer onGoHome={handleGoHome} />
+        </>
     );
 };
 

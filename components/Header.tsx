@@ -71,10 +71,10 @@ const Header: React.FC<HeaderProps> = ({ onGoHome }) => {
              <a href="#top" onClick={handleHomeClick} className="flex-shrink-0">
                 <img className="h-10 w-auto" src="https://www.infibague.gov.co/wp-content/uploads/2025/02/logo-Infibague-blanco-300x99.png" alt="INFIBAGUE Logo" />
             </a>
-            <div className="hidden md:block ml-4">
-                <h1 className="text-sm font-bold tracking-wider text-white uppercase">
-                    Oficina Asesora De Planeación Institucional
-                </h1>
+            <div className="ml-3 border-l-2 border-gray-700 pl-3">
+              <h1 className="text-white font-bold text-xs md:text-sm tracking-wide uppercase leading-tight">
+                  Oficina Asesora de<br className="sm:hidden" /> Planeación Institucional
+              </h1>
             </div>
           </div>
           <nav className="hidden md:block">

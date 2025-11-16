@@ -3,18 +3,233 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Oficina Asesora De Planeación Institucional</title>
+    <title>Campus INFIBAGUE</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     <style>
       html {
         scroll-behavior: smooth;
       }
       body {
         font-family: 'Inter', sans-serif;
+        background-color: #1E2129;
+        color: #E5E7EB;
+        position: relative;
+        z-index: 1;
       }
+       body::before {
+        content: "";
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        background-image: url('https://www.infibague.gov.co/wp-content/uploads/2025/08/7-scaled.jpg');
+        background-size: cover;
+        background-position: center;
+        opacity: 0.1;
+        z-index: -1;
+      }
+
+      /* From Uiverse.io by EddyBel, customized for INFIBAGUE */
+      .input__container {
+        position: relative;
+        background: rgba(255, 255, 255, 0.2);
+        backdrop-filter: blur(10px);
+        padding: 10px 15px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 5px;
+        border-radius: 22px;
+        max-width: 450px;
+        transition: transform 400ms;
+        transform-style: preserve-3d;
+        transform: rotateX(15deg) rotateY(-20deg);
+        perspective: 500px;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+      }
+
+      .input__container:hover, .input__container:focus-within {
+        transform: rotateX(0deg) rotateY(0deg);
+      }
+
+      .shadow__input {
+        content: "";
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        left: 0;
+        bottom: 0;
+        z-index: -1;
+        filter: blur(30px);
+        border-radius: 20px;
+        background-color: #999cff;
+        background-image: radial-gradient(at 85% 51%, hsla(60,60%,61%,1) 0px, transparent 50%),
+          radial-gradient(at 74% 68%, hsla(235,69%,77%,1) 0px, transparent 50%),
+          radial-gradient(at 64% 79%, hsla(284,72%,73%,1) 0px, transparent 50%),
+          radial-gradient(at 75% 16%, hsla(283,60%,72%,1) 0px, transparent 50%),
+          radial-gradient(at 90% 65%, hsla(153,70%,64%,1) 0px, transparent 50%),
+          radial-gradient(at 91% 83%, hsla(283,74%,69%,1) 0px, transparent 50%),
+          radial-gradient(at 72% 91%, hsla(213,75%,75%,1) 0px, transparent 50%);
+      }
+
+      .input__button__shadow {
+        cursor: pointer;
+        border: none;
+        background: none;
+        transition: transform 400ms, background 400ms;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border-radius: 12px;
+        padding: 5px;
+      }
+
+      .input__button__shadow:hover {
+        background: rgba(255, 255, 255, 0.2);
+      }
+
+      .input__search {
+        width: 100%;
+        border-radius: 20px;
+        outline: none;
+        border: none;
+        padding: 8px;
+        position: relative;
+        background: transparent;
+        color: #E5E7EB;
+        font-weight: 500;
+        font-size: 1.125rem; /* ~text-lg */
+      }
+
+      .input__search::placeholder {
+        color: #9CA3AF;
+      }
+
+      /* From Uiverse.io by xXJollyHAKERXx */ 
+      .spinner {
+        background-image: linear-gradient(rgb(186, 66, 255) 35%,rgb(0, 225, 255));
+        width: 100px;
+        height: 100px;
+        animation: spinning82341 1.7s linear infinite;
+        text-align: center;
+        border-radius: 50px;
+        filter: blur(1px);
+        box-shadow: 0px -5px 20px 0px rgb(186, 66, 255), 0px 5px 20px 0px rgb(0, 225, 255);
+      }
+
+      .spinner1 {
+        background-color: rgb(36, 36, 36);
+        width: 100px;
+        height: 100px;
+        border-radius: 50px;
+        filter: blur(10px);
+      }
+
+      @keyframes spinning82341 {
+        to {
+          transform: rotate(360deg);
+        }
+      }
+
+      @keyframes slideRight {
+        from {
+          opacity: 0;
+          transform: translateX(40px);
+        }
+        to {
+          opacity: 1;
+          transform: translateX(0);
+        }
+      }
+      .animate-slide-right {
+        animation: slideRight 0.5s ease-out forwards;
+      }
+
+      @keyframes fade-in {
+        from { opacity: 0; transform: translateY(10px); }
+        to { opacity: 1; transform: translateY(0); }
+      }
+      .animate-fade-in {
+        animation: fade-in 0.5s ease-out forwards;
+      }
+      
+      /* From Uiverse.io by alexmaracinaru, adapted for NavButton component */
+      .nav-button {
+        cursor: pointer;
+        font-weight: 700;
+        color: #1E2129;
+        transition: all 0.2s;
+        padding: 10px 20px;
+        border-radius: 100px;
+        background: #cfef00;
+        border: 1px solid transparent;
+        display: inline-flex;
+        align-items: center;
+        font-size: 15px;
+        gap: 10px;
+      }
+
+      .nav-button:hover:not(:disabled) {
+        background: #c4e201;
+      }
+
+      .nav-button > svg {
+        width: 34px;
+        height: 34px;
+        transition: transform 0.3s ease-in-out;
+      }
+
+      /* Next button (default) hover */
+      .nav-button:not(.nav-button--prev):hover:not(:disabled) > svg {
+        transform: translateX(5px);
+      }
+
+      /* Previous button base style */
+      .nav-button.nav-button--prev > svg {
+        transform: rotate(180deg);
+      }
+
+      /* Previous button hover */
+      .nav-button.nav-button--prev:hover:not(:disabled) > svg {
+        transform: rotate(180deg) translateX(5px);
+      }
+
+      .nav-button:active:not(:disabled) {
+        transform: scale(0.95);
+      }
+
+      .nav-button:disabled {
+        background: #4a5568;
+        color: #a0aec0;
+        cursor: not-allowed;
+        opacity: 0.7;
+      }
+
+      .nav-button:disabled svg circle,
+      .nav-button:disabled svg path {
+        stroke: #a0aec0;
+        fill: #a0aec0;
+      }
+
+      /* From Animista */
+      .shadow-pop-tr {
+        animation: shadow-pop-tr 0.3s cubic-bezier(0.470, 0.000, 0.745, 0.715) both;
+      }
+      @keyframes shadow-pop-tr {
+        0% {
+          box-shadow: 0 0 #3e3e3e, 0 0 #3e3e3e, 0 0 #3e3e3e, 0 0 #3e3e3e, 0 0 #3e3e3e, 0 0 #3e3e3e, 0 0 #3e3e3e, 0 0 #3e3e3e;
+          transform: translateX(0) translateY(0);
+        }
+        100% {
+          box-shadow: 1px -1px #3e3e3e, 2px -2px #3e3e3e, 3px -3px #3e3e3e, 4px -4px #3e3e3e, 5px -5px #3e3e3e, 6px -6px #3e3e3e, 7px -7px #3e3e3e, 8px -8px #3e3e3e;
+          transform: translateX(-8px) translateY(8px);
+        }
+      }
+
     </style>
 <script type="importmap">
 {
