@@ -78,8 +78,8 @@ const DocumentationChecklist: React.FC<DocumentationChecklistProps> = ({ data })
 
   return (
     <section className="my-16">
-      <h2 className="text-3xl font-bold mb-4">Verificación de Documentación</h2>
-      <p className="text-gray-400 mb-8">Estado de los documentos requeridos para la auditoría externa.</p>
+      <h2 className="text-3xl font-bold mb-4">Auditoria externa -&gt; Alistamiento de documentos auditoria 2026</h2>
+      <p className="text-gray-400 mb-8">Estado de los documentos requeridos para la auditoría externa 2026.</p>
       
       <div className="flex flex-wrap items-center justify-center gap-2 md:gap-4 mb-10">
         {filterOptions.map(({label, status}) => {
@@ -130,11 +130,16 @@ const DocumentationChecklist: React.FC<DocumentationChecklistProps> = ({ data })
                 <div className={`flex items-center gap-3 p-4 rounded-t-lg ${bgColor} border-b ${borderColor}`}>
                     <Icon className={`w-7 h-7 flex-shrink-0 ${iconColor}`} />
                     <span className={`text-xl font-bold uppercase ${textColor}`}>
-                        {item.value !== undefined ? item.value : config.label}
+                        {config.label}
                     </span>
                 </div>
-                <div className="p-4 flex-grow">
-                  <p className="text-gray-200 font-medium leading-tight text-sm">{item.name}</p>
+                <div className="p-4 flex-grow flex flex-col">
+                  <p className="text-gray-200 font-medium leading-tight text-sm flex-grow">{item.name}</p>
+                  {item.value && (
+                    <p className="mt-2 text-xs font-mono text-gray-400 bg-gray-900/50 inline-block px-2 py-1 rounded self-start">
+                      {item.value}
+                    </p>
+                  )}
                 </div>
               </div>
             );

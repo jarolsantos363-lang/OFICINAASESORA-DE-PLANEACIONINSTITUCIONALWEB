@@ -5,8 +5,9 @@ import ActivityTracking from './ActivityTracking';
 import PlanningDashboard from './PlanningDashboard';
 import DocumentationChecklist from './DocumentationChecklist';
 import DevelopmentPlanGoals from './DevelopmentPlanGoals';
+import ImprovementPlanDashboard from './ImprovementPlanDashboard';
 
-type ActiveTab = 'planning' | 'documentation' | 'goals';
+type ActiveTab = 'planning' | 'documentation' | 'goals' | 'improvement';
 
 interface ProcessDetailViewProps {
   processData: ProcessData;
@@ -18,6 +19,7 @@ const ProcessDetailView: React.FC<ProcessDetailViewProps> = ({ processData, proc
     
     const hasDevelopmentGoals = processData.developmentPlanGoals && processData.developmentPlanGoals.length > 0;
     const hasDocumentation = processData.documentation && processData.documentation.length > 0;
+    const hasImprovementPlan = !!processData.improvementPlan;
 
     useEffect(() => {
         if (activeTab === 'goals' && !hasDevelopmentGoals) {
@@ -26,7 +28,10 @@ const ProcessDetailView: React.FC<ProcessDetailViewProps> = ({ processData, proc
          if (activeTab === 'documentation' && !hasDocumentation) {
             setActiveTab('planning');
         }
-    }, [processName, hasDevelopmentGoals, hasDocumentation, activeTab]);
+        if (activeTab === 'improvement' && !hasImprovementPlan) {
+            setActiveTab('planning');
+        }
+    }, [processName, hasDevelopmentGoals, hasDocumentation, hasImprovementPlan, activeTab]);
 
     return (
         <div className="pt-6">
@@ -42,7 +47,7 @@ const ProcessDetailView: React.FC<ProcessDetailViewProps> = ({ processData, proc
                         onClick={() => setActiveTab('documentation')}
                         className={`w-full sm:w-auto text-sm md:text-base flex-1 sm:flex-none px-4 sm:px-8 py-3 rounded-lg font-semibold transition-all duration-300 transform focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-black/50 focus:ring-blue-500 ${activeTab === 'documentation' ? 'bg-blue-600 text-white shadow-lg scale-105' : 'bg-slate-800 text-gray-300 hover:bg-slate-700'}`}
                     >
-                        Verificación de Documentación
+                        Alistamiento Auditoria 2026
                     </button>
                 )}
                 {hasDevelopmentGoals && (
@@ -51,6 +56,14 @@ const ProcessDetailView: React.FC<ProcessDetailViewProps> = ({ processData, proc
                     className={`w-full sm:w-auto text-sm md:text-base flex-1 sm:flex-none px-4 sm:px-8 py-3 rounded-lg font-semibold transition-all duration-300 transform focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-black/50 focus:ring-blue-500 ${activeTab === 'goals' ? 'bg-blue-600 text-white shadow-lg scale-105' : 'bg-slate-800 text-gray-300 hover:bg-slate-700'}`}
                   >
                     Metas de Plan de Desarrollo
+                  </button>
+                )}
+                 {hasImprovementPlan && (
+                  <button
+                    onClick={() => setActiveTab('improvement')}
+                    className={`w-full sm:w-auto text-sm md:text-base flex-1 sm:flex-none px-4 sm:px-8 py-3 rounded-lg font-semibold transition-all duration-300 transform focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-black/50 focus:ring-blue-500 ${activeTab === 'improvement' ? 'bg-blue-600 text-white shadow-lg scale-105' : 'bg-slate-800 text-gray-300 hover:bg-slate-700'}`}
+                  >
+                    Plan de Mejoramiento
                   </button>
                 )}
               </div>
@@ -69,6 +82,11 @@ const ProcessDetailView: React.FC<ProcessDetailViewProps> = ({ processData, proc
               {activeTab === 'goals' && (
                  <div className="animate-fade-in">
                   <DevelopmentPlanGoals data={processData.developmentPlanGoals} />
+                </div>
+              )}
+              {activeTab === 'improvement' && processData.improvementPlan && (
+                 <div className="animate-fade-in">
+                  <ImprovementPlanDashboard data={processData.improvementPlan} />
                 </div>
               )}
         </div>

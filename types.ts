@@ -37,9 +37,19 @@ export interface ActivityTrackingItem {
 
 export interface DevelopmentPlanGoal {
   producto: string;
+  indicador: string;
   metaProductoCuatrienio: number;
+  meta2024Programado: number;
+  meta2024Ejecutado: number;
   meta2025Programado: number;
   meta2025Ejecutado: number;
+  ejecutado2025OP?: number;
+}
+
+export interface ImprovementPlan {
+  hallazgos: string;
+  fortalezas: string;
+  planDeMejoramiento: string;
 }
 
 export interface ProcessData {
@@ -53,6 +63,7 @@ export interface ProcessData {
   documentation: VerificationItem[];
   tracking: ActivityTrackingItem[];
   developmentPlanGoals: DevelopmentPlanGoal[];
+  improvementPlan?: ImprovementPlan;
   subProcesses?: { [key: string]: ProcessData };
 }
 

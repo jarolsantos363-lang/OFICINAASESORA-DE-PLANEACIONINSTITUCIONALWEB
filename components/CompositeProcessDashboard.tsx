@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { ProcessData } from '../types';
 import ActivityTracking from './ActivityTracking';
@@ -72,7 +73,7 @@ const CompositeProcessDashboard: React.FC<CompositeProcessDashboardProps> = ({ p
                 onClick={() => setActiveTab('documentation')}
                 className={`w-full sm:w-auto text-sm md:text-base flex-1 sm:flex-none px-4 sm:px-8 py-3 rounded-lg font-semibold transition-all duration-300 transform focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-black/50 focus:ring-blue-500 ${activeTab === 'documentation' ? 'bg-blue-600 text-white shadow-lg scale-105' : 'bg-slate-800 text-gray-300 hover:bg-slate-700'}`}
             >
-                Verificación de Documentación
+                Alistamiento Auditoria 2026
             </button>
         )}
         {hasBusinessUnits && (

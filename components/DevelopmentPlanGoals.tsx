@@ -1,7 +1,7 @@
-
 import React from 'react';
 import { DevelopmentPlanGoal } from '../types';
 import { InformationCircleIcon } from './icons/InformationCircleIcon';
+import { CheckIcon } from './icons/CheckIcon';
 
 interface RadialProgressProps {
   percentage: number;
@@ -89,38 +89,73 @@ const DevelopmentPlanGoals: React.FC<DevelopmentPlanGoalsProps> = ({ data }) => 
       <h2 className="text-3xl font-bold mb-8">Metas de Plan de Desarrollo</h2>
       <div className="space-y-8">
         {data.map((item, index) => {
-          const percentage = item.metaProductoCuatrienio > 0 ? (item.meta2025Ejecutado / item.metaProductoCuatrienio) * 100 : 0;
-          const faltante = item.metaProductoCuatrienio - item.meta2025Ejecutado;
+          const percentage = item.meta2025Programado > 0 ? (item.meta2025Ejecutado / item.meta2025Programado) * 100 : 0;
+          const faltante2025 = item.meta2025Programado - item.meta2025Ejecutado;
+          const totalEjecutado = item.meta2024Ejecutado + item.meta2025Ejecutado;
+          const faltanteCuatrienio = item.metaProductoCuatrienio - totalEjecutado;
           
           return (
             <div key={index} className="bg-gray-900/70 backdrop-blur-sm p-6 rounded-xl border border-gray-800 shadow-lg flex flex-col md:flex-row items-center gap-6 animate-fade-in" style={{ animationDelay: `${index * 100}ms` }}>
                 <div className="flex-grow w-full">
-                    <p className="text-lg text-gray-200 font-semibold mb-5">{item.producto}</p>
-                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-y-4 gap-x-6 text-center sm:text-left">
-                        <div className="bg-gray-800/50 p-3 rounded-lg border border-gray-700/50">
-                          <p className="text-xs text-gray-400 uppercase tracking-wider">Meta Cuatrienio</p>
-                          <p className="text-2xl font-bold text-white">{item.metaProductoCuatrienio.toLocaleString('es-ES')}</p>
+                    <p className="text-lg text-gray-200 font-semibold">{item.producto}</p>
+                    <p className="text-sm text-gray-400 font-mono mb-5">{item.indicador}</p>
+                    
+                    <div className="space-y-4">
+                        <div className="bg-gray-800/50 p-3 rounded-lg border border-gray-700/50 text-center">
+                            <p className="text-xs text-gray-400 uppercase tracking-wider">Meta Cuatrienio</p>
+                            <p className="text-2xl font-bold text-white">{item.metaProductoCuatrienio.toLocaleString('es-ES')}</p>
                         </div>
-                        <div className="bg-gray-800/50 p-3 rounded-lg border border-gray-700/50">
-                          <p className="text-xs text-gray-400 uppercase tracking-wider">Programado 2025</p>
-                          <p className="text-2xl font-bold text-white">{item.meta2025Programado.toLocaleString('es-ES')}</p>
-                        </div>
-                        <div className="bg-gray-800/50 p-3 rounded-lg border border-gray-700/50">
-                          <p className="text-xs text-gray-400 uppercase tracking-wider">Ejecutado 2025</p>
-                          <p className="text-2xl font-bold text-lime-400">{item.meta2025Ejecutado.toLocaleString('es-ES')}</p>
+                        <div className="grid grid-cols-2 gap-4">
+                            <div className="bg-gray-800/50 p-3 rounded-lg border border-gray-700/50 text-center">
+                                <p className="text-xs text-gray-400 uppercase tracking-wider">Programado 2024</p>
+                                <p className="text-xl font-bold text-white">{item.meta2024Programado.toLocaleString('es-ES')}</p>
+                            </div>
+                            <div className="bg-gray-800/50 p-3 rounded-lg border border-gray-700/50 text-center">
+                                <p className="text-xs text-gray-400 uppercase tracking-wider">Ejecutado 2024</p>
+                                <p className="text-xl font-bold text-lime-400">{item.meta2024Ejecutado.toLocaleString('es-ES')}</p>
+                            </div>
+                            <div className="bg-gray-800/50 p-3 rounded-lg border border-gray-700/50 text-center">
+                                <p className="text-xs text-gray-400 uppercase tracking-wider">Programado 2025</p>
+                                <p className="text-xl font-bold text-white">{item.meta2025Programado.toLocaleString('es-ES')}</p>
+                            </div>
+                            <div className="bg-gray-800/50 p-3 rounded-lg border border-gray-700/50 text-center">
+                                <p className="text-xs text-gray-400 uppercase tracking-wider">Ejecutado 2025</p>
+                                <p className="text-xl font-bold text-lime-400">{item.meta2025Ejecutado.toLocaleString('es-ES')}</p>
+                            </div>
                         </div>
                     </div>
-                    {faltante > 0 && (
+
+                    {faltante2025 > 0 ? (
                         <div className="mt-5 flex items-start gap-3 bg-blue-900/30 border border-blue-800/50 rounded-lg p-3">
                             <InformationCircleIcon className="w-5 h-5 text-blue-400 flex-shrink-0 mt-0.5" />
                             <p className="text-sm text-blue-200">
-                                <span className="font-bold">{faltante.toLocaleString('es-ES')}</span> unidades restantes para cumplir la meta al 31 de Diciembre de 2025.
+                                <span className="font-bold">{faltante2025.toLocaleString('es-ES')}</span> unidades restantes para cumplir la meta programada para 2025.
+                            </p>
+                        </div>
+                    ) : (
+                         <div className="mt-5 flex items-start gap-3 bg-green-900/30 border border-green-800/50 rounded-lg p-3">
+                            <CheckIcon className="w-5 h-5 text-green-400 flex-shrink-0 mt-0.5" />
+                            <p className="text-sm text-green-200">
+                                <span className="font-bold">¡Meta de 2025 cumplida!</span> 
+                                {faltanteCuatrienio > 0 
+                                    ? ` Faltan ${faltanteCuatrienio.toLocaleString('es-ES')} unidades para la meta del cuatrienio.`
+                                    : ' ¡Meta del cuatrienio también cumplida!'}
                             </p>
                         </div>
                     )}
                 </div>
                 
-                <RadialProgress key={`${item.producto}-${index}`} percentage={percentage} />
+                <div className="flex flex-col items-center gap-4 flex-shrink-0">
+                  <RadialProgress key={`${item.producto}-${index}`} percentage={percentage} />
+                  {item.ejecutado2025OP && item.ejecutado2025OP > 0 && (
+                      <div className="bg-slate-800/60 p-3 rounded-lg text-center border border-slate-700 w-40">
+                          <p className="text-xs text-gray-400 uppercase">Ejecutado OP 2025</p>
+                          <p className="text-lg font-bold text-cyan-400 mt-1">
+                              ${item.ejecutado2025OP.toLocaleString('es-CO')}
+                          </p>
+                      </div>
+                  )}
+                </div>
             </div>
           );
         })}
