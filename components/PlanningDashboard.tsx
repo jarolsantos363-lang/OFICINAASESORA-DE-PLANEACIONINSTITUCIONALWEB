@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { ProcessData } from '../types';
 import { ProgressCard } from './ProgressCard';
+import YearlyProgressWidget from './YearlyProgressWidget';
 
 const Section: React.FC<{ title: string; children: React.ReactNode; gridCols?: string }> = ({ title, children, gridCols = 'lg:grid-cols-2' }) => (
     <div className="mb-12">
@@ -55,6 +56,7 @@ const PlanningDashboard: React.FC<{ data: ProcessData['planning'] }> = ({ data }
                 {activeTab === 'mensual' && hasMensual && (
                     <Section title="Planes Mensuales">
                         {mensual.map(plan => <ProgressCard key={plan.title} plan={plan} />)}
+                        {mensual.length === 1 && <YearlyProgressWidget plan={mensual[0]} />}
                     </Section>
                 )}
 
