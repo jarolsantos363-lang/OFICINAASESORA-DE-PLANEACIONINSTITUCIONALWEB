@@ -19,7 +19,7 @@ const ExpandableProcessButton: React.FC<ExpandableProcessButtonProps> = ({ proce
     };
 
     return (
-        <div className="bg-gray-900/70 rounded-lg border border-gray-700 hover:border-lime-500/80 transition-all duration-300 w-full overflow-hidden shadow-lg hover-zoomIn">
+        <div className="stylish-card bg-gray-900/70 rounded-lg border border-gray-700 transition-all duration-300 w-full overflow-hidden shadow-lg">
             <div className="flex items-stretch justify-between">
                 <button 
                     onClick={() => onProcessClick(process)}
@@ -76,7 +76,7 @@ const ProcessCategory: React.FC<ProcessCategoryProps> = ({ id, title, processes,
 
     return (
       <section id={id} className="mb-12 scroll-mt-28">
-        <h3 className={`text-2xl font-semibold mb-6 border-l-4 ${borderColor} pl-4 text-gray-200`}>{title}</h3>
+        <h3 className={`font-heading text-2xl font-semibold mb-6 border-l-4 ${borderColor} pl-4 text-gray-200`}>{title}</h3>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {processes.map((process) => {
             const processData = allData[process];
@@ -98,7 +98,7 @@ const ProcessCategory: React.FC<ProcessCategoryProps> = ({ id, title, processes,
                 <button 
                 key={process} 
                 onClick={() => onProcessClick(process)}
-                className="text-left bg-gray-900/70 p-4 rounded-lg border border-gray-700 hover:bg-gray-800 hover:border-lime-500/80 transition-all duration-300 w-full focus:outline-none focus:ring-2 focus:ring-lime-500 hover-zoomIn"
+                className="stylish-card text-left bg-gray-900/70 p-4 rounded-lg border border-gray-700 transition-all duration-300 w-full focus:outline-none focus:ring-2 focus:ring-lime-500"
                 >
                 <p className="text-gray-300 font-medium">{process}</p>
                 </button>

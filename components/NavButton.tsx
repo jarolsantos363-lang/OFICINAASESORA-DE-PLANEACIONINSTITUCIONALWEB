@@ -9,6 +9,8 @@ interface NavButtonProps {
 
 const NavButton: React.FC<NavButtonProps> = ({ onClick, disabled, direction, children }) => {
     const isPrev = direction === 'prev';
+    
+    const ariaLabel = isPrev ? 'Ir a la sección anterior' : 'Ir a la sección siguiente';
 
     const SvgIcon = () => (
         <svg
@@ -17,6 +19,7 @@ const NavButton: React.FC<NavButtonProps> = ({ onClick, disabled, direction, chi
             viewBox="0 0 74 74"
             height="34"
             width="34"
+            aria-hidden="true"
         >
             <circle strokeWidth="3" stroke="black" r="35.5" cy="37" cx="37"></circle>
             <path
@@ -31,6 +34,7 @@ const NavButton: React.FC<NavButtonProps> = ({ onClick, disabled, direction, chi
             onClick={onClick}
             disabled={disabled}
             className={`nav-button ${isPrev ? 'nav-button--prev' : ''}`}
+            aria-label={ariaLabel}
         >
             {isPrev && <SvgIcon />}
             <span>{children}</span>

@@ -8,13 +8,13 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;700;800&family=Lato:wght@400;700&display=swap" rel="stylesheet">
     <style>
       html {
         scroll-behavior: smooth;
       }
       body {
-        font-family: 'Inter', sans-serif;
+        font-family: 'Lato', sans-serif;
         background-color: #1E2129;
         color: #E5E7EB;
         position: relative;
@@ -32,6 +32,10 @@
         background-position: center;
         opacity: 0.1;
         z-index: -1;
+      }
+
+      h1, h2, h3, h4, h5, h6, .font-heading {
+        font-family: 'Poppins', sans-serif;
       }
 
       /* From Uiverse.io by EddyBel, customized for INFIBAGUE */
@@ -202,6 +206,11 @@
       .nav-button:active:not(:disabled) {
         transform: scale(0.95);
       }
+      
+      .nav-button:focus-visible {
+        outline: none;
+        box-shadow: 0 0 0 3px #1E2129, 0 0 0 5px #c4e201;
+      }
 
       .nav-button:disabled {
         background: #4a5568;
@@ -231,26 +240,6 @@
         }
       }
 
-      /* ZoomIn Animation on Hover */
-      .hover-zoomIn {
-        transition: transform 0.3s ease-out;
-      }
-      .hover-zoomIn:hover {
-        animation: zoomIn 0.5s;
-      }
-      @keyframes zoomIn {
-        from {
-          opacity: 0.8;
-          transform: scale3d(0.95, 0.95, 0.95);
-        }
-        50% {
-          opacity: 1;
-        }
-        to {
-          transform: scale3d(1, 1, 1);
-        }
-      }
-
       /* Scroll To Top/Bottom Button */
       .scroll-btn {
         position: fixed;
@@ -268,7 +257,7 @@
         z-index: 50;
         opacity: 0;
         transform: translateY(100px);
-        transition: opacity 0.3s ease-out, transform 0.4s ease-out;
+        transition: opacity 0.3s ease-out, transform 0.4s ease-out, box-shadow 0.3s ease, background-image 0.3s ease;
       }
       .scroll-btn.visible {
         opacity: 1;
@@ -335,6 +324,94 @@
         opacity: 1;
         transform: scale(1) translateY(0);
         pointer-events: auto;
+      }
+
+      /* Scroll-triggered animation */
+      .scroll-fade-up {
+          opacity: 0;
+          transform: translateY(40px);
+          transition: opacity 0.7s ease-out, transform 0.7s ease-out;
+      }
+      .scroll-fade-up.is-visible {
+          opacity: 1;
+          transform: translateY(0);
+      }
+      
+      /* PlanningDashboard Tabs */
+      .planning-tabs-container {
+          display: flex;
+          flex-wrap: wrap;
+          gap: 0.5rem;
+          margin-bottom: 2rem;
+          border-bottom: 2px solid #374151; /* gray-700 */
+      }
+      .planning-tab {
+          padding: 0.75rem 1.5rem;
+          font-weight: 600;
+          color: #9CA3AF; /* gray-400 */
+          cursor: pointer;
+          transition: all 0.2s ease;
+          border-bottom: 3px solid transparent;
+          position: relative;
+          top: 2px;
+      }
+      .planning-tab:hover {
+          color: #E5E7EB; /* gray-200 */
+          background-color: #374151; /* gray-700 */
+          border-radius: 6px 6px 0 0;
+      }
+      .planning-tab.active {
+          color: #c4e201; /* lime-400ish */
+          border-bottom-color: #c4e201;
+      }
+
+      @keyframes tab-content-fade-in {
+          from { opacity: 0; transform: translateY(15px); }
+          to { opacity: 1; transform: translateY(0); }
+      }
+      .animate-tab-content-fade-in {
+          animation: tab-content-fade-in 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+      }
+
+      /* New Stylish Card Effect */
+      .stylish-card {
+        position: relative;
+        overflow: hidden;
+        transition: transform 0.3s ease-out, border-color 0.4s ease-out;
+      }
+      .stylish-card:hover {
+        transform: scale(1.02) translateY(-2px);
+        border-color: rgba(196, 226, 1, 0.7);
+      }
+      .stylish-card::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -150%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(to right, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.15) 50%, rgba(255, 255, 255, 0) 100%);
+        transform: skewX(-25deg);
+        transition: left 0.8s;
+      }
+      .stylish-card:hover::after {
+        left: 150%;
+      }
+
+      /* Text Gradient Effect */
+      .text-gradient {
+          background: linear-gradient(90deg, #c4e201, #a6c1ee, #fbc2eb, #c4e201);
+          -webkit-background-clip: text;
+          -webkit-text-fill-color: transparent;
+          background-clip: text;
+          text-fill-color: transparent;
+          animation: gradient-flow 10s ease infinite;
+          background-size: 200% 200%;
+      }
+      @keyframes gradient-flow {
+          0% { background-position: 0% 50%; }
+          50% { background-position: 100% 50%; }
+          100% { background-position: 0% 50%; }
       }
 
     </style>

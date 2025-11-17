@@ -25,8 +25,8 @@ const statusConfig = {
 
 export const ProgressCard: React.FC<ProgressCardProps> = ({ plan }) => {
     return (
-        <div className="bg-gray-900 rounded-xl shadow-lg p-5 border border-gray-800 transition-all duration-300">
-            <h4 className="font-bold text-lg text-lime-400 mb-4">{plan.title}</h4>
+        <div className="bg-gradient-to-br from-gray-900/80 to-gray-800/50 rounded-xl shadow-lg p-5 border border-gray-800 transition-all duration-300 hover:-translate-y-1.5 hover:shadow-2xl hover:shadow-lime-500/20 group">
+            <h4 className="font-bold text-lg text-lime-400 mb-4 group-hover:text-lime-300 transition-colors">{plan.title}</h4>
             
             <div className="space-y-1">
                 {plan.items.map((item, index) => (

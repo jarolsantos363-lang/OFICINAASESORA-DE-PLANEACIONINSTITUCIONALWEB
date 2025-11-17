@@ -5,6 +5,7 @@ import { strategicProcesses, misionalProcesses, supportProcesses, evaluationProc
 import { SearchIcon } from './icons/SearchIcon';
 import { XCircleIcon } from './icons/XCircleIcon';
 import { AllProcessData } from '../types';
+import { useIntersectionObserver } from '../hooks/useIntersectionObserver';
 
 interface HomePageProps {
   onProcessClick: (processName: string) => void;
@@ -15,6 +16,7 @@ interface HomePageProps {
 
 const HomePage: React.FC<HomePageProps> = ({ onProcessClick, allData, onSubProcessClick }) => {
     const [searchQuery, setSearchQuery] = useState('');
+    const [mapRef, isMapIntersecting] = useIntersectionObserver({ freezeOnceVisible: true, threshold: 0.05 });
 
     const filteredProcesses = useMemo(() => {
         if (!searchQuery) {
@@ -69,8 +71,11 @@ const HomePage: React.FC<HomePageProps> = ({ onProcessClick, allData, onSubProce
     <>
         <MissionVision />
 
-        <div className="my-16">
-        <h2 className="text-4xl font-bold text-center mb-6 text-white">Mapa de Procesos</h2>
+        <div 
+          ref={mapRef}
+          className={`my-16 scroll-fade-up ${isMapIntersecting ? 'is-visible' : ''}`}
+        >
+        <h2 className="text-4xl font-bold text-center mb-6 text-white font-heading text-gradient">Mapa de Procesos</h2>
         <div className="max-w-xl mx-auto mb-10 flex justify-center">
             <div className="input__container">
                 <div className="shadow__input"></div>
