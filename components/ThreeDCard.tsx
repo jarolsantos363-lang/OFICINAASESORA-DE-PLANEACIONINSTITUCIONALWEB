@@ -5,15 +5,18 @@ type MouseEnterContextType = [boolean, React.Dispatch<React.SetStateAction<boole
 
 const MouseEnterContext = createContext<MouseEnterContextType | undefined>(undefined);
 
+// FIX: Define a named interface for CardContainer props to improve type checking and clarity.
+interface CardContainerProps {
+  children: React.ReactNode;
+  className?: string;
+  containerClassName?: string;
+}
+
 export const CardContainer = ({
   children,
   className,
   containerClassName,
-}: {
-  children: React.ReactNode;
-  className?: string;
-  containerClassName?: string;
-}) => {
+}: CardContainerProps) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const [isMouseEntered, setIsMouseEntered] = useState(false);
 
@@ -56,19 +59,36 @@ export const CardContainer = ({
   );
 };
 
+// FIX: Define a named interface for CardBody props.
+interface CardBodyProps {
+  children: React.ReactNode;
+  className?: string;
+}
+
 export const CardBody = ({
   children,
   className,
-}: {
-  children: React.ReactNode;
-  className?: string;
-}) => {
+}: CardBodyProps) => {
   return (
     <div className={`h-full w-full [transform-style:preserve-3d] [&>*]:[transform-style:preserve-3d] ${className}`}>
       {children}
     </div>
   );
 };
+
+// FIX: Define a named interface for CardItem props.
+interface CardItemProps {
+  as?: React.ElementType;
+  children: React.ReactNode;
+  className?: string;
+  translateX?: number;
+  translateY?: number;
+  translateZ?: number;
+  rotateX?: number;
+  rotateY?: number;
+  rotateZ?: number;
+  [key: string]: any;
+}
 
 export const CardItem = ({
   as: Tag = 'div',
@@ -81,18 +101,7 @@ export const CardItem = ({
   rotateY = 0,
   rotateZ = 0,
   ...rest
-}: {
-  as?: React.ElementType;
-  children: React.ReactNode;
-  className?: string;
-  translateX?: number;
-  translateY?: number;
-  translateZ?: number;
-  rotateX?: number;
-  rotateY?: number;
-  rotateZ?: number;
-  [key: string]: any;
-}) => {
+}: CardItemProps) => {
   const ref = useRef<HTMLDivElement>(null);
   const [isMouseEntered] = useMouseEnter();
 

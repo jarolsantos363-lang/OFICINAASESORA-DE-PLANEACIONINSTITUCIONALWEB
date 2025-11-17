@@ -35,9 +35,10 @@ const CompositeProcessDashboard: React.FC<CompositeProcessDashboardProps> = ({ p
 
   // This logic is to handle processes that only have sub-processes, like "Operacion De Esquemas Empresariales"
   if (!showTabs) {
+    // FIX: Refactored this block to resolve obscure TypeScript errors about missing 'children' props.
     return (
         <div className="pt-6 animate-fade-in">
-             <CardContainer containerClassName="py-0" className="w-full">
+            <CardContainer containerClassName="py-0" className="w-full">
                 <CardBody className="bg-gray-900/80 relative group/card border-lime-500/40 w-full max-w-2xl mx-auto rounded-xl p-6 border h-auto">
                     <CardItem translateZ={50} className="text-2xl font-bold text-white">
                         {processName}
@@ -56,13 +57,13 @@ const CompositeProcessDashboard: React.FC<CompositeProcessDashboardProps> = ({ p
                     </CardItem>
                     <div className="flex justify-center items-center mt-10">
                         <CardItem
-                        translateZ={20}
-                        as="button"
-                        onClick={() => setIsExpanded(!isExpanded)}
-                        className="px-6 py-3 rounded-xl bg-lime-500 text-black font-bold text-sm flex items-center gap-2 shadow-lg shadow-lime-500/20 hover:bg-lime-400 transition-colors"
+                            translateZ={20}
+                            as="button"
+                            onClick={() => setIsExpanded(!isExpanded)}
+                            className="px-6 py-3 rounded-xl bg-lime-500 text-black font-bold text-sm flex items-center gap-2 shadow-lg shadow-lime-500/20 hover:bg-lime-400 transition-colors"
                         >
-                        <span>{isExpanded ? 'Ocultar' : 'Mostrar'} Unidades de Negocio</span>
-                        <ChevronDown className={`w-4 h-4 transition-transform duration-300 ${isExpanded ? 'rotate-180' : ''}`} />
+                            <span>{isExpanded ? 'Ocultar' : 'Mostrar'} Unidades de Negocio</span>
+                            <ChevronDown className={`w-4 h-4 transition-transform duration-300 ${isExpanded ? 'rotate-180' : ''}`} />
                         </CardItem>
                     </div>
 

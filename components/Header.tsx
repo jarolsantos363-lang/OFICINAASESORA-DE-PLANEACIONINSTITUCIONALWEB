@@ -6,9 +6,10 @@ import { ChevronDown } from './icons/ChevronDown';
 
 interface HeaderProps {
     onGoHome: () => void;
+    onShowPiipReport: () => void;
 }
 
-const Header: React.FC<HeaderProps> = ({ onGoHome }) => {
+const Header: React.FC<HeaderProps> = ({ onGoHome, onShowPiipReport }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
@@ -20,11 +21,21 @@ const Header: React.FC<HeaderProps> = ({ onGoHome }) => {
       setIsDropdownOpen(false);
   }
 
+  const handlePiipReportClick = (event: React.MouseEvent<HTMLAnchorElement>) => {
+    event.preventDefault();
+    onShowPiipReport();
+    setIsMenuOpen(false);
+    setIsDropdownOpen(false);
+  }
+
   const handleLinkClick = (event: React.MouseEvent<HTMLAnchorElement>) => {
     const href = event.currentTarget.getAttribute('href');
     if (!href || !href.startsWith('#')) {
-      setIsMenuOpen(false);
-      setIsDropdownOpen(false);
+      // Allow regular navigation for external links or new pages
+      if (event.currentTarget.target !== '_blank') {
+          setIsMenuOpen(false);
+          setIsDropdownOpen(false);
+      }
       return;
     }
 
@@ -101,6 +112,9 @@ const Header: React.FC<HeaderProps> = ({ onGoHome }) => {
                   </div>
                 )}
               </div>
+               <a href="#" onClick={handlePiipReportClick} className="px-3 py-2 rounded-md text-sm font-medium text-gray-300 hover:text-white hover:bg-gray-800 transition-colors">
+                Reporte de la PIIP
+              </a>
               <a href="https://www.infibague.gov.co" target="_blank" rel="noopener noreferrer" className="px-3 py-2 rounded-md text-sm font-medium text-gray-300 hover:text-white hover:bg-gray-800 transition-colors">
                 Sitio Principal
               </a>
@@ -119,6 +133,7 @@ const Header: React.FC<HeaderProps> = ({ onGoHome }) => {
         <nav className="md:hidden" id="mobile-menu">
           <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3 bg-black/90 backdrop-blur-sm">
             <a href="#top" onClick={handleHomeClick} className="block px-3 py-2 rounded-md text-base font-medium text-gray-300 hover:text-white hover:bg-gray-700">Inicio</a>
+            <a href="#" onClick={handlePiipReportClick} className="block px-3 py-2 rounded-md text-base font-medium text-gray-300 hover:text-white hover:bg-gray-700">Reporte de la PIIP</a>
             <div className="border-t border-gray-700 my-2"></div>
             <h3 className="px-3 pt-2 pb-1 text-xs font-semibold text-lime-400 uppercase tracking-wider">Procesos</h3>
             <div className="pl-2 space-y-1">

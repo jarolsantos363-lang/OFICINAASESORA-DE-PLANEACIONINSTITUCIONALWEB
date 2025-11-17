@@ -1,3 +1,4 @@
+
 import React, { useState, useCallback } from 'react';
 import HomePage from './components/HomePage';
 import Dashboard from './components/Dashboard';
@@ -9,6 +10,7 @@ import { AllProcessData, ProcessData } from './types';
 import { fetchDataFromGoogleSheets } from './services/googleSheets';
 import ScrollToTopButton from './components/ScrollToTopButton';
 import Calendar from './components/Calendar';
+import PiipReport from './piip-report';
 
 const App: React.FC = () => {
     const [processStack, setProcessStack] = useState<string[]>([]);
@@ -30,6 +32,7 @@ const App: React.FC = () => {
         withLoading(() => setProcessStack([processName, subProcessName]));
     };
     const handleGoBack = () => withLoading(() => setProcessStack(stack => stack.slice(0, -1)));
+    const handleShowPiipReport = () => withLoading(() => setProcessStack(['piip-report']));
     
     const handleUpdateData = async () => {
         setIsLoading(true);
@@ -44,11 +47,12 @@ const App: React.FC = () => {
     };
 
     const isHomePage = processStack.length === 0;
-    const currentProcessName = processStack[processStack.length - 1];
-    const parentProcessName = processStack.length > 1 ? processStack[processStack.length - 2] : undefined;
+    const isPiipReport = processStack.length === 1 && processStack[0] === 'piip-report';
+    const currentProcessName = processStack.length > 0 && !isPiipReport ? processStack[processStack.length - 1] : "";
+    const parentProcessName = processStack.length > 1 && !isPiipReport ? processStack[processStack.length - 2] : undefined;
     
     const getProcessData = (): ProcessData | null => {
-        if (isHomePage) return null;
+        if (isHomePage || isPiipReport) return null;
         try {
             let data = allData[processStack[0]];
             if (!data) throw new Error("Process not found");
@@ -101,9 +105,11 @@ const App: React.FC = () => {
     return (
         <>
             <Spinner isLoading={isLoading} />
-            <Header onGoHome={handleGoHome} />
+            <Header onGoHome={handleGoHome} onShowPiipReport={handleShowPiipReport} />
             <main className="container mx-auto px-4 sm:px-6 lg:px-8 pt-28 pb-12 min-h-[calc(100vh-15rem)]">
-                {isHomePage || !currentProcessData ? (
+                {isPiipReport ? (
+                    <PiipReport onGoBack={handleGoHome} />
+                ) : isHomePage || !currentProcessData ? (
                     <HomePage 
                         onProcessClick={handleSelectProcess} 
                         onGoHome={handleGoHome} 
