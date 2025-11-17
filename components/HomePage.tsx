@@ -1,3 +1,4 @@
+
 import React, { useState, useMemo } from 'react';
 import MissionVision from './MissionVision';
 import ProcessSections from './ProcessSections';
@@ -14,6 +15,36 @@ interface HomePageProps {
   onSubProcessClick: (processName: string, subProcessName: string) => void;
 }
 
+const normalizeStringForSearch = (str: string) => 
+  str.toString().toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+
+const deepSearch = (obj: any, query: string): boolean => {
+    if (!query) return false;
+    const normalizedQuery = normalizeStringForSearch(query);
+
+    const search = (current: any): boolean => {
+        if (current === null || current === undefined) {
+            return false;
+        }
+        if (typeof current === 'string' || typeof current === 'number' || typeof current === 'boolean') {
+            return normalizeStringForSearch(String(current)).includes(normalizedQuery);
+        }
+        if (Array.isArray(current)) {
+            return current.some(item => search(item));
+        }
+        if (typeof current === 'object') {
+            return Object.entries(current).some(([key, value]) => {
+                if (normalizeStringForSearch(key).includes(normalizedQuery)) return true;
+                return search(value);
+            });
+        }
+        return false;
+    };
+    
+    return search(obj);
+};
+
+
 const HomePage: React.FC<HomePageProps> = ({ onProcessClick, allData, onSubProcessClick }) => {
     const [searchQuery, setSearchQuery] = useState('');
     const [mapRef, isMapIntersecting] = useIntersectionObserver({ freezeOnceVisible: true, threshold: 0.05 });
@@ -28,33 +59,14 @@ const HomePage: React.FC<HomePageProps> = ({ onProcessClick, allData, onSubProce
             };
         }
 
-        const lowerCaseQuery = searchQuery.toLowerCase();
-
-        const deepSearch = (obj: any, query: string): boolean => {
-            if (obj === null || obj === undefined) {
-                return false;
-            }
-            if (typeof obj === 'string' || typeof obj === 'number') {
-                return String(obj).toLowerCase().includes(query);
-            }
-            if (Array.isArray(obj)) {
-                return obj.some(item => deepSearch(item, query));
-            }
-            if (typeof obj === 'object') {
-                return Object.entries(obj).some(([key, value]) => {
-                    if (key.toLowerCase().includes(query)) return true;
-                    return deepSearch(value, query);
-                });
-            }
-            return false;
-        };
-
         const allProcesses = [...strategicProcesses, ...misionalProcesses, ...supportProcesses, ...evaluationProcesses];
         
+        const normalizedQuery = normalizeStringForSearch(searchQuery);
+
         const matchingProcesses = allProcesses.filter(name => {
-            if (name.toLowerCase().includes(lowerCaseQuery)) return true;
+            if (normalizeStringForSearch(name).includes(normalizedQuery)) return true;
             const processData = allData[name] || allData['default'];
-            return deepSearch(processData, lowerCaseQuery);
+            return deepSearch(processData, searchQuery);
         });
 
         return {
@@ -105,6 +117,7 @@ const HomePage: React.FC<HomePageProps> = ({ onProcessClick, allData, onSubProce
             evaluationProcesses={filteredProcesses.evaluation}
             onSubProcessClick={onSubProcessClick}
             allData={allData}
+            searchQuery={searchQuery}
         />
         </div>
     </>

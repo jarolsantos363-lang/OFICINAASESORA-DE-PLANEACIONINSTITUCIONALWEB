@@ -1,23 +1,79 @@
-import React, { useState } from 'react';
+
+import React, { useState, useMemo, useEffect } from 'react';
 import { AllProcessData, ProcessData } from '../types';
 import { ChevronDown } from './icons/ChevronDown';
 import { useIntersectionObserver } from '../hooks/useIntersectionObserver';
 
+const normalizeStringForSearch = (str: string) => 
+  str.toString().toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+
+const deepSearch = (obj: any, query: string): boolean => {
+    if (!query) return false;
+    const normalizedQuery = normalizeStringForSearch(query);
+
+    const search = (current: any): boolean => {
+        if (current === null || current === undefined) {
+            return false;
+        }
+        if (typeof current === 'string' || typeof current === 'number' || typeof current === 'boolean') {
+            return normalizeStringForSearch(String(current)).includes(normalizedQuery);
+        }
+        if (Array.isArray(current)) {
+            return current.some(item => search(item));
+        }
+        if (typeof current === 'object') {
+            return Object.entries(current).some(([key, value]) => {
+                if (normalizeStringForSearch(key).includes(normalizedQuery)) return true;
+                return search(value);
+            });
+        }
+        return false;
+    };
+    
+    return search(obj);
+};
 
 interface ExpandableProcessButtonProps {
     process: string;
     subProcesses: { [key: string]: ProcessData };
     onProcessClick: (processName: string) => void;
     onSubProcessClick: (processName: string, subProcessName: string) => void;
+    searchQuery: string;
 }
 
-const ExpandableProcessButton: React.FC<ExpandableProcessButtonProps> = ({ process, subProcesses, onProcessClick, onSubProcessClick }) => {
+const ExpandableProcessButton: React.FC<ExpandableProcessButtonProps> = ({ process, subProcesses, onProcessClick, onSubProcessClick, searchQuery }) => {
     const [isExpanded, setIsExpanded] = useState(false);
+
+    useEffect(() => {
+        // Auto-expand if search query is present and finds a match within sub-processes
+        if (searchQuery) {
+            const hasMatch = Object.keys(subProcesses).some(name => {
+                const normalizedQuery = normalizeStringForSearch(searchQuery);
+                if (normalizeStringForSearch(name).includes(normalizedQuery)) return true;
+                return deepSearch(subProcesses[name], searchQuery);
+            });
+            setIsExpanded(hasMatch);
+        } else {
+            setIsExpanded(false); // Collapse when search is cleared
+        }
+    }, [searchQuery, subProcesses]);
 
     const toggleExpansion = (e: React.MouseEvent) => {
         e.stopPropagation();
         setIsExpanded(!isExpanded);
     };
+
+    const filteredSubProcesses = useMemo(() => {
+        const subProcessNames = Object.keys(subProcesses);
+        if (!searchQuery) {
+            return subProcessNames;
+        }
+        const normalizedQuery = normalizeStringForSearch(searchQuery);
+        return subProcessNames.filter(name => {
+            if (normalizeStringForSearch(name).includes(normalizedQuery)) return true;
+            return deepSearch(subProcesses[name], searchQuery);
+        });
+    }, [subProcesses, searchQuery]);
 
     return (
         <div className="stylish-card bg-gray-900/70 rounded-lg border border-gray-700 transition-all duration-300 w-full overflow-hidden shadow-lg">
@@ -38,23 +94,27 @@ const ExpandableProcessButton: React.FC<ExpandableProcessButtonProps> = ({ proce
                 </button>
             </div>
             <div className={`transition-all duration-300 ease-in-out ${isExpanded ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'}`}>
-                <div className="pb-3 px-4">
-                    <div className="border-t border-gray-800 pt-3">
-                        <h4 className="text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">Unidades de Negocio</h4>
-                        <ul className="space-y-1">
-                            {Object.keys(subProcesses).map(subProcessName => (
-                                <li key={subProcessName}>
-                                    <button
-                                        onClick={() => onSubProcessClick(process, subProcessName)}
-                                        className="w-full text-left text-sm text-gray-300 p-2 rounded hover:bg-gray-800 transition-colors flex items-center gap-2"
-                                    >
-                                        <span className="text-lime-500">↳</span> {subProcessName}
-                                    </button>
-                                </li>
-                            ))}
-                        </ul>
+                {filteredSubProcesses.length > 0 ? (
+                    <div className="pb-3 px-4">
+                        <div className="border-t border-gray-800 pt-3">
+                            <h4 className="text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">Unidades de Negocio</h4>
+                            <ul className="space-y-1">
+                                {filteredSubProcesses.map(subProcessName => (
+                                    <li key={subProcessName}>
+                                        <button
+                                            onClick={() => onSubProcessClick(process, subProcessName)}
+                                            className="w-full text-left text-sm text-gray-300 p-2 rounded hover:bg-gray-800 transition-colors flex items-center gap-2"
+                                        >
+                                            <span className="text-lime-500">↳</span> {subProcessName}
+                                        </button>
+                                    </li>
+                                ))}
+                            </ul>
+                        </div>
                     </div>
-                </div>
+                ) : (
+                    searchQuery && <p className="text-xs text-gray-500 p-4 text-center">Ninguna unidad de negocio coincide con la búsqueda.</p>
+                )}
             </div>
         </div>
     );
@@ -68,9 +128,10 @@ interface ProcessCategoryProps {
   onProcessClick: (processName: string) => void;
   allData: AllProcessData;
   onSubProcessClick: (processName: string, subProcessName: string) => void;
+  searchQuery: string;
 }
 
-const ProcessCategory: React.FC<ProcessCategoryProps> = ({ id, title, processes, borderColor, onProcessClick, allData, onSubProcessClick }) => {
+const ProcessCategory: React.FC<ProcessCategoryProps> = ({ id, title, processes, borderColor, onProcessClick, allData, onSubProcessClick, searchQuery }) => {
     const [ref, isIntersecting] = useIntersectionObserver({ threshold: 0.1 });
     
     if (processes.length === 0) {
@@ -97,6 +158,7 @@ const ProcessCategory: React.FC<ProcessCategoryProps> = ({ id, title, processes,
                         subProcesses={subProcesses}
                         onProcessClick={onProcessClick}
                         onSubProcessClick={onSubProcessClick}
+                        searchQuery={searchQuery}
                     />
                 );
             }
@@ -124,6 +186,7 @@ interface ProcessSectionsProps {
     evaluationProcesses: string[];
     allData: AllProcessData;
     onSubProcessClick: (processName: string, subProcessName: string) => void;
+    searchQuery: string;
 }
 
 const ProcessSections: React.FC<ProcessSectionsProps> = ({ 
@@ -133,7 +196,8 @@ const ProcessSections: React.FC<ProcessSectionsProps> = ({
     supportProcesses,
     evaluationProcesses,
     allData,
-    onSubProcessClick
+    onSubProcessClick,
+    searchQuery
 }) => {
   const allProcessesCount = strategicProcesses.length + misionalProcesses.length + supportProcesses.length + evaluationProcesses.length;
 
@@ -149,6 +213,7 @@ const ProcessSections: React.FC<ProcessSectionsProps> = ({
                     onProcessClick={onProcessClick}
                     allData={allData}
                     onSubProcessClick={onSubProcessClick}
+                    searchQuery={searchQuery}
                 />
                 <ProcessCategory 
                     id="procesos-misionales" 
@@ -158,6 +223,7 @@ const ProcessSections: React.FC<ProcessSectionsProps> = ({
                     onProcessClick={onProcessClick}
                     allData={allData}
                     onSubProcessClick={onSubProcessClick}
+                    searchQuery={searchQuery}
                 />
                 <ProcessCategory 
                     id="procesos-de-apoyo" 
@@ -167,6 +233,7 @@ const ProcessSections: React.FC<ProcessSectionsProps> = ({
                     onProcessClick={onProcessClick}
                     allData={allData}
                     onSubProcessClick={onSubProcessClick}
+                    searchQuery={searchQuery}
                 />
                 <ProcessCategory 
                     id="procesos-de-evaluacion" 
@@ -176,6 +243,7 @@ const ProcessSections: React.FC<ProcessSectionsProps> = ({
                     onProcessClick={onProcessClick}
                     allData={allData}
                     onSubProcessClick={onSubProcessClick}
+                    searchQuery={searchQuery}
                 />
             </>
         ) : (

@@ -7,7 +7,8 @@ const MouseEnterContext = createContext<MouseEnterContextType | undefined>(undef
 
 // FIX: Define a named interface for CardContainer props to improve type checking and clarity.
 interface CardContainerProps {
-  children: React.ReactNode;
+  // FIX: Made children optional to resolve obscure TypeScript error.
+  children?: React.ReactNode;
   className?: string;
   containerClassName?: string;
 }
@@ -61,7 +62,8 @@ export const CardContainer = ({
 
 // FIX: Define a named interface for CardBody props.
 interface CardBodyProps {
-  children: React.ReactNode;
+  // FIX: Made children optional to resolve obscure TypeScript error.
+  children?: React.ReactNode;
   className?: string;
 }
 
@@ -79,7 +81,8 @@ export const CardBody = ({
 // FIX: Define a named interface for CardItem props.
 interface CardItemProps {
   as?: React.ElementType;
-  children: React.ReactNode;
+  // FIX: Made children optional to resolve obscure TypeScript error.
+  children?: React.ReactNode;
   className?: string;
   translateX?: number;
   translateY?: number;
