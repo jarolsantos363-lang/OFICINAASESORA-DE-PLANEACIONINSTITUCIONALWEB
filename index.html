@@ -230,6 +230,112 @@
         }
       }
 
+      /* ZoomIn Animation on Hover */
+      .hover-zoomIn {
+        transition: transform 0.3s ease-out;
+      }
+      .hover-zoomIn:hover {
+        animation: zoomIn 0.5s;
+      }
+      @keyframes zoomIn {
+        from {
+          opacity: 0.8;
+          transform: scale3d(0.95, 0.95, 0.95);
+        }
+        50% {
+          opacity: 1;
+        }
+        to {
+          transform: scale3d(1, 1, 1);
+        }
+      }
+
+      /* Scroll To Top/Bottom Button */
+      .scroll-btn {
+        position: fixed;
+        bottom: 2rem;
+        right: 2rem;
+        width: 3.5rem;
+        height: 3.5rem;
+        border-radius: 50%;
+        background-image: linear-gradient(45deg, #84fab0 0%, #8fd3f4 100%);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        z-index: 50;
+        opacity: 0;
+        transform: translateY(100px);
+        transition: opacity 0.3s ease-out, transform 0.4s ease-out;
+      }
+      .scroll-btn.visible {
+        opacity: 1;
+        transform: translateY(0);
+      }
+      .scroll-btn:hover {
+        transform: scale(1.1);
+        box-shadow: 0 8px 20px rgba(132, 250, 176, 0.4);
+      }
+      .scroll-btn svg {
+        width: 1.75rem;
+        height: 1.75rem;
+        color: #1E2129;
+        transition: transform 0.3s;
+      }
+
+      /* Calendar Widget Styles */
+      .calendar-widget-container {
+        position: fixed;
+        top: 5.5rem; /* Below header */
+        right: 2rem;
+        z-index: 45;
+      }
+
+      .calendar-toggle-btn {
+        width: 3.5rem;
+        height: 3.5rem;
+        border-radius: 50%;
+        background-image: linear-gradient(45deg, #fbc2eb 0%, #a6c1ee 100%);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: all 0.3s ease-out;
+      }
+      .calendar-toggle-btn:hover {
+        transform: scale(1.1);
+        box-shadow: 0 8px 20px rgba(251, 194, 235, 0.4);
+      }
+      .calendar-toggle-btn svg {
+        width: 1.75rem;
+        height: 1.75rem;
+        color: #1E2129;
+      }
+
+      .calendar-widget {
+        position: absolute;
+        top: calc(100% + 0.5rem);
+        right: 0;
+        width: 320px;
+        background: #2a2f3b;
+        border-radius: 1rem;
+        padding: 1rem;
+        border: 1px solid #4a5568;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        opacity: 0;
+        transform-origin: top right;
+        transform: scale(0.95) translateY(-10px);
+        transition: opacity 0.3s ease-out, transform 0.3s ease-out;
+        pointer-events: none;
+      }
+      .calendar-widget.visible {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+        pointer-events: auto;
+      }
+
     </style>
 <script type="importmap">
 {

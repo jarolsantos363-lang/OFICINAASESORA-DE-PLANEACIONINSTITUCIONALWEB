@@ -1,4 +1,63 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { AllProcessData, ProcessData } from '../types';
+import { ChevronDown } from './icons/ChevronDown';
+
+
+interface ExpandableProcessButtonProps {
+    process: string;
+    subProcesses: { [key: string]: ProcessData };
+    onProcessClick: (processName: string) => void;
+    onSubProcessClick: (processName: string, subProcessName: string) => void;
+}
+
+const ExpandableProcessButton: React.FC<ExpandableProcessButtonProps> = ({ process, subProcesses, onProcessClick, onSubProcessClick }) => {
+    const [isExpanded, setIsExpanded] = useState(false);
+
+    const toggleExpansion = (e: React.MouseEvent) => {
+        e.stopPropagation();
+        setIsExpanded(!isExpanded);
+    };
+
+    return (
+        <div className="bg-gray-900/70 rounded-lg border border-gray-700 hover:border-lime-500/80 transition-all duration-300 w-full overflow-hidden shadow-lg hover-zoomIn">
+            <div className="flex items-stretch justify-between">
+                <button 
+                    onClick={() => onProcessClick(process)}
+                    className="text-left flex-grow p-4 focus:outline-none group"
+                >
+                    <p className="text-gray-300 font-medium group-hover:text-lime-400 transition-colors">{process}</p>
+                </button>
+                <button 
+                    onClick={toggleExpansion}
+                    className="p-4 flex-shrink-0 hover:bg-gray-800 transition-colors focus:outline-none border-l border-gray-800"
+                    aria-label={isExpanded ? 'Ocultar unidades de negocio' : 'Mostrar unidades de negocio'}
+                    aria-expanded={isExpanded}
+                >
+                    <ChevronDown className={`w-5 h-5 text-gray-400 transition-transform duration-300 ${isExpanded ? 'rotate-180' : ''}`} />
+                </button>
+            </div>
+            <div className={`transition-all duration-300 ease-in-out ${isExpanded ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'}`}>
+                <div className="pb-3 px-4">
+                    <div className="border-t border-gray-800 pt-3">
+                        <h4 className="text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">Unidades de Negocio</h4>
+                        <ul className="space-y-1">
+                            {Object.keys(subProcesses).map(subProcessName => (
+                                <li key={subProcessName}>
+                                    <button
+                                        onClick={() => onSubProcessClick(process, subProcessName)}
+                                        className="w-full text-left text-sm text-gray-300 p-2 rounded hover:bg-gray-800 transition-colors flex items-center gap-2"
+                                    >
+                                        <span className="text-lime-500">↳</span> {subProcessName}
+                                    </button>
+                                </li>
+                            ))}
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    );
+};
 
 interface ProcessCategoryProps {
   id: string;
@@ -6,9 +65,11 @@ interface ProcessCategoryProps {
   processes: string[];
   borderColor: string;
   onProcessClick: (processName: string) => void;
+  allData: AllProcessData;
+  onSubProcessClick: (processName: string, subProcessName: string) => void;
 }
 
-const ProcessCategory: React.FC<ProcessCategoryProps> = ({ id, title, processes, borderColor, onProcessClick }) => {
+const ProcessCategory: React.FC<ProcessCategoryProps> = ({ id, title, processes, borderColor, onProcessClick, allData, onSubProcessClick }) => {
     if (processes.length === 0) {
         return null;
     }
@@ -17,15 +78,32 @@ const ProcessCategory: React.FC<ProcessCategoryProps> = ({ id, title, processes,
       <section id={id} className="mb-12 scroll-mt-28">
         <h3 className={`text-2xl font-semibold mb-6 border-l-4 ${borderColor} pl-4 text-gray-200`}>{title}</h3>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          {processes.map((process) => (
-            <button 
-              key={process} 
-              onClick={() => onProcessClick(process)}
-              className="text-left bg-gray-900/70 p-4 rounded-lg border border-gray-700 hover:bg-gray-800 hover:border-lime-500/80 transition-all duration-300 transform hover:-translate-y-1 w-full focus:outline-none focus:ring-2 focus:ring-lime-500"
-            >
-              <p className="text-gray-300 font-medium">{process}</p>
-            </button>
-          ))}
+          {processes.map((process) => {
+            const processData = allData[process];
+            const subProcesses = processData?.subProcesses;
+
+            if (subProcesses && Object.keys(subProcesses).length > 0) {
+                return (
+                    <ExpandableProcessButton 
+                        key={process} 
+                        process={process}
+                        subProcesses={subProcesses}
+                        onProcessClick={onProcessClick}
+                        onSubProcessClick={onSubProcessClick}
+                    />
+                );
+            }
+            
+            return (
+                <button 
+                key={process} 
+                onClick={() => onProcessClick(process)}
+                className="text-left bg-gray-900/70 p-4 rounded-lg border border-gray-700 hover:bg-gray-800 hover:border-lime-500/80 transition-all duration-300 w-full focus:outline-none focus:ring-2 focus:ring-lime-500 hover-zoomIn"
+                >
+                <p className="text-gray-300 font-medium">{process}</p>
+                </button>
+            );
+          })}
         </div>
       </section>
     );
@@ -37,6 +115,8 @@ interface ProcessSectionsProps {
     misionalProcesses: string[];
     supportProcesses: string[];
     evaluationProcesses: string[];
+    allData: AllProcessData;
+    onSubProcessClick: (processName: string, subProcessName: string) => void;
 }
 
 const ProcessSections: React.FC<ProcessSectionsProps> = ({ 
@@ -44,7 +124,9 @@ const ProcessSections: React.FC<ProcessSectionsProps> = ({
     strategicProcesses,
     misionalProcesses,
     supportProcesses,
-    evaluationProcesses
+    evaluationProcesses,
+    allData,
+    onSubProcessClick
 }) => {
   const allProcessesCount = strategicProcesses.length + misionalProcesses.length + supportProcesses.length + evaluationProcesses.length;
 
@@ -58,6 +140,8 @@ const ProcessSections: React.FC<ProcessSectionsProps> = ({
                     processes={strategicProcesses} 
                     borderColor="border-gray-400"
                     onProcessClick={onProcessClick}
+                    allData={allData}
+                    onSubProcessClick={onSubProcessClick}
                 />
                 <ProcessCategory 
                     id="procesos-misionales" 
@@ -65,6 +149,8 @@ const ProcessSections: React.FC<ProcessSectionsProps> = ({
                     processes={misionalProcesses} 
                     borderColor="border-orange-500"
                     onProcessClick={onProcessClick}
+                    allData={allData}
+                    onSubProcessClick={onSubProcessClick}
                 />
                 <ProcessCategory 
                     id="procesos-de-apoyo" 
@@ -72,6 +158,8 @@ const ProcessSections: React.FC<ProcessSectionsProps> = ({
                     processes={supportProcesses} 
                     borderColor="border-blue-500"
                     onProcessClick={onProcessClick}
+                    allData={allData}
+                    onSubProcessClick={onSubProcessClick}
                 />
                 <ProcessCategory 
                     id="procesos-de-evaluacion" 
@@ -79,6 +167,8 @@ const ProcessSections: React.FC<ProcessSectionsProps> = ({
                     processes={evaluationProcesses} 
                     borderColor="border-green-500"
                     onProcessClick={onProcessClick}
+                    allData={allData}
+                    onSubProcessClick={onSubProcessClick}
                 />
             </>
         ) : (

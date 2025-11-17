@@ -4,14 +4,14 @@ const MissionVision: React.FC = () => {
   return (
     <section className="my-20">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            <div className="bg-slate-900/50 backdrop-blur-sm rounded-2xl shadow-2xl p-8 border border-slate-800 transition-all duration-300 hover:border-lime-500/50 hover:-translate-y-1">
+            <div className="bg-slate-900/50 backdrop-blur-sm rounded-2xl shadow-2xl p-8 border border-slate-800 transition-all duration-300 hover:border-lime-500/50 hover-zoomIn">
                 <h3 className="text-3xl font-bold text-lime-400 mb-3">Misión</h3>
                 <div className="w-20 h-1 bg-lime-500 rounded-full mb-6"></div>
                 <p className="text-slate-300 leading-relaxed text-base">
                     Somos el Instituto de financiamiento, promoción y desarrollo de Ibagué, una empresa industrial y comercial del estado, que gestiona y ejecuta proyectos de desarrollo urbano e inmobiliario, y presta servicios de alumbrado público, concesiones y arrendamientos, para el mejoramiento de la calidad de vida de los Ibaguereños.
                 </p>
             </div>
-             <div className="bg-slate-900/50 backdrop-blur-sm rounded-2xl shadow-2xl p-8 border border-slate-800 transition-all duration-300 hover:border-blue-500/50 hover:-translate-y-1">
+             <div className="bg-slate-900/50 backdrop-blur-sm rounded-2xl shadow-2xl p-8 border border-slate-800 transition-all duration-300 hover:border-blue-500/50 hover-zoomIn">
                 <h3 className="text-3xl font-bold text-blue-400 mb-3">Visión</h3>
                 <div className="w-20 h-1 bg-blue-500 rounded-full mb-6"></div>
                 <p className="text-slate-300 leading-relaxed text-base">

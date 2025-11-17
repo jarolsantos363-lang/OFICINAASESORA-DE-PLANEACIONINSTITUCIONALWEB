@@ -1,4 +1,3 @@
-
 import React, { useState, useMemo } from 'react';
 import MissionVision from './MissionVision';
 import ProcessSections from './ProcessSections';
@@ -11,9 +10,10 @@ interface HomePageProps {
   onProcessClick: (processName: string) => void;
   onGoHome: () => void;
   allData: AllProcessData;
+  onSubProcessClick: (processName: string, subProcessName: string) => void;
 }
 
-const HomePage: React.FC<HomePageProps> = ({ onProcessClick, allData }) => {
+const HomePage: React.FC<HomePageProps> = ({ onProcessClick, allData, onSubProcessClick }) => {
     const [searchQuery, setSearchQuery] = useState('');
 
     const filteredProcesses = useMemo(() => {
@@ -68,7 +68,7 @@ const HomePage: React.FC<HomePageProps> = ({ onProcessClick, allData }) => {
     return (
     <>
         <MissionVision />
-        
+
         <div className="my-16">
         <h2 className="text-4xl font-bold text-center mb-6 text-white">Mapa de Procesos</h2>
         <div className="max-w-xl mx-auto mb-10 flex justify-center">
@@ -98,6 +98,8 @@ const HomePage: React.FC<HomePageProps> = ({ onProcessClick, allData }) => {
             misionalProcesses={filteredProcesses.misional}
             supportProcesses={filteredProcesses.support}
             evaluationProcesses={filteredProcesses.evaluation}
+            onSubProcessClick={onSubProcessClick}
+            allData={allData}
         />
         </div>
     </>

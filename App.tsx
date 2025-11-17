@@ -7,6 +7,8 @@ import Spinner from './components/Spinner';
 import { ALL_PROCESS_DATA, allProcessCategories } from './constants';
 import { AllProcessData, ProcessData } from './types';
 import { fetchDataFromGoogleSheets } from './services/googleSheets';
+import ScrollToTopButton from './components/ScrollToTopButton';
+import Calendar from './components/Calendar';
 
 const App: React.FC = () => {
     const [processStack, setProcessStack] = useState<string[]>([]);
@@ -24,6 +26,9 @@ const App: React.FC = () => {
     const handleGoHome = useCallback(() => withLoading(() => setProcessStack([])), []);
     const handleSelectProcess = (processName: string) => withLoading(() => setProcessStack([processName]));
     const handleSelectSubProcess = (subProcessName: string) => withLoading(() => setProcessStack(stack => [...stack, subProcessName]));
+    const handleDirectToSubProcess = (processName: string, subProcessName: string) => {
+        withLoading(() => setProcessStack([processName, subProcessName]));
+    };
     const handleGoBack = () => withLoading(() => setProcessStack(stack => stack.slice(0, -1)));
     
     const handleUpdateData = async () => {
@@ -99,7 +104,12 @@ const App: React.FC = () => {
             <Header onGoHome={handleGoHome} />
             <main className="container mx-auto px-4 sm:px-6 lg:px-8 pt-28 pb-12 min-h-[calc(100vh-15rem)]">
                 {isHomePage || !currentProcessData ? (
-                    <HomePage onProcessClick={handleSelectProcess} onGoHome={handleGoHome} allData={allData} />
+                    <HomePage 
+                        onProcessClick={handleSelectProcess} 
+                        onGoHome={handleGoHome} 
+                        allData={allData}
+                        onSubProcessClick={handleDirectToSubProcess}
+                    />
                 ) : (
                     <Dashboard
                         key={processStack.join('-')}
@@ -122,6 +132,8 @@ const App: React.FC = () => {
                 )}
             </main>
             <Footer onGoHome={handleGoHome} />
+            <Calendar />
+            <ScrollToTopButton />
         </>
     );
 };
