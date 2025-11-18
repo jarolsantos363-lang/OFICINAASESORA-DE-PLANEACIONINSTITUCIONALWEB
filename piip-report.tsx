@@ -90,14 +90,10 @@ const PiipReport: React.FC<PiipReportProps> = ({ onGoBack }) => {
                     Volver al Mapa de Procesos
                 </button>
             </div>
-            <header className="mb-8">
-                <div className="flex items-center gap-4">
-                     <img className="h-12 w-auto" src="https://www.infibague.gov.co/wp-content/uploads/2025/02/logo-Infibague-blanco-300x99.png" alt="INFIBAGUE Logo" />
-                     <h1 className="text-3xl md:text-4xl font-bold font-heading text-gradient">Reporte de la PIIP</h1>
-                </div>
-            </header>
+            
+            <h1 className="text-3xl md:text-4xl font-bold font-heading text-gradient mb-8">Reporte de la PIIP</h1>
 
-            <main>
+            <div>
                 <section className="mb-12 animate-fade-in">
                     <h2 className="text-2xl font-semibold mb-4 border-l-4 border-lime-500 pl-4">Tabla de Datos</h2>
                     <div className="overflow-x-auto bg-black/20 backdrop-blur-sm rounded-lg border border-gray-700">
@@ -177,7 +173,7 @@ const PiipReport: React.FC<PiipReportProps> = ({ onGoBack }) => {
                         })}
                     </div>
                 </section>
-            </main>
+            </div>
         </div>
     );
 };

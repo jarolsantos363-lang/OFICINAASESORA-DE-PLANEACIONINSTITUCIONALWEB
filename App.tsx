@@ -11,8 +11,11 @@ import { fetchDataFromGoogleSheets } from './services/googleSheets';
 import ScrollToTopButton from './components/ScrollToTopButton';
 import Calendar from './components/Calendar';
 import PiipReport from './piip-report';
+import LmsDashboard from './components/LmsDashboard';
+import CourseCard from './components/CourseCard';
 
 const App: React.FC = () => {
+    const [view, setView] = useState<'planning' | 'lms'>('planning');
     const [processStack, setProcessStack] = useState<string[]>([]);
     const [allData, setAllData] = useState<AllProcessData>(ALL_PROCESS_DATA);
     const [isLoading, setIsLoading] = useState(false);
@@ -25,7 +28,10 @@ const App: React.FC = () => {
         }, 500); // Simulate loading time
     };
 
-    const handleGoHome = useCallback(() => withLoading(() => setProcessStack([])), []);
+    const handleGoHome = useCallback(() => {
+        setView('planning');
+        withLoading(() => setProcessStack([]))
+    }, []);
     const handleSelectProcess = (processName: string) => withLoading(() => setProcessStack([processName]));
     const handleSelectSubProcess = (subProcessName: string) => withLoading(() => setProcessStack(stack => [...stack, subProcessName]));
     const handleDirectToSubProcess = (processName: string, subProcessName: string) => {
@@ -33,7 +39,8 @@ const App: React.FC = () => {
     };
     const handleGoBack = () => withLoading(() => setProcessStack(stack => stack.slice(0, -1)));
     const handleShowPiipReport = () => withLoading(() => setProcessStack(['piip-report']));
-    
+    const handleShowLms = () => withLoading(() => setView('lms'));
+
     const handleUpdateData = async () => {
         setIsLoading(true);
         try {
@@ -45,6 +52,22 @@ const App: React.FC = () => {
             setIsLoading(false);
         }
     };
+    
+    if (view === 'lms') {
+        return (
+            <LmsDashboard title="Mis Cursos" onNavigate={(target) => {
+                if (target === 'back') {
+                    setView('planning');
+                }
+            }}>
+                <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">
+                    <CourseCard title="Introducción al SIG" description="Conoce los fundamentos del Sistema Integrado de Gestión." progress={75} status="In Progress" />
+                    <CourseCard title="Gestión de Riesgos" description="Aprende a identificar y mitigar riesgos en tu proceso." progress={100} status="Completed" />
+                    <CourseCard title="Normatividad Aplicable" description="Curso sobre el marco legal que rige a INFIBAGUE." progress={0} status="Not Started" />
+                </div>
+            </LmsDashboard>
+        );
+    }
 
     const isHomePage = processStack.length === 0;
     const isPiipReport = processStack.length === 1 && processStack[0] === 'piip-report';
@@ -105,7 +128,7 @@ const App: React.FC = () => {
     return (
         <>
             <Spinner isLoading={isLoading} />
-            <Header onGoHome={handleGoHome} onShowPiipReport={handleShowPiipReport} />
+            <Header onGoHome={handleGoHome} onShowPiipReport={handleShowPiipReport} onShowLms={handleShowLms} />
             <main className="container mx-auto px-4 sm:px-6 lg:px-8 pt-28 pb-12 min-h-[calc(100vh-15rem)]">
                 {isPiipReport ? (
                     <PiipReport onGoBack={handleGoHome} />

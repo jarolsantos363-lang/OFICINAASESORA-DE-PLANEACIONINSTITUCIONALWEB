@@ -1,10 +1,11 @@
+
 import React from 'react';
 import LmsSidebar from './LmsSidebar';
 
 interface LmsDashboardProps {
     title: string;
     children: React.ReactNode;
-    onNavigate: (target: 'home') => void;
+    onNavigate: (target: 'home' | 'back') => void;
 }
 
 const LmsDashboard: React.FC<LmsDashboardProps> = ({ title, children, onNavigate }) => {
