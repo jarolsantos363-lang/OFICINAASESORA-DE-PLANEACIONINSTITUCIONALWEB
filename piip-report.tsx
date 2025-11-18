@@ -10,7 +10,7 @@ const piipData = [
     reportePiip: 819672034,
   },
   {
-    actividad: 'PANOPTICO CODIGO:',
+    actividad: 'PANOPTICO',
     plataColocada: 2632129085,
     reporteMiGestion: 63535566,
     reportePiip: 769175085,

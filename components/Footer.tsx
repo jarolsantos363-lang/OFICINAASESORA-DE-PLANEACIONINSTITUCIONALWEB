@@ -13,10 +13,10 @@ const Footer: React.FC<FooterProps> = ({ onGoHome }) => {
 
     return (
         <footer className="bg-black/40 backdrop-blur-sm border-t border-white/10 mt-16">
-            <div className="container mx-auto px-6 py-12">
+            <div className="container mx-auto px-2 sm:px-4 lg:px-6 py-8">
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
                     <div className="md:col-span-1">
-                        <img className="h-12 w-auto mb-4" src="https://www.infibague.gov.co/wp-content/uploads/2025/02/logo-Infibague-blanco-300x99.png" alt="INFIBAGUE Logo" />
+                        <img className="h-16 w-auto mb-4" src="https://www.infibague.gov.co/wp-content/uploads/2025/02/logo-Infibague-blanco-300x99.png" alt="INFIBAGUE Logo" />
                         <p className="text-gray-400 text-sm">Oficina Asesora De Planeación Institucional</p>
                     </div>
                     <div>

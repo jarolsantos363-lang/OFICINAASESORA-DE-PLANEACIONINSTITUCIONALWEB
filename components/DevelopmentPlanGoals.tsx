@@ -68,7 +68,6 @@ const RadialProgress: React.FC<RadialProgressProps> = ({ percentage }) => {
     );
 };
 
-// FIX: Define DevelopmentPlanGoalsProps interface
 interface DevelopmentPlanGoalsProps {
   data: DevelopmentPlanGoal[];
 }

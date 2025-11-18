@@ -1,3 +1,4 @@
+
 import { AllProcessData, PlanStatus, VerificationStatus } from './types';
 
 export const strategicProcesses = [
@@ -38,30 +39,30 @@ export const allProcessCategories = [
 ];
 
 const defaultDocumentation = [
-    { name: "ACTUALIZACIÓN CARACTERIZACIÓN VIGENCIA 2025", status: VerificationStatus.PENDIENTE, value: "INICIA 01/01/2026" },
-    { name: "N° DE INDICADORES 2024", status: VerificationStatus.PENDIENTE, value: "INICIA 01/01/202" },
-    { name: "CIERRE 2024", status: VerificationStatus.PENDIENTE, value: "INICIA 01/01/202" },
-    { name: "ACTUALIZACIÓN INDICADORES Feb-2025", status: VerificationStatus.PENDIENTE, value: "INICIA 01/01/202" },
-    { name: "N° DE INDICADORES 2025", status: VerificationStatus.PENDIENTE, value: "INICIA 01/01/202" },
-    { name: "SEGUIMIENTO INDICADORES 1er TRIMESTRE", status: VerificationStatus.PENDIENTE, value: "INICIA 01/01/2026" },
-    { name: "ACTUALIZACIÓN FODA 2025", status: VerificationStatus.PENDIENTE, value: "INICIA 01/01/2026" },
-    { name: "ACTUALIZACIÓN MATRIZ DE REQUISITOS LEGALES PRIMER SEMESTRE", status: VerificationStatus.PENDIENTE, value: "INICIA 01/01/202" },
-    { name: "N° DE FORMATOS", status: VerificationStatus.PENDIENTE, value: "INICIA 01/01/202" },
-    { name: "ACTUALIZACIÓN DE FORMATOS", status: VerificationStatus.PENDIENTE, value: "INICIA 01/01/2026" },
-    { name: "N° DE PROCEDIMIENTOS", status: VerificationStatus.PENDIENTE, value: "INICIA 01/01/20" },
-    { name: "ACTUALIZACIÓN DE PROCEDIMIENTOS", status: VerificationStatus.PENDIENTE, value: "INICIA 01/01/2026" },
-    { name: "N° DE MANUALES", status: VerificationStatus.PENDIENTE, value: "INICIA 01/01/2026" },
-    { name: "ACTUALIZACIÓN DE MANUALES", status: VerificationStatus.PENDIENTE, value: "INICIA 01/01/202" },
-    { name: "ACTUALIZACION MATRIZ DE ASPECTOS E IMPACTOS AMBIENTALES", status: VerificationStatus.PENDIENTE, value: "INICIA 01/01/202" },
-    { name: "ACTUALIZACION MATRIZ IPVR", status: VerificationStatus.PENDIENTE, value: "INICIA 01/01/202" },
-    { name: "CIERRE DE SEGUIMIENTOS 2024 MATRIZ DE RIESGOS Y OPORTUNIDADES", status: VerificationStatus.PENDIENTE, value: "INICIA 01/01/2026" },
-    { name: "ACTUALIZACION MATRIZ DE RIESGOS Y OPORTUNIDADES 2025", status: VerificationStatus.PENDIENTE, value: "INICIA 01/01/202" },
-    { name: "N° DE RIESGOS 2025", status: VerificationStatus.PENDIENTE, value: "INICIA 01/01/202" },
-    { name: "N° DE ACCIONES CORRECTIVAS DE AUDITORIA INTERNA 2024", status: VerificationStatus.PENDIENTE, value: "INICIA 01/01/202" },
-    { name: "CIERRE DE ACCIONES CORRECTIVAS DE AUDITORIA INTERNA 2025", status: VerificationStatus.PENDIENTE, value: "INICIA 01/01/202" },
-    { name: "ACTUALIZACION MATRIZ PRODUCTO NO CONFORME", status: VerificationStatus.PENDIENTE, value: "INICIA 01/01/202" },
-    { name: "ACTUALIZACIÓN MATRIZ GESTIÓN DEL CAMBIO", status: VerificationStatus.PENDIENTE, value: "INICIA 01/01/202" },
-    { name: "PUBLICADO EN INTEGRA", status: VerificationStatus.PENDIENTE, value: "INICIA 01/01/2026" }
+    { name: "ACTUALIZACIÓN CARACTERIZACIÓN VIGENCIA 2025", status: VerificationStatus.PENDIENTE },
+    { name: "N° DE INDICADORES 2024", status: VerificationStatus.PENDIENTE },
+    { name: "CIERRE 2024", status: VerificationStatus.PENDIENTE },
+    { name: "ACTUALIZACIÓN INDICADORES Feb-2025", status: VerificationStatus.PENDIENTE },
+    { name: "N° DE INDICADORES 2025", status: VerificationStatus.PENDIENTE },
+    { name: "SEGUIMIENTO INDICADORES 1er TRIMESTRE", status: VerificationStatus.PENDIENTE },
+    { name: "ACTUALIZACIÓN FODA 2025", status: VerificationStatus.PENDIENTE },
+    { name: "ACTUALIZACIÓN MATRIZ DE REQUISITOS LEGALES PRIMER SEMESTRE", status: VerificationStatus.PENDIENTE },
+    { name: "N° DE FORMATOS", status: VerificationStatus.PENDIENTE },
+    { name: "ACTUALIZACIÓN DE FORMATOS", status: VerificationStatus.PENDIENTE },
+    { name: "N° DE PROCEDIMIENTOS", status: VerificationStatus.PENDIENTE },
+    { name: "ACTUALIZACIÓN DE PROCEDIMIENTOS", status: VerificationStatus.PENDIENTE },
+    { name: "N° DE MANUALES", status: VerificationStatus.PENDIENTE },
+    { name: "ACTUALIZACIÓN DE MANUALES", status: VerificationStatus.PENDIENTE },
+    { name: "ACTUALIZACION MATRIZ DE ASPECTOS E IMPACTOS AMBIENTALES", status: VerificationStatus.PENDIENTE },
+    { name: "ACTUALIZACION MATRIZ IPVR", status: VerificationStatus.PENDIENTE },
+    { name: "CIERRE DE SEGUIMIENTOS 2024 MATRIZ DE RIESGOS Y OPORTUNIDADES", status: VerificationStatus.PENDIENTE },
+    { name: "ACTUALIZACION MATRIZ DE RIESGOS Y OPORTUNIDADES 2025", status: VerificationStatus.PENDIENTE },
+    { name: "N° DE RIESGOS 2025", status: VerificationStatus.PENDIENTE },
+    { name: "N° DE ACCIONES CORRECTIVAS DE AUDITORIA INTERNA 2024", status: VerificationStatus.PENDIENTE },
+    { name: "CIERRE DE ACCIONES CORRECTIVAS DE AUDITORIA INTERNA 2025", status: VerificationStatus.PENDIENTE },
+    { name: "ACTUALIZACION MATRIZ PRODUCTO NO CONFORME", status: VerificationStatus.PENDIENTE },
+    { name: "ACTUALIZACIÓN MATRIZ GESTIÓN DEL CAMBIO", status: VerificationStatus.PENDIENTE },
+    { name: "PUBLICADO EN INTEGRA", status: VerificationStatus.PENDIENTE }
 ];
 
 
@@ -512,7 +513,7 @@ export const ALL_PROCESS_DATA: AllProcessData = {
                     items: [
                         { name: "1 CAUTRIMESTRE", status: PlanStatus.Missing, value: 0.0 },
                         { name: "2 CAUTRIMESTRE", status: PlanStatus.Missing, value: 0.0 },
-                        { name: "3 CAUTRIMESTRE", status: PlanStatus.NotStarted, value: 0.0 },
+                        { name: "3 CUATRIMESTRE", status: PlanStatus.NotStarted, value: 0.0 },
                     ],
                     total: 0.0,
                 },
@@ -762,7 +763,7 @@ export const ALL_PROCESS_DATA: AllProcessData = {
                     items: [
                         { name: "1 CAUTRIMESTRE", status: PlanStatus.Missing, value: 0.0 },
                         { name: "2 CAUTRIMESTRE", status: PlanStatus.Missing, value: 0.0 },
-                        { name: "3 CAUTRIMESTRE", status: PlanStatus.NotStarted, value: 0.0 },
+                        { name: "3 CUATRIMESTRE", status: PlanStatus.NotStarted, value: 0.0 },
                     ],
                     total: 0.0,
                 },
@@ -1084,7 +1085,7 @@ export const ALL_PROCESS_DATA: AllProcessData = {
         ],
         developmentPlanGoals: [],
         improvementPlan: {
-          hallazgos: 'FALTA DE DOCUMENTACION',
+          hallazgos: 'FALTA DE DOCUMNETACION',
           fortalezas: 'BUENA ORGANIZACION',
           planDeMejoramiento: 'Ya realizado',
         },
@@ -1356,7 +1357,7 @@ export const ALL_PROCESS_DATA: AllProcessData = {
                     },
                 ],
                 improvementPlan: {
-                    hallazgos: 'FALTA DE DOCUMENTACION',
+                    hallazgos: 'FALTA DE DOCUMNETACION',
                     fortalezas: 'BUENA ORGANIZACION',
                     planDeMejoramiento: 'Ya realizado',
                 },

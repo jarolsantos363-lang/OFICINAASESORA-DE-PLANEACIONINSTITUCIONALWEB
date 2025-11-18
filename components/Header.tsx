@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect, useRef } from 'react';
 import { MenuIcon } from './icons/MenuIcon';
 import { XIcon } from './icons/XIcon';
@@ -84,20 +83,20 @@ const Header: React.FC<HeaderProps> = ({ onGoHome, onShowPiipReport, onShowLms }
 
   return (
     <header className="bg-black/60 backdrop-blur-md fixed top-0 left-0 right-0 z-40 border-b border-gray-800">
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="container mx-auto pr-2 sm:pr-4 lg:pr-6">
         <div className="flex items-center justify-between h-20">
           <div className="flex items-center">
              <a href="#top" onClick={handleHomeClick} className="flex-shrink-0">
-                <img className="h-10 w-auto" src="https://www.infibague.gov.co/wp-content/uploads/2025/02/logo-Infibague-blanco-300x99.png" alt="INFIBAGUE Logo" />
+                <img className="h-16 w-auto" src="https://www.infibague.gov.co/wp-content/uploads/2025/02/logo-Infibague-blanco-300x99.png" alt="INFIBAGUE Logo" />
             </a>
-            <div className="ml-3 border-l-2 border-gray-700 pl-3">
+            <div className="ml-6 border-l-2 border-gray-700 pl-6">
               <h1 className="text-white font-bold text-xs md:text-sm tracking-wide uppercase leading-tight">
-                  Oficina Asesora de<br className="sm:hidden" /> Planeación Institucional
+                  Oficina Asesora de Planeación Institucional
               </h1>
             </div>
           </div>
           <nav className="hidden md:block">
-            <div className="ml-10 flex items-baseline space-x-4">
+            <div className="ml-4 flex items-baseline space-x-2">
               <a href="#top" onClick={handleHomeClick} className="px-3 py-2 rounded-md text-sm font-medium text-gray-300 hover:text-white hover:bg-gray-800 transition-colors">
                 Inicio
               </a>
