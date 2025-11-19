@@ -94,6 +94,15 @@ const DevelopmentPlanGoals: React.FC<DevelopmentPlanGoalsProps> = ({ data }) => 
           const totalEjecutado = item.meta2024Ejecutado + item.meta2025Ejecutado;
           const faltanteCuatrienio = item.metaProductoCuatrienio - totalEjecutado;
           
+          // Logic to determine if the product should be displayed in M²
+          const isSquareMeters = [
+              "4002023-Parques mejorados",
+              "4002025-Zonas verdes adecuadas",
+              "4002026-Zonas verdes mantenidas"
+          ].includes(item.producto);
+
+          const unitLabel = isSquareMeters ? " M²" : "";
+
           return (
             <div key={index} className="bg-gray-900/70 backdrop-blur-sm p-6 rounded-xl border border-gray-800 shadow-lg flex flex-col md:flex-row items-center gap-6 animate-fade-in" style={{ animationDelay: `${index * 100}ms` }}>
                 <div className="flex-grow w-full">
@@ -103,24 +112,39 @@ const DevelopmentPlanGoals: React.FC<DevelopmentPlanGoalsProps> = ({ data }) => 
                     <div className="space-y-4">
                         <div className="bg-gray-800/50 p-3 rounded-lg border border-gray-700/50 text-center">
                             <p className="text-xs text-gray-400 uppercase tracking-wider">Meta Cuatrienio</p>
-                            <p className="text-2xl font-bold text-white">{item.metaProductoCuatrienio.toLocaleString('es-ES')}</p>
+                            <p className="text-2xl font-bold text-white">
+                                {item.metaProductoCuatrienio.toLocaleString('es-ES')}
+                                <span className="text-sm font-normal text-gray-400 ml-1">{unitLabel}</span>
+                            </p>
                         </div>
                         <div className="grid grid-cols-2 gap-4">
                             <div className="bg-gray-800/50 p-3 rounded-lg border border-gray-700/50 text-center">
                                 <p className="text-xs text-gray-400 uppercase tracking-wider">Programado 2024</p>
-                                <p className="text-xl font-bold text-white">{item.meta2024Programado.toLocaleString('es-ES')}</p>
+                                <p className="text-xl font-bold text-white">
+                                    {item.meta2024Programado.toLocaleString('es-ES')}
+                                    <span className="text-xs font-normal text-gray-400 ml-1">{unitLabel}</span>
+                                </p>
                             </div>
                             <div className="bg-gray-800/50 p-3 rounded-lg border border-gray-700/50 text-center">
                                 <p className="text-xs text-gray-400 uppercase tracking-wider">Ejecutado 2024</p>
-                                <p className="text-xl font-bold text-lime-400">{item.meta2024Ejecutado.toLocaleString('es-ES')}</p>
+                                <p className="text-xl font-bold text-lime-400">
+                                    {item.meta2024Ejecutado.toLocaleString('es-ES')}
+                                    <span className="text-xs font-normal text-lime-600/70 ml-1">{unitLabel}</span>
+                                </p>
                             </div>
                             <div className="bg-gray-800/50 p-3 rounded-lg border border-gray-700/50 text-center">
                                 <p className="text-xs text-gray-400 uppercase tracking-wider">Programado 2025</p>
-                                <p className="text-xl font-bold text-white">{item.meta2025Programado.toLocaleString('es-ES')}</p>
+                                <p className="text-xl font-bold text-white">
+                                    {item.meta2025Programado.toLocaleString('es-ES')}
+                                    <span className="text-xs font-normal text-gray-400 ml-1">{unitLabel}</span>
+                                </p>
                             </div>
                             <div className="bg-gray-800/50 p-3 rounded-lg border border-gray-700/50 text-center">
                                 <p className="text-xs text-gray-400 uppercase tracking-wider">Ejecutado 2025</p>
-                                <p className="text-xl font-bold text-lime-400">{item.meta2025Ejecutado.toLocaleString('es-ES')}</p>
+                                <p className="text-xl font-bold text-lime-400">
+                                    {item.meta2025Ejecutado.toLocaleString('es-ES')}
+                                    <span className="text-xs font-normal text-lime-600/70 ml-1">{unitLabel}</span>
+                                </p>
                             </div>
                         </div>
                     </div>
@@ -129,7 +153,7 @@ const DevelopmentPlanGoals: React.FC<DevelopmentPlanGoalsProps> = ({ data }) => 
                         <div className="mt-5 flex items-start gap-3 bg-blue-900/30 border border-blue-800/50 rounded-lg p-3">
                             <InformationCircleIcon className="w-5 h-5 text-blue-400 flex-shrink-0 mt-0.5" />
                             <p className="text-sm text-blue-200">
-                                <span className="font-bold">{faltante2025.toLocaleString('es-ES')}</span> unidades restantes para cumplir la meta programada para 2025.
+                                <span className="font-bold">{faltante2025.toLocaleString('es-ES')}{unitLabel}</span> restantes para cumplir la meta programada para 2025.
                             </p>
                         </div>
                     ) : (
@@ -138,7 +162,7 @@ const DevelopmentPlanGoals: React.FC<DevelopmentPlanGoalsProps> = ({ data }) => 
                             <p className="text-sm text-green-200">
                                 <span className="font-bold">¡Meta de 2025 cumplida!</span> 
                                 {faltanteCuatrienio > 0 
-                                    ? ` Faltan ${faltanteCuatrienio.toLocaleString('es-ES')} unidades para la meta del cuatrienio.`
+                                    ? ` Faltan ${faltanteCuatrienio.toLocaleString('es-ES')}${unitLabel} para la meta del cuatrienio.`
                                     : ' ¡Meta del cuatrienio también cumplida!'}
                             </p>
                         </div>
