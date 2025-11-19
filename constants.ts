@@ -303,8 +303,8 @@ export const ALL_PROCESS_DATA: AllProcessData = {
         ],
         developmentPlanGoals: [
             {
-                producto: "3206002-Documentos de lineamientos técnicos",
-                indicador: "320600200-Documentos de lineamientos técnicos realizados",
+                producto: "3206002-Documentos de lineamientos técnicos- Estudio Tecnico implementacion solucion de servicios energeticos ecoeficientes",
+                indicador: "320600200-Documentos de lineamientos técnicos realizados- Granja Solar",
                 metaProductoCuatrienio: 1,
                 meta2024Programado: 0,
                 meta2024Ejecutado: 0,
@@ -313,8 +313,8 @@ export const ALL_PROCESS_DATA: AllProcessData = {
                 ejecutado2025OP: 0,
             },
             {
-                producto: "3206002-Documentos de lineamientos técnicos",
-                indicador: "320600200-Documentos de lineamientos técnicos realizados",
+                producto: "3206002-Documentos de lineamientos técnicos- Implemnetación ISO 14064 Gases de efecto inverndero",
+                indicador: "320600200-Documentos de lineamientos técnicos realizados- Huella de Carbono ",
                 metaProductoCuatrienio: 1,
                 meta2024Programado: 0,
                 meta2024Ejecutado: 0,
@@ -323,8 +323,8 @@ export const ALL_PROCESS_DATA: AllProcessData = {
                 ejecutado2025OP: 0,
             },
             {
-                producto: "4599018-Documentos de lineamientos técnicos realizados",
-                indicador: "459901800-Documentos de lineamientos técnicos realizados",
+                producto: "4599018-Documentos de lineamientos técnicos realizados- Implementación regimen especial de control y vigilancia de la superintendencia financiera",
+                indicador: "459901800-Documentos de lineamientos técnicos realizados- Calificadora de riesgos",
                 metaProductoCuatrienio: 4,
                 meta2024Programado: 0,
                 meta2024Ejecutado: 0,
