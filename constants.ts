@@ -313,7 +313,7 @@ export const ALL_PROCESS_DATA: AllProcessData = {
                 ejecutado2025OP: 0,
             },
             {
-                producto: "3206002-Documentos de lineamientos técnicos- Implemnetación ISO 14064 Gases de efecto inverndero",
+                producto: "3206002-Documentos de lineamientos técnicos- Implementación ISO 14064 Gases de efecto inverndero",
                 indicador: "320600200-Documentos de lineamientos técnicos realizados- Huella de Carbono ",
                 metaProductoCuatrienio: 1,
                 meta2024Programado: 0,
