@@ -1,7 +1,7 @@
 
 import React, { useState } from 'react';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, PieChart, Pie, Cell, RadialBarChart, RadialBar } from 'recharts';
-import { Bike, Building2, Trees, TrendingUp, Calendar, DollarSign, Target, Activity, ArrowLeft } from 'lucide-react';
+import { Bike, Building2, Trees, TrendingUp, Calendar, DollarSign, Target, Activity, ArrowLeft, Wallet } from 'lucide-react';
 
 interface MunicipalActionPlanProps {
     onGoBack: () => void;
@@ -101,6 +101,10 @@ const PlanAccionMunicipal: React.FC<MunicipalActionPlanProps> = ({ onGoBack }) =
     return `${value.toLocaleString('es-CO')} COP`;
   };
 
+  const calculateExecuted = (presupuesto: number, inversionPercentage: number) => {
+      return Math.round(presupuesto * (inversionPercentage / 100));
+  };
+
   const renderIndicadores = (actividad: any) => {
     const faltantes = actividad.cantidadPropuesta - actividad.cantidadEjecutada;
     const porcentajeCumplimiento = actividad.cantidadPropuesta > 0 ? ((actividad.cantidadEjecutada / actividad.cantidadPropuesta) * 100).toFixed(0) : 0;
@@ -156,8 +160,47 @@ const PlanAccionMunicipal: React.FC<MunicipalActionPlanProps> = ({ onGoBack }) =
     );
   };
 
-  const renderBicicletasContent = () => (
+  const renderBicicletasContent = () => {
+    // Calculos para gráfico global
+    const totalPresupuesto = bicicletasData.actividades.reduce((acc, curr) => acc + curr.presupuesto, 0);
+    const totalEjecutado = bicicletasData.actividades.reduce((acc, curr) => acc + calculateExecuted(curr.presupuesto, curr.inversion), 0);
+    const chartData = [
+        { name: 'Total', Presupuesto: totalPresupuesto, Ejecutado: totalEjecutado }
+    ];
+
+    return (
     <div className="space-y-6">
+        {/* Gráfico Global de Ejecución Presupuestal */}
+        <div className="bg-white p-6 rounded-xl shadow-lg border-l-4 border-green-500">
+             <h3 className="text-lg font-bold mb-4 flex items-center gap-2 text-gray-800">
+                <Wallet className="w-6 h-6 text-green-600" />
+                Ejecución Presupuestal Global
+            </h3>
+            <div className="h-64">
+                <ResponsiveContainer width="100%" height="100%">
+                    <BarChart data={chartData} layout="vertical" margin={{ left: 20, right: 30 }}>
+                        <CartesianGrid strokeDasharray="3 3" horizontal={true} vertical={true} />
+                        <XAxis type="number" tickFormatter={(val) => `${(val/1000000).toFixed(0)}M`} />
+                        <YAxis type="category" dataKey="name" hide />
+                        <Tooltip formatter={(value: number) => formatCurrency(value)} />
+                        <Legend />
+                        <Bar dataKey="Presupuesto" fill="#3b82f6" name="Presupuesto Asignado" barSize={30} radius={[0, 4, 4, 0]} />
+                        <Bar dataKey="Ejecutado" fill="#10b981" name="Presupuesto Ejecutado" barSize={30} radius={[0, 4, 4, 0]} />
+                    </BarChart>
+                </ResponsiveContainer>
+            </div>
+             <div className="flex justify-around mt-4 pt-4 border-t border-gray-100">
+                <div className="text-center">
+                    <p className="text-sm text-gray-500">Presupuesto</p>
+                    <p className="text-xl font-bold text-blue-600">{formatCurrency(totalPresupuesto)}</p>
+                </div>
+                 <div className="text-center">
+                    <p className="text-sm text-gray-500">Ejecutado</p>
+                    <p className="text-xl font-bold text-green-600">{formatCurrency(totalEjecutado)}</p>
+                </div>
+            </div>
+        </div>
+
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div className="bg-white p-6 rounded-xl shadow-lg">
           <h3 className="text-lg font-bold mb-4 flex items-center gap-2">
@@ -192,20 +235,71 @@ const PlanAccionMunicipal: React.FC<MunicipalActionPlanProps> = ({ onGoBack }) =
       <div className="bg-white p-6 rounded-xl shadow-lg">
         <h3 className="text-lg font-bold mb-4">Detalle de Actividades</h3>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          {bicicletasData.actividades.map((act, idx) => (
-            <div key={idx} className="border-2 border-blue-200 rounded-lg p-4 hover:shadow-md transition-shadow">
-              <h4 className="font-bold text-sm text-blue-900 mb-2">{act.nombre}</h4>
-              <div className="text-xs text-gray-600 mb-2">Presupuesto: <span className="font-semibold">{formatCurrency(act.presupuesto)}</span></div>
-              {renderIndicadores(act)}
-            </div>
-          ))}
+          {bicicletasData.actividades.map((act, idx) => {
+             const ejecutado = calculateExecuted(act.presupuesto, act.inversion);
+             return (
+                <div key={idx} className="border-2 border-blue-200 rounded-lg p-4 hover:shadow-md transition-shadow">
+                <h4 className="font-bold text-sm text-blue-900 mb-2">{act.nombre}</h4>
+                <div className="bg-gray-50 p-2 rounded mb-2">
+                    <div className="flex justify-between items-center text-xs text-gray-600 mb-1">
+                        <span>Presupuesto:</span>
+                        <span className="font-semibold">{formatCurrency(act.presupuesto)}</span>
+                    </div>
+                    <div className="flex justify-between items-center text-xs text-green-700">
+                        <span>Ejecutado:</span>
+                        <span className="font-bold">{formatCurrency(ejecutado)}</span>
+                    </div>
+                </div>
+                {renderIndicadores(act)}
+                </div>
+            )
+          })}
         </div>
       </div>
     </div>
-  );
+  )};
 
-  const renderPanopticoContent = () => (
+  const renderPanopticoContent = () => {
+    // Calculos para gráfico global
+    const totalPresupuesto = panopticoData.actividades.reduce((acc, curr) => acc + curr.presupuesto, 0);
+    const totalEjecutado = panopticoData.actividades.reduce((acc, curr) => acc + calculateExecuted(curr.presupuesto, curr.inversion), 0);
+    const chartData = [
+        { name: 'Total', Presupuesto: totalPresupuesto, Ejecutado: totalEjecutado }
+    ];
+
+    return (
     <div className="space-y-6">
+       {/* Gráfico Global de Ejecución Presupuestal */}
+       <div className="bg-white p-6 rounded-xl shadow-lg border-l-4 border-green-500">
+             <h3 className="text-lg font-bold mb-4 flex items-center gap-2 text-gray-800">
+                <Wallet className="w-6 h-6 text-green-600" />
+                Ejecución Presupuestal Global
+            </h3>
+            <div className="h-64">
+                <ResponsiveContainer width="100%" height="100%">
+                    <BarChart data={chartData} layout="vertical" margin={{ left: 20, right: 30 }}>
+                        <CartesianGrid strokeDasharray="3 3" horizontal={true} vertical={true} />
+                        <XAxis type="number" tickFormatter={(val) => `${(val/1000000).toFixed(0)}M`} />
+                        <YAxis type="category" dataKey="name" hide />
+                        <Tooltip formatter={(value: number) => formatCurrency(value)} />
+                        <Legend />
+                        <Bar dataKey="Presupuesto" fill="#3b82f6" name="Presupuesto Asignado" barSize={30} radius={[0, 4, 4, 0]} />
+                        <Bar dataKey="Ejecutado" fill="#10b981" name="Presupuesto Ejecutado" barSize={30} radius={[0, 4, 4, 0]} />
+                    </BarChart>
+                </ResponsiveContainer>
+            </div>
+             <div className="flex justify-around mt-4 pt-4 border-t border-gray-100">
+                <div className="text-center">
+                    <p className="text-sm text-gray-500">Presupuesto</p>
+                    <p className="text-xl font-bold text-blue-600">{formatCurrency(totalPresupuesto)}</p>
+                </div>
+                 <div className="text-center">
+                    <p className="text-sm text-gray-500">Ejecutado</p>
+                    <p className="text-xl font-bold text-green-600">{formatCurrency(totalEjecutado)}</p>
+                </div>
+            </div>
+        </div>
+
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div className="bg-white p-6 rounded-xl shadow-lg">
           <h3 className="text-lg font-bold mb-4 flex items-center gap-2">
@@ -252,20 +346,72 @@ const PlanAccionMunicipal: React.FC<MunicipalActionPlanProps> = ({ onGoBack }) =
       <div className="bg-white p-6 rounded-xl shadow-lg">
         <h3 className="text-lg font-bold mb-4">Servicios del Complejo Cultural</h3>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          {panopticoData.actividades.map((act, idx) => (
+          {panopticoData.actividades.map((act, idx) => {
+            const ejecutado = calculateExecuted(act.presupuesto, act.inversion);
+            return (
             <div key={idx} className="border-2 border-purple-200 rounded-lg p-4 hover:shadow-md transition-shadow">
               <h4 className="font-bold text-sm text-purple-900 mb-2">{act.nombre}</h4>
-              <div className="text-xs text-gray-600 mb-2">Presupuesto: <span className="font-semibold">{formatCurrency(act.presupuesto)}</span></div>
+                <div className="bg-gray-50 p-2 rounded mb-2">
+                    <div className="flex justify-between items-center text-xs text-gray-600 mb-1">
+                        <span>Presupuesto:</span>
+                        <span className="font-semibold">{formatCurrency(act.presupuesto)}</span>
+                    </div>
+                    <div className="flex justify-between items-center text-xs text-green-700">
+                        <span>Ejecutado:</span>
+                        <span className="font-bold">{formatCurrency(ejecutado)}</span>
+                    </div>
+                </div>
               {renderIndicadores(act)}
             </div>
-          ))}
+          )})}
         </div>
       </div>
     </div>
-  );
+  )};
 
-  const renderParquesContent = () => (
+  const renderParquesContent = () => {
+    // Flatten activities for global calculation
+    const allActivities = parquesData.proyectos.flatMap(p => p.actividades);
+    const totalPresupuesto = allActivities.reduce((acc: number, curr: any) => acc + curr.presupuesto, 0);
+    const totalEjecutado = allActivities.reduce((acc: number, curr: any) => acc + calculateExecuted(curr.presupuesto, curr.inversion), 0);
+    
+    const chartData = [
+        { name: 'Total', Presupuesto: totalPresupuesto, Ejecutado: totalEjecutado }
+    ];
+
+    return (
     <div className="space-y-6">
+        {/* Gráfico Global de Ejecución Presupuestal */}
+       <div className="bg-white p-6 rounded-xl shadow-lg border-l-4 border-green-500">
+             <h3 className="text-lg font-bold mb-4 flex items-center gap-2 text-gray-800">
+                <Wallet className="w-6 h-6 text-green-600" />
+                Ejecución Presupuestal Global
+            </h3>
+            <div className="h-64">
+                <ResponsiveContainer width="100%" height="100%">
+                    <BarChart data={chartData} layout="vertical" margin={{ left: 20, right: 30 }}>
+                        <CartesianGrid strokeDasharray="3 3" horizontal={true} vertical={true} />
+                        <XAxis type="number" tickFormatter={(val) => `${(val/1000000).toFixed(0)}M`} />
+                        <YAxis type="category" dataKey="name" hide />
+                        <Tooltip formatter={(value: number) => formatCurrency(value)} />
+                        <Legend />
+                        <Bar dataKey="Presupuesto" fill="#3b82f6" name="Presupuesto Asignado" barSize={30} radius={[0, 4, 4, 0]} />
+                        <Bar dataKey="Ejecutado" fill="#10b981" name="Presupuesto Ejecutado" barSize={30} radius={[0, 4, 4, 0]} />
+                    </BarChart>
+                </ResponsiveContainer>
+            </div>
+             <div className="flex justify-around mt-4 pt-4 border-t border-gray-100">
+                <div className="text-center">
+                    <p className="text-sm text-gray-500">Presupuesto</p>
+                    <p className="text-xl font-bold text-blue-600">{formatCurrency(totalPresupuesto)}</p>
+                </div>
+                 <div className="text-center">
+                    <p className="text-sm text-gray-500">Ejecutado</p>
+                    <p className="text-xl font-bold text-green-600">{formatCurrency(totalEjecutado)}</p>
+                </div>
+            </div>
+        </div>
+
       {parquesData.proyectos.map((proyecto, pidx) => (
         <div key={pidx} className="bg-white p-6 rounded-xl shadow-lg">
           <h3 className="text-xl font-bold mb-4 text-green-800 flex items-center gap-2">
@@ -273,15 +419,27 @@ const PlanAccionMunicipal: React.FC<MunicipalActionPlanProps> = ({ onGoBack }) =
             {proyecto.nombre}
           </h3>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {proyecto.actividades.map((act: any, idx) => (
-              <div key={idx} className="border-2 border-green-200 rounded-lg p-4 hover:shadow-md transition-shadow">
-                <h4 className="font-bold text-sm text-green-900 mb-2">{act.nombre}</h4>
-                {act.cantidad && <div className="text-xs text-gray-600 mb-1">Cantidad: <span className="font-semibold">{act.cantidad}</span></div>}
-                {act.mts2 && <div className="text-xs text-gray-600 mb-1">Área: <span className="font-semibold">{act.mts2} m²</span></div>}
-                <div className="text-xs text-gray-600 mb-2">Presupuesto: <span className="font-semibold">{formatCurrency(act.presupuesto)}</span></div>
-                {renderIndicadores(act)}
-              </div>
-            ))}
+            {proyecto.actividades.map((act: any, idx) => {
+                const ejecutado = calculateExecuted(act.presupuesto, act.inversion);
+                return (
+                <div key={idx} className="border-2 border-green-200 rounded-lg p-4 hover:shadow-md transition-shadow">
+                    <h4 className="font-bold text-sm text-green-900 mb-2">{act.nombre}</h4>
+                    {act.cantidad && <div className="text-xs text-gray-600 mb-1">Cantidad: <span className="font-semibold">{act.cantidad}</span></div>}
+                    {act.mts2 && <div className="text-xs text-gray-600 mb-1">Área: <span className="font-semibold">{act.mts2} m²</span></div>}
+                    
+                    <div className="bg-gray-50 p-2 rounded mb-2">
+                        <div className="flex justify-between items-center text-xs text-gray-600 mb-1">
+                            <span>Presupuesto:</span>
+                            <span className="font-semibold">{formatCurrency(act.presupuesto)}</span>
+                        </div>
+                        <div className="flex justify-between items-center text-xs text-green-700">
+                            <span>Ejecutado:</span>
+                            <span className="font-bold">{formatCurrency(ejecutado)}</span>
+                        </div>
+                    </div>
+                    {renderIndicadores(act)}
+                </div>
+            )})}
           </div>
         </div>
       ))}
@@ -303,7 +461,7 @@ const PlanAccionMunicipal: React.FC<MunicipalActionPlanProps> = ({ onGoBack }) =
         </ResponsiveContainer>
       </div>
     </div>
-  );
+  )};
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 p-6">
