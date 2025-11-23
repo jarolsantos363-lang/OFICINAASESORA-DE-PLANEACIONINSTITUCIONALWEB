@@ -1,5 +1,5 @@
 
-import React from 'react';
+import React, { useState } from 'react';
 import { ArrowLeftIcon } from './components/icons/ArrowLeftIcon';
 
 const piipData = [
@@ -32,11 +32,11 @@ const formatCurrency = (value: number) => {
   }).format(value);
 };
 
-interface PieChartProps {
+interface SimplePieChartProps {
     data: { name: string, value: number, color: string }[];
 }
 
-const PieChart: React.FC<PieChartProps> = ({ data }) => {
+const SimplePieChart: React.FC<SimplePieChartProps> = ({ data }) => {
     const total = data.reduce((sum, item) => sum + item.value, 0);
     if (total === 0) {
         return <div className="w-48 h-48 bg-gray-700 rounded-full flex items-center justify-center"><span className="text-gray-400 text-sm">Sin datos</span></div>;
@@ -73,6 +73,8 @@ const PieChart: React.FC<PieChartProps> = ({ data }) => {
         </svg>
     );
 };
+
+// --- Main PiipReport Component ---
 
 interface PiipReportProps {
     onGoBack: () => void;
@@ -142,7 +144,7 @@ const PiipReport: React.FC<PiipReportProps> = ({ onGoBack }) => {
                                     <h3 className="text-lg font-bold text-center mb-4 text-white whitespace-pre-wrap">{item.actividad.split('\n')[0]}</h3>
                                     <div className="flex flex-col md:flex-row items-center gap-6 w-full">
                                         <div className="flex-shrink-0">
-                                            <PieChart data={chartData} />
+                                            <SimplePieChart data={chartData} />
                                         </div>
                                         <div className="text-sm space-y-2 flex-grow">
                                             {chartData.map(d => (

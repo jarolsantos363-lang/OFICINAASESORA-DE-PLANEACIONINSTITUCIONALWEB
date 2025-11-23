@@ -6,8 +6,9 @@ import PlanningDashboard from './PlanningDashboard';
 import DocumentationChecklist from './DocumentationChecklist';
 import DevelopmentPlanGoals from './DevelopmentPlanGoals';
 import ImprovementPlanDashboard from './ImprovementPlanDashboard';
+import InstitutionalActionPlanSubset from './InstitutionalActionPlanSubset';
 
-type ActiveTab = 'planning' | 'documentation' | 'goals' | 'improvement';
+type ActiveTab = 'planning' | 'documentation' | 'goals' | 'improvement' | 'institutionalSubset';
 
 interface ProcessDetailViewProps {
   processData: ProcessData;
@@ -20,6 +21,7 @@ const ProcessDetailView: React.FC<ProcessDetailViewProps> = ({ processData, proc
     const hasDevelopmentGoals = processData.developmentPlanGoals && processData.developmentPlanGoals.length > 0;
     const hasDocumentation = processData.documentation && processData.documentation.length > 0;
     const hasImprovementPlan = !!processData.improvementPlan;
+    const hasInstitutionalSubset = processData.institutionalActivities && processData.institutionalActivities.length > 0;
 
     useEffect(() => {
         if (activeTab === 'goals' && !hasDevelopmentGoals) {
@@ -31,7 +33,10 @@ const ProcessDetailView: React.FC<ProcessDetailViewProps> = ({ processData, proc
         if (activeTab === 'improvement' && !hasImprovementPlan) {
             setActiveTab('planning');
         }
-    }, [processName, hasDevelopmentGoals, hasDocumentation, hasImprovementPlan, activeTab]);
+        if (activeTab === 'institutionalSubset' && !hasInstitutionalSubset) {
+            setActiveTab('planning');
+        }
+    }, [processName, hasDevelopmentGoals, hasDocumentation, hasImprovementPlan, hasInstitutionalSubset, activeTab]);
 
     return (
         <div className="pt-6">
@@ -58,6 +63,14 @@ const ProcessDetailView: React.FC<ProcessDetailViewProps> = ({ processData, proc
                     Metas de Plan de Desarrollo
                   </button>
                 )}
+                {hasInstitutionalSubset && (
+                  <button
+                    onClick={() => setActiveTab('institutionalSubset')}
+                    className={`w-full sm:w-auto text-sm md:text-base flex-1 sm:flex-none px-4 sm:px-8 py-3 rounded-lg font-semibold transition-all duration-300 transform focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-black/50 focus:ring-blue-500 ${activeTab === 'institutionalSubset' ? 'bg-blue-600 text-white shadow-lg scale-105' : 'bg-slate-800 text-gray-300 hover:bg-slate-700'}`}
+                  >
+                    Plan de Acción Institucional 2025
+                  </button>
+                )}
                  {hasImprovementPlan && (
                   <button
                     onClick={() => setActiveTab('improvement')}
@@ -82,6 +95,11 @@ const ProcessDetailView: React.FC<ProcessDetailViewProps> = ({ processData, proc
               {activeTab === 'goals' && (
                  <div className="animate-fade-in">
                   <DevelopmentPlanGoals data={processData.developmentPlanGoals} />
+                </div>
+              )}
+              {activeTab === 'institutionalSubset' && processData.institutionalActivities && (
+                 <div className="animate-fade-in">
+                  <InstitutionalActionPlanSubset activities={processData.institutionalActivities} />
                 </div>
               )}
               {activeTab === 'improvement' && processData.improvementPlan && (

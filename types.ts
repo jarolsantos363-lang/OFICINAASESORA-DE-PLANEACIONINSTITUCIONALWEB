@@ -52,6 +52,17 @@ export interface ImprovementPlan {
   planDeMejoramiento: string;
 }
 
+export interface InstitutionalActivity {
+  id: number;
+  nombre: string;
+  unidad: string;
+  cantidad: (number | string)[];
+  inversion: number[];
+  indiceFisico: string;
+  indiceInversion: string;
+  eficencia: string;
+}
+
 export interface ProcessData {
   planning: {
     mensual: Plan[];
@@ -64,6 +75,7 @@ export interface ProcessData {
   tracking: ActivityTrackingItem[];
   developmentPlanGoals: DevelopmentPlanGoal[];
   improvementPlan?: ImprovementPlan;
+  institutionalActivities?: InstitutionalActivity[];
   subProcesses?: { [key: string]: ProcessData };
 }
 
