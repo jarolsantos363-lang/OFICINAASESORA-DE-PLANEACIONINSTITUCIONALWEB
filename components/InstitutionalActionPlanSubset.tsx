@@ -38,7 +38,7 @@ const InstitutionalActionPlanSubset: React.FC<InstitutionalActionPlanSubsetProps
   }));
 
   const dataEficiencia = activities.map(act => ({
-    nombre: `Act. ${act.id}`,
+    name: `Act. ${act.id}`,
     value: parseInt(act.eficencia.replace('%', ''))
   }));
 
@@ -251,7 +251,7 @@ const InstitutionalActionPlanSubset: React.FC<InstitutionalActionPlanSubsetProps
                             cx="50%"
                             cy="50%"
                             labelLine={true}
-                            label={({ nombre, value }) => `${nombre}: ${value}%`}
+                            label={({ name, value }) => `${name}: ${value}%`}
                             outerRadius={100}
                             fill="#8884d8"
                             dataKey="value"

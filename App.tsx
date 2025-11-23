@@ -14,9 +14,10 @@ import PiipReport from './piip-report';
 import LmsDashboard from './components/LmsDashboard';
 import CourseCard from './components/CourseCard';
 import InstitutionalActionPlan from './components/InstitutionalActionPlan';
+import PlanAccionMunicipal from './components/MunicipalActionPlan';
 
 const App: React.FC = () => {
-    const [view, setView] = useState<'planning' | 'lms' | 'institutional-plan'>('planning');
+    const [view, setView] = useState<'planning' | 'lms' | 'institutional-plan' | 'municipal-plan'>('planning');
     const [processStack, setProcessStack] = useState<string[]>([]);
     const [allData, setAllData] = useState<AllProcessData>(ALL_PROCESS_DATA);
     const [isLoading, setIsLoading] = useState(false);
@@ -42,6 +43,7 @@ const App: React.FC = () => {
     const handleShowPiipReport = () => withLoading(() => setProcessStack(['piip-report']));
     const handleShowLms = () => withLoading(() => setView('lms'));
     const handleShowInstitutionalPlan = () => withLoading(() => setView('institutional-plan'));
+    const handleShowMunicipalPlan = () => withLoading(() => setView('municipal-plan'));
 
     const handleUpdateData = async () => {
         setIsLoading(true);
@@ -80,12 +82,33 @@ const App: React.FC = () => {
                     onShowPiipReport={handleShowPiipReport} 
                     onShowLms={handleShowLms} 
                     onShowInstitutionalPlan={handleShowInstitutionalPlan}
+                    onShowMunicipalPlan={handleShowMunicipalPlan}
                 />
                  <main className="container mx-auto px-4 sm:px-6 lg:px-8 pt-28 pb-12 min-h-[calc(100vh-15rem)]">
                     <InstitutionalActionPlan onGoBack={handleGoHome} />
                  </main>
                  <Footer onGoHome={handleGoHome} />
                  <ScrollToTopButton />
+            </>
+        )
+    }
+
+    if (view === 'municipal-plan') {
+        return (
+            <>
+                <Spinner isLoading={isLoading} />
+                <Header 
+                    onGoHome={handleGoHome} 
+                    onShowPiipReport={handleShowPiipReport} 
+                    onShowLms={handleShowLms} 
+                    onShowInstitutionalPlan={handleShowInstitutionalPlan}
+                    onShowMunicipalPlan={handleShowMunicipalPlan}
+                />
+                <main className="pt-20">
+                    <PlanAccionMunicipal onGoBack={handleGoHome} />
+                </main>
+                <Footer onGoHome={handleGoHome} />
+                <ScrollToTopButton />
             </>
         )
     }
@@ -154,6 +177,7 @@ const App: React.FC = () => {
                 onShowPiipReport={handleShowPiipReport} 
                 onShowLms={handleShowLms}
                 onShowInstitutionalPlan={handleShowInstitutionalPlan}
+                onShowMunicipalPlan={handleShowMunicipalPlan}
             />
             <main className="container mx-auto px-4 sm:px-6 lg:px-8 pt-28 pb-12 min-h-[calc(100vh-15rem)]">
                 {isPiipReport ? (

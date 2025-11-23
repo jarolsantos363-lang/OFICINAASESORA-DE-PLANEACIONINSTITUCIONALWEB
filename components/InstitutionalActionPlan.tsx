@@ -100,7 +100,7 @@ const InstitutionalActionPlan: React.FC<InstitutionalActionPlanProps> = ({ onGoB
   }));
 
   const dataEficiencia = actividades.map(act => ({
-    nombre: `Act. ${act.id}`,
+    name: `Act. ${act.id}`,
     value: parseInt(act.eficencia.replace('%', ''))
   }));
 
@@ -348,7 +348,7 @@ const InstitutionalActionPlan: React.FC<InstitutionalActionPlanProps> = ({ onGoB
                                 cx="50%"
                                 cy="50%"
                                 labelLine={true}
-                                label={({ nombre, value }) => `${nombre}: ${value}%`}
+                                label={({ name, value }) => `${name}: ${value}%`}
                                 outerRadius={120}
                                 fill="#8884d8"
                                 dataKey="value"

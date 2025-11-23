@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect, useRef } from 'react';
 import { MenuIcon } from './icons/MenuIcon';
 import { XIcon } from './icons/XIcon';
@@ -9,9 +8,10 @@ interface HeaderProps {
     onShowPiipReport: () => void;
     onShowLms: () => void;
     onShowInstitutionalPlan: () => void;
+    onShowMunicipalPlan: () => void;
 }
 
-const Header: React.FC<HeaderProps> = ({ onGoHome, onShowPiipReport, onShowLms, onShowInstitutionalPlan }) => {
+const Header: React.FC<HeaderProps> = ({ onGoHome, onShowPiipReport, onShowLms, onShowInstitutionalPlan, onShowMunicipalPlan }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
@@ -33,6 +33,13 @@ const Header: React.FC<HeaderProps> = ({ onGoHome, onShowPiipReport, onShowLms, 
   const handleInstitutionalPlanClick = (event: React.MouseEvent<HTMLAnchorElement>) => {
     event.preventDefault();
     onShowInstitutionalPlan();
+    setIsMenuOpen(false);
+    setIsDropdownOpen(false);
+  }
+
+  const handleMunicipalPlanClick = (event: React.MouseEvent<HTMLAnchorElement>) => {
+    event.preventDefault();
+    onShowMunicipalPlan();
     setIsMenuOpen(false);
     setIsDropdownOpen(false);
   }
@@ -104,8 +111,8 @@ const Header: React.FC<HeaderProps> = ({ onGoHome, onShowPiipReport, onShowLms, 
               </h1>
             </div>
           </div>
-          <nav className="hidden md:block">
-            <div className="ml-4 flex items-baseline space-x-2">
+          <nav className="hidden xl:block">
+            <div className="ml-4 flex items-baseline space-x-1">
               <a href="#top" onClick={handleHomeClick} className="px-3 py-2 rounded-md text-sm font-medium text-gray-300 hover:text-white hover:bg-gray-800 transition-colors">
                 Inicio
               </a>
@@ -132,7 +139,10 @@ const Header: React.FC<HeaderProps> = ({ onGoHome, onShowPiipReport, onShowLms, 
                 Reporte de la PIIP
               </a>
               <a href="#" onClick={handleInstitutionalPlanClick} className="px-3 py-2 rounded-md text-sm font-medium text-gray-300 hover:text-white hover:bg-gray-800 transition-colors">
-                Plan de Acción Institucional 2025
+                Plan de Acción Inst. 2025
+              </a>
+              <a href="#" onClick={handleMunicipalPlanClick} className="px-3 py-2 rounded-md text-sm font-medium text-gray-300 hover:text-white hover:bg-gray-800 transition-colors">
+                Plan de Acción Municipal
               </a>
               <a href="#" onClick={handleLmsClick} className="px-3 py-2 rounded-md text-sm font-medium text-lime-400 hover:text-black hover:bg-lime-400 transition-all font-bold">
                 Campus Virtual
@@ -142,7 +152,7 @@ const Header: React.FC<HeaderProps> = ({ onGoHome, onShowPiipReport, onShowLms, 
               </a>
             </div>
           </nav>
-          <div className="-mr-2 flex md:hidden">
+          <div className="-mr-2 flex xl:hidden">
             <button onClick={() => setIsMenuOpen(!isMenuOpen)} type="button" className="bg-gray-800 inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-white hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white" aria-controls="mobile-menu" aria-expanded={isMenuOpen}>
               <span className="sr-only">Open main menu</span>
               {isMenuOpen ? <XIcon className="block h-6 w-6" /> : <MenuIcon className="block h-6 w-6" />}
@@ -152,11 +162,12 @@ const Header: React.FC<HeaderProps> = ({ onGoHome, onShowPiipReport, onShowLms, 
       </div>
 
       {isMenuOpen && (
-        <nav className="md:hidden" id="mobile-menu">
+        <nav className="xl:hidden" id="mobile-menu">
           <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3 bg-black/90 backdrop-blur-sm">
             <a href="#top" onClick={handleHomeClick} className="block px-3 py-2 rounded-md text-base font-medium text-gray-300 hover:text-white hover:bg-gray-700">Inicio</a>
             <a href="#" onClick={handlePiipReportClick} className="block px-3 py-2 rounded-md text-base font-medium text-gray-300 hover:text-white hover:bg-gray-700">Reporte de la PIIP</a>
-            <a href="#" onClick={handleInstitutionalPlanClick} className="block px-3 py-2 rounded-md text-base font-medium text-gray-300 hover:text-white hover:bg-gray-700">Plan de Acción</a>
+            <a href="#" onClick={handleInstitutionalPlanClick} className="block px-3 py-2 rounded-md text-base font-medium text-gray-300 hover:text-white hover:bg-gray-700">Plan de Acción Institucional 2025</a>
+            <a href="#" onClick={handleMunicipalPlanClick} className="block px-3 py-2 rounded-md text-base font-medium text-gray-300 hover:text-white hover:bg-gray-700">Plan de Acción Municipal</a>
             <a href="#" onClick={handleLmsClick} className="block px-3 py-2 rounded-md text-base font-medium text-lime-400 hover:text-black hover:bg-lime-400">Campus Virtual</a>
             <div className="border-t border-gray-700 my-2"></div>
             <h3 className="px-3 pt-2 pb-1 text-xs font-semibold text-lime-400 uppercase tracking-wider">Procesos</h3>
