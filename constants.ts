@@ -181,6 +181,56 @@ const standardPlanning = {
     ]
 };
 
+// Helper for 67% progress (Jan-Aug completed)
+const supportProcessPlanning67 = {
+    mensual: [
+        {
+            title: "Plan De Accion",
+            items: [
+                { name: "ENERO", status: PlanStatus.Completed, value: 8.0 },
+                { name: "FEBRERO", status: PlanStatus.Completed, value: 8.0 },
+                { name: "MARZO", status: PlanStatus.Completed, value: 8.0 },
+                { name: "ABRIL", status: PlanStatus.Completed, value: 8.0 },
+                { name: "MAYO", status: PlanStatus.Completed, value: 8.0 },
+                { name: "JUNIO", status: PlanStatus.Completed, value: 8.0 },
+                { name: "JULIO", status: PlanStatus.Completed, value: 8.0 },
+                { name: "AGOSTO", status: PlanStatus.Completed, value: 8.0 },
+                { name: "SEPTIEMBRE", status: PlanStatus.Missing, value: 0.0 },
+                { name: "OCTUBRE", status: PlanStatus.Missing, value: 0.0 },
+                { name: "NOVIEMBRE", status: PlanStatus.NotStarted, value: 0.0 },
+                { name: "DICIEMBRE", status: PlanStatus.NotStarted, value: 0.0 },
+            ],
+            total: 67.0,
+        },
+    ],
+    ...standardPlanning
+};
+
+// Helper for 59% progress (Jan-Jul completed)
+const supportProcessPlanning59 = {
+    mensual: [
+        {
+            title: "Plan De Accion",
+            items: [
+                { name: "ENERO", status: PlanStatus.Completed, value: 8.0 },
+                { name: "FEBRERO", status: PlanStatus.Completed, value: 8.0 },
+                { name: "MARZO", status: PlanStatus.Completed, value: 8.0 },
+                { name: "ABRIL", status: PlanStatus.Completed, value: 8.0 },
+                { name: "MAYO", status: PlanStatus.Completed, value: 8.0 },
+                { name: "JUNIO", status: PlanStatus.Completed, value: 8.0 },
+                { name: "JULIO", status: PlanStatus.Completed, value: 8.0 },
+                { name: "AGOSTO", status: PlanStatus.Missing, value: 0.0 },
+                { name: "SEPTIEMBRE", status: PlanStatus.Missing, value: 0.0 },
+                { name: "OCTUBRE", status: PlanStatus.Missing, value: 0.0 },
+                { name: "NOVIEMBRE", status: PlanStatus.NotStarted, value: 0.0 },
+                { name: "DICIEMBRE", status: PlanStatus.NotStarted, value: 0.0 },
+            ],
+            total: 59.0,
+        },
+    ],
+    ...standardPlanning
+};
+
 
 export const ALL_PROCESS_DATA: AllProcessData = {
     "Gestión Estratégica": {
@@ -361,97 +411,7 @@ export const ALL_PROCESS_DATA: AllProcessData = {
                     total: 59.0,
                 },
             ],
-            trimestral: [
-                {
-                    title: "Reporte indicadores",
-                    items: [
-                        { name: "1 TRIMESTRE", status: PlanStatus.Completed, value: 33.1 },
-                        { name: "2 TRIMESTRE", status: PlanStatus.Completed, value: 33.1 },
-                        { name: "3 TRIMESTRE", status: PlanStatus.NotStarted, value: 0.0 },
-                    ],
-                    total: 66.2,
-                },
-            ],
-            cuatrimestral: [
-                {
-                    title: "Matriz de aspectos e impactos ambientales",
-                    items: [
-                        { name: "1 CAUTRIMESTRE", status: PlanStatus.Completed, value: 33.1 },
-                        { name: "2 CAUTRIMESTRE", status: PlanStatus.Missing, value: 0.0 },
-                        { name: "3 CUATRIMESTRE", status: PlanStatus.NotStarted, value: 0.0 },
-                    ],
-                    total: 33.1,
-                },
-                {
-                    title: "Matriz de riesgos y oportunidades",
-                    items: [
-                        { name: "1 CAUTRIMESTRE", status: PlanStatus.Missing, value: 0.0 },
-                        { name: "2 CAUTRIMESTRE", status: PlanStatus.Missing, value: 0.0 },
-                        { name: "3 CUATRIMESTRE", status: PlanStatus.NotStarted, value: 0.0 },
-                    ],
-                    total: 0.0,
-                },
-                {
-                    title: "Matriz IPVER",
-                    items: [
-                        { name: "1 CAUTRIMESTRE", status: PlanStatus.Completed, value: 33.1 },
-                        { name: "2 CAUTRIMESTRE", status: PlanStatus.Missing, value: 0.0 },
-                        { name: "3 CUATRIMESTRE", status: PlanStatus.NotStarted, value: 0.0 },
-                    ],
-                    total: 33.1,
-                },
-                {
-                    title: "Programa de transparencia y ética publica",
-                    items: [
-                        { name: "1 CAUTRIMESTRE", status: PlanStatus.Completed, value: 33.1 },
-                        { name: "2 CAUTRIMESTRE", status: PlanStatus.Completed, value: 33.1 },
-                        { name: "3 CUATRIMESTRE", status: PlanStatus.NotStarted, value: 0.0 },
-                    ],
-                    total: 66.2,
-                },
-            ],
-            semestral: [
-                {
-                    title: "Matriz de requisitos legales",
-                    items: [
-                        { name: "1 SEMESTRE", status: PlanStatus.Completed, value: 50.0 },
-                        { name: "2 SEMESTRE", status: PlanStatus.NotStarted, value: 0.0 },
-                    ],
-                    total: 50.0,
-                },
-            ],
-            anual: [
-                 {
-                    title: "Reporte del tratamiento producto o servicio no conforme",
-                    items: [{ name: "ANUAL", status: PlanStatus.Completed, value: 100.0 }],
-                    total: 100.0,
-                },
-                {
-                    title: "Gestion del cambio",
-                    items: [{ name: "ANUAL", status: PlanStatus.Completed, value: 100.0 }],
-                    total: 100.0,
-                },
-                {
-                    title: "Reporte FURAG",
-                    items: [{ name: "ANUAL", status: PlanStatus.Completed, value: 100.0 }],
-                    total: 100.0,
-                },
-                {
-                    title: "Reporte ITA",
-                    items: [{ name: "ANUAL", status: PlanStatus.Completed, value: 100.0 }],
-                    total: 100.0,
-                },
-                {
-                    title: "POAI",
-                    items: [{ name: "ANUAL", status: PlanStatus.Completed, value: 100.0 }],
-                    total: 100.0,
-                },
-                {
-                    title: "Programa De Transparencia Etica y Publica",
-                    items: [{ name: "ANUAL", status: PlanStatus.Missing, value: 0.0 }],
-                    total: 0.0,
-                },
-            ],
+            ...standardPlanning
         },
         documentation: defaultDocumentation,
         tracking: [
@@ -487,97 +447,7 @@ export const ALL_PROCESS_DATA: AllProcessData = {
                     total: 58.0,
                 },
             ],
-            trimestral: [
-                {
-                    title: "Reporte indicadores",
-                    items: [
-                        { name: "1 TRIMESTRE", status: PlanStatus.Completed, value: 33.1 },
-                        { name: "2 TRIMESTRE", status: PlanStatus.Completed, value: 33.1 },
-                        { name: "3 TRIMESTRE", status: PlanStatus.NotStarted, value: 0.0 },
-                    ],
-                    total: 66.2,
-                },
-            ],
-            cuatrimestral: [
-                {
-                    title: "Matriz de aspectos e impactos ambientales",
-                    items: [
-                        { name: "1 CAUTRIMESTRE", status: PlanStatus.Completed, value: 33.1 },
-                        { name: "2 CAUTRIMESTRE", status: PlanStatus.Missing, value: 0.0 },
-                        { name: "3 CUATRIMESTRE", status: PlanStatus.NotStarted, value: 0.0 },
-                    ],
-                    total: 33.1,
-                },
-                {
-                    title: "Matriz de riesgos y oportunidades",
-                    items: [
-                        { name: "1 CAUTRIMESTRE", status: PlanStatus.Missing, value: 0.0 },
-                        { name: "2 CAUTRIMESTRE", status: PlanStatus.Missing, value: 0.0 },
-                        { name: "3 CUATRIMESTRE", status: PlanStatus.NotStarted, value: 0.0 },
-                    ],
-                    total: 0.0,
-                },
-                 {
-                    title: "Matriz IPVER",
-                    items: [
-                        { name: "1 CAUTRIMESTRE", status: PlanStatus.Completed, value: 33.1 },
-                        { name: "2 CAUTRIMESTRE", status: PlanStatus.Missing, value: 0.0 },
-                        { name: "3 CUATRIMESTRE", status: PlanStatus.NotStarted, value: 0.0 },
-                    ],
-                    total: 33.1,
-                },
-                {
-                    title: "Programa de transparencia y ética publica",
-                    items: [
-                        { name: "1 CAUTRIMESTRE", status: PlanStatus.Completed, value: 33.1 },
-                        { name: "2 CAUTRIMESTRE", status: PlanStatus.Missing, value: 0.0 },
-                        { name: "3 CUATRIMESTRE", status: PlanStatus.NotStarted, value: 0.0 },
-                    ],
-                    total: 33.1,
-                },
-            ],
-            semestral: [
-                {
-                    title: "Matriz de requisitos legales",
-                    items: [
-                        { name: "1 SEMESTRE", status: PlanStatus.Completed, value: 50.0 },
-                        { name: "2 SEMESTRE", status: PlanStatus.NotStarted, value: 0.0 },
-                    ],
-                    total: 50.0,
-                },
-            ],
-            anual: [
-                 {
-                    title: "Reporte del tratamiento producto o servicio no conforme",
-                    items: [{ name: "ANUAL", status: PlanStatus.Completed, value: 100.0 }],
-                    total: 100.0,
-                },
-                {
-                    title: "Gestion del cambio",
-                    items: [{ name: "ANUAL", status: PlanStatus.Completed, value: 100.0 }],
-                    total: 100.0,
-                },
-                {
-                    title: "Reporte FURAG",
-                    items: [{ name: "ANUAL", status: PlanStatus.Completed, value: 100.0 }],
-                    total: 100.0,
-                },
-                {
-                    title: "Reporte ITA",
-                    items: [{ name: "ANUAL", status: PlanStatus.Completed, value: 100.0 }],
-                    total: 100.0,
-                },
-                {
-                    title: "POAI",
-                    items: [{ name: "ANUAL", status: PlanStatus.Completed, value: 100.0 }],
-                    total: 100.0,
-                },
-                {
-                    title: "Programa De Transparencia Etica y Publica",
-                    items: [{ name: "ANUAL", status: PlanStatus.Missing, value: 0.0 }],
-                    total: 0.0,
-                },
-            ],
+            ...standardPlanning
         },
         documentation: defaultDocumentation,
         tracking: [
@@ -612,97 +482,7 @@ export const ALL_PROCESS_DATA: AllProcessData = {
                     total: 84.0,
                 },
             ],
-            trimestral: [
-                {
-                    title: "Reporte indicadores",
-                    items: [
-                        { name: "1 TRIMESTRE", status: PlanStatus.Completed, value: 33.1 },
-                        { name: "2 TRIMESTRE", status: PlanStatus.Completed, value: 33.1 },
-                        { name: "3 TRIMESTRE", status: PlanStatus.NotStarted, value: 0.0 },
-                    ],
-                    total: 66.2,
-                },
-            ],
-            cuatrimestral: [
-                {
-                    title: "Matriz de aspectos e impactos ambientales",
-                    items: [
-                        { name: "1 CAUTRIMESTRE", status: PlanStatus.Completed, value: 33.1 },
-                        { name: "2 CAUTRIMESTRE", status: PlanStatus.Missing, value: 0.0 },
-                        { name: "3 CUATRIMESTRE", status: PlanStatus.NotStarted, value: 0.0 },
-                    ],
-                    total: 33.1,
-                },
-                {
-                    title: "Matriz de riesgos y oportunidades",
-                    items: [
-                        { name: "1 CAUTRIMESTRE", status: PlanStatus.Missing, value: 0.0 },
-                        { name: "2 CAUTRIMESTRE", status: PlanStatus.Missing, value: 0.0 },
-                        { name: "3 CUATRIMESTRE", status: PlanStatus.NotStarted, value: 0.0 },
-                    ],
-                    total: 0.0,
-                },
-                 {
-                    title: "Matriz IPVER",
-                    items: [
-                        { name: "1 CAUTRIMESTRE", status: PlanStatus.Completed, value: 33.1 },
-                        { name: "2 CAUTRIMESTRE", status: PlanStatus.Missing, value: 0.0 },
-                        { name: "3 CUATRIMESTRE", status: PlanStatus.NotStarted, value: 0.0 },
-                    ],
-                    total: 33.1,
-                },
-                {
-                    title: "Programa de transparencia y ética publica",
-                    items: [
-                        { name: "1 CAUTRIMESTRE", status: PlanStatus.Completed, value: 33.1 },
-                        { name: "2 CAUTRIMESTRE", status: PlanStatus.Completed, value: 33.1 },
-                        { name: "3 CUATRIMESTRE", status: PlanStatus.NotStarted, value: 0.0 },
-                    ],
-                    total: 66.2,
-                },
-            ],
-            semestral: [
-                {
-                    title: "Matriz de requisitos legales",
-                    items: [
-                        { name: "1 SEMESTRE", status: PlanStatus.Completed, value: 50.0 },
-                        { name: "2 SEMESTRE", status: PlanStatus.NotStarted, value: 0.0 },
-                    ],
-                    total: 50.0,
-                },
-            ],
-            anual: [
-                 {
-                    title: "Reporte del tratamiento producto o servicio no conforme",
-                    items: [{ name: "ANUAL", status: PlanStatus.Completed, value: 100.0 }],
-                    total: 100.0,
-                },
-                {
-                    title: "Gestion del cambio",
-                    items: [{ name: "ANUAL", status: PlanStatus.Completed, value: 100.0 }],
-                    total: 100.0,
-                },
-                {
-                    title: "Reporte FURAG",
-                    items: [{ name: "ANUAL", status: PlanStatus.Completed, value: 100.0 }],
-                    total: 100.0,
-                },
-                {
-                    title: "Reporte ITA",
-                    items: [{ name: "ANUAL", status: PlanStatus.Completed, value: 100.0 }],
-                    total: 100.0,
-                },
-                {
-                    title: "POAI",
-                    items: [{ name: "ANUAL", status: PlanStatus.Completed, value: 100.0 }],
-                    total: 100.0,
-                },
-                {
-                    title: "Programa De Transparencia Etica y Publica",
-                    items: [{ name: "ANUAL", status: PlanStatus.Missing, value: 0.0 }],
-                    total: 0.0,
-                },
-            ],
+            ...standardPlanning
         },
         documentation: defaultDocumentation,
         tracking: [
@@ -737,97 +517,7 @@ export const ALL_PROCESS_DATA: AllProcessData = {
                     total: 76.0,
                 },
             ],
-            trimestral: [
-                {
-                    title: "Reporte indicadores",
-                    items: [
-                        { name: "1 TRIMESTRE", status: PlanStatus.Completed, value: 33.1 },
-                        { name: "2 TRIMESTRE", status: PlanStatus.Completed, value: 33.1 },
-                        { name: "3 TRIMESTRE", status: PlanStatus.NotStarted, value: 0.0 },
-                    ],
-                    total: 66.2,
-                },
-            ],
-            cuatrimestral: [
-                {
-                    title: "Matriz de aspectos e impactos ambientales",
-                    items: [
-                        { name: "1 CAUTRIMESTRE", status: PlanStatus.Completed, value: 33.1 },
-                        { name: "2 CAUTRIMESTRE", status: PlanStatus.Missing, value: 0.0 },
-                        { name: "3 CUATRIMESTRE", status: PlanStatus.NotStarted, value: 0.0 },
-                    ],
-                    total: 33.1,
-                },
-                {
-                    title: "Matriz de riesgos y oportunidades",
-                    items: [
-                        { name: "1 CAUTRIMESTRE", status: PlanStatus.Missing, value: 0.0 },
-                        { name: "2 CAUTRIMESTRE", status: PlanStatus.Missing, value: 0.0 },
-                        { name: "3 CUATRIMESTRE", status: PlanStatus.NotStarted, value: 0.0 },
-                    ],
-                    total: 0.0,
-                },
-                 {
-                    title: "Matriz IPVER",
-                    items: [
-                        { name: "1 CAUTRIMESTRE", status: PlanStatus.Completed, value: 33.1 },
-                        { name: "2 CAUTRIMESTRE", status: PlanStatus.Missing, value: 0.0 },
-                        { name: "3 CUATRIMESTRE", status: PlanStatus.NotStarted, value: 0.0 },
-                    ],
-                    total: 33.1,
-                },
-                {
-                    title: "Programa de transparencia y ética publica",
-                    items: [
-                        { name: "1 CAUTRIMESTRE", status: PlanStatus.Completed, value: 33.1 },
-                        { name: "2 CAUTRIMESTRE", status: PlanStatus.Completed, value: 33.1 },
-                        { name: "3 CUATRIMESTRE", status: PlanStatus.NotStarted, value: 0.0 },
-                    ],
-                    total: 66.2,
-                },
-            ],
-            semestral: [
-                {
-                    title: "Matriz de requisitos legales",
-                    items: [
-                        { name: "1 SEMESTRE", status: PlanStatus.Completed, value: 50.0 },
-                        { name: "2 SEMESTRE", status: PlanStatus.NotStarted, value: 0.0 },
-                    ],
-                    total: 50.0,
-                },
-            ],
-            anual: [
-                 {
-                    title: "Reporte del tratamiento producto o servicio no conforme",
-                    items: [{ name: "ANUAL", status: PlanStatus.Completed, value: 100.0 }],
-                    total: 100.0,
-                },
-                {
-                    title: "Gestion del cambio",
-                    items: [{ name: "ANUAL", status: PlanStatus.Completed, value: 100.0 }],
-                    total: 100.0,
-                },
-                {
-                    title: "Reporte FURAG",
-                    items: [{ name: "ANUAL", status: PlanStatus.Completed, value: 100.0 }],
-                    total: 100.0,
-                },
-                {
-                    title: "Reporte ITA",
-                    items: [{ name: "ANUAL", status: PlanStatus.Completed, value: 100.0 }],
-                    total: 100.0,
-                },
-                {
-                    title: "POAI",
-                    items: [{ name: "ANUAL", status: PlanStatus.Completed, value: 100.0 }],
-                    total: 100.0,
-                },
-                {
-                    title: "Programa De Transparencia Etica y Publica",
-                    items: [{ name: "ANUAL", status: PlanStatus.Missing, value: 0.0 }],
-                    total: 0.0,
-                },
-            ],
+            ...standardPlanning
         },
         documentation: defaultDocumentation,
         tracking: [
@@ -862,97 +552,7 @@ export const ALL_PROCESS_DATA: AllProcessData = {
                     total: 67.0,
                 },
             ],
-            trimestral: [
-                {
-                    title: "Reporte indicadores",
-                    items: [
-                        { name: "1 TRIMESTRE", status: PlanStatus.Completed, value: 33.1 },
-                        { name: "2 TRIMESTRE", status: PlanStatus.Completed, value: 33.1 },
-                        { name: "3 TRIMESTRE", status: PlanStatus.NotStarted, value: 0.0 },
-                    ],
-                    total: 66.2,
-                },
-            ],
-            cuatrimestral: [
-                {
-                    title: "Matriz de aspectos e impactos ambientales",
-                    items: [
-                        { name: "1 CAUTRIMESTRE", status: PlanStatus.Completed, value: 33.1 },
-                        { name: "2 CAUTRIMESTRE", status: PlanStatus.Missing, value: 0.0 },
-                        { name: "3 CUATRIMESTRE", status: PlanStatus.NotStarted, value: 0.0 },
-                    ],
-                    total: 33.1,
-                },
-                {
-                    title: "Matriz de riesgos y oportunidades",
-                    items: [
-                        { name: "1 CAUTRIMESTRE", status: PlanStatus.Missing, value: 0.0 },
-                        { name: "2 CAUTRIMESTRE", status: PlanStatus.Missing, value: 0.0 },
-                        { name: "3 CUATRIMESTRE", status: PlanStatus.NotStarted, value: 0.0 },
-                    ],
-                    total: 0.0,
-                },
-                 {
-                    title: "Matriz IPVER",
-                    items: [
-                        { name: "1 CAUTRIMESTRE", status: PlanStatus.Completed, value: 33.1 },
-                        { name: "2 CAUTRIMESTRE", status: PlanStatus.Missing, value: 0.0 },
-                        { name: "3 CUATRIMESTRE", status: PlanStatus.NotStarted, value: 0.0 },
-                    ],
-                    total: 33.1,
-                },
-                {
-                    title: "Programa de transparencia y ética publica",
-                    items: [
-                        { name: "1 CAUTRIMESTRE", status: PlanStatus.Completed, value: 33.1 },
-                        { name: "2 CAUTRIMESTRE", status: PlanStatus.Completed, value: 33.1 },
-                        { name: "3 CUATRIMESTRE", status: PlanStatus.NotStarted, value: 0.0 },
-                    ],
-                    total: 66.2,
-                },
-            ],
-            semestral: [
-                {
-                    title: "Matriz de requisitos legales",
-                    items: [
-                        { name: "1 SEMESTRE", status: PlanStatus.Completed, value: 50.0 },
-                        { name: "2 SEMESTRE", status: PlanStatus.NotStarted, value: 0.0 },
-                    ],
-                    total: 50.0,
-                },
-            ],
-            anual: [
-                 {
-                    title: "Reporte del tratamiento producto o servicio no conforme",
-                    items: [{ name: "ANUAL", status: PlanStatus.Completed, value: 100.0 }],
-                    total: 100.0,
-                },
-                {
-                    title: "Gestion del cambio",
-                    items: [{ name: "ANUAL", status: PlanStatus.Completed, value: 100.0 }],
-                    total: 100.0,
-                },
-                {
-                    title: "Reporte FURAG",
-                    items: [{ name: "ANUAL", status: PlanStatus.Completed, value: 100.0 }],
-                    total: 100.0,
-                },
-                {
-                    title: "Reporte ITA",
-                    items: [{ name: "ANUAL", status: PlanStatus.Completed, value: 100.0 }],
-                    total: 100.0,
-                },
-                {
-                    title: "POAI",
-                    items: [{ name: "ANUAL", status: PlanStatus.Completed, value: 100.0 }],
-                    total: 100.0,
-                },
-                {
-                    title: "Programa De Transparencia Etica y Publica",
-                    items: [{ name: "ANUAL", status: PlanStatus.Missing, value: 0.0 }],
-                    total: 0.0,
-                },
-            ],
+            ...standardPlanning,
         },
         documentation: defaultDocumentation,
         tracking: [
@@ -967,15 +567,34 @@ export const ALL_PROCESS_DATA: AllProcessData = {
     },
     "Gestión de Proyectos de Promoción y Desarrollo": {
         planning: {
-            mensual: [],
-            trimestral: [],
-            cuatrimestral: [],
-            semestral: [],
-            anual: [],
+            mensual: [
+                {
+                    title: "Plan De Accion",
+                    items: [
+                        { name: "ENERO", status: PlanStatus.Completed, value: 8.0 },
+                        { name: "FEBRERO", status: PlanStatus.Completed, value: 8.0 },
+                        { name: "MARZO", status: PlanStatus.Completed, value: 8.0 },
+                        { name: "ABRIL", status: PlanStatus.Completed, value: 8.0 },
+                        { name: "MAYO", status: PlanStatus.Completed, value: 8.0 },
+                        { name: "JUNIO", status: PlanStatus.Completed, value: 8.0 },
+                        { name: "JULIO", status: PlanStatus.Completed, value: 8.0 },
+                        { name: "AGOSTO", status: PlanStatus.Completed, value: 8.0 },
+                        { name: "SEPTIEMBRE", status: PlanStatus.Missing, value: 0.0 },
+                        { name: "OCTUBRE", status: PlanStatus.Missing, value: 0.0 },
+                        { name: "NOVIEMBRE", status: PlanStatus.NotStarted, value: 0.0 },
+                        { name: "DICIEMBRE", status: PlanStatus.NotStarted, value: 0.0 },
+                    ],
+                    total: 67.0,
+                },
+            ],
+            ...standardPlanning,
         },
-        documentation: [],
-        tracking: [],
+        documentation: defaultDocumentation,
+        tracking: [
+            { name: "Plan de Acción", months: [true, true, true, true, true, true, true, true, false, false, false, false] },
+        ],
         developmentPlanGoals: [],
+        improvementPlan: standardImprovementPlan,
         subProcesses: {
             "Panóptico": {
                 planning: {
@@ -1379,13 +998,189 @@ export const ALL_PROCESS_DATA: AllProcessData = {
             },
         }
     },
-    "Gestión Humana": defaultData,
-    "Gestión Financiera": defaultData,
-    "Gestión Contractual": defaultData,
-    "Gestión Jurídica": defaultData,
-    "Gestión de Recursos Físicos": defaultData,
-    "Gestión Documental": defaultData,
-    "Gestión Control Disciplinario": defaultData,
-    "Evaluación Independiente": defaultData,
+    "Gestión Humana": {
+        planning: supportProcessPlanning67,
+        documentation: defaultDocumentation,
+        tracking: [
+            { name: "Plan de Acción", months: [true, true, true, true, true, true, true, true, false, false, false, false] }
+        ],
+        developmentPlanGoals: [],
+        improvementPlan: standardImprovementPlan
+    },
+    "Gestión Financiera": {
+        planning: supportProcessPlanning67,
+        documentation: defaultDocumentation,
+        tracking: [
+            { name: "Plan de Acción", months: [true, true, true, true, true, true, true, true, false, false, false, false] }
+        ],
+        developmentPlanGoals: [],
+        improvementPlan: standardImprovementPlan
+    },
+    "Gestión Contractual": {
+        planning: supportProcessPlanning67,
+        documentation: defaultDocumentation,
+        tracking: [
+            { name: "Plan de Acción", months: [true, true, true, true, true, true, true, true, false, false, false, false] }
+        ],
+        developmentPlanGoals: [],
+        improvementPlan: standardImprovementPlan
+    },
+    "Gestión Jurídica": {
+        planning: supportProcessPlanning67,
+        documentation: defaultDocumentation,
+        tracking: [
+            { name: "Plan de Acción", months: [true, true, true, true, true, true, true, true, false, false, false, false] }
+        ],
+        developmentPlanGoals: [],
+        improvementPlan: standardImprovementPlan
+    },
+    "Gestión de Recursos Físicos": {
+        planning: supportProcessPlanning67,
+        documentation: defaultDocumentation,
+        tracking: [
+            { name: "Plan de Acción", months: [true, true, true, true, true, true, true, true, false, false, false, false] }
+        ],
+        developmentPlanGoals: [],
+        improvementPlan: standardImprovementPlan
+    },
+    "Gestión Documental": {
+        planning: supportProcessPlanning59,
+        documentation: defaultDocumentation,
+        tracking: [
+            { name: "Plan de Acción", months: [true, true, true, true, true, true, true, false, false, false, false, false] }
+        ],
+        developmentPlanGoals: [],
+        improvementPlan: standardImprovementPlan
+    },
+    "Gestión Control Disciplinario": {
+        planning: supportProcessPlanning67,
+        documentation: defaultDocumentation,
+        tracking: [
+            { name: "Plan de Acción", months: [true, true, true, true, true, true, true, true, false, false, false, false] }
+        ],
+        developmentPlanGoals: [],
+        improvementPlan: standardImprovementPlan
+    },
+    "Evaluación Independiente": {
+        planning: {
+            mensual: [
+                {
+                    title: "Plan De Accion",
+                    items: [
+                        { name: "ENERO", status: PlanStatus.Completed, value: 8.0 },
+                        { name: "FEBRERO", status: PlanStatus.Completed, value: 8.0 },
+                        { name: "MARZO", status: PlanStatus.Completed, value: 8.0 },
+                        { name: "ABRIL", status: PlanStatus.Completed, value: 8.0 },
+                        { name: "MAYO", status: PlanStatus.Completed, value: 8.0 },
+                        { name: "JUNIO", status: PlanStatus.Completed, value: 8.0 },
+                        { name: "JULIO", status: PlanStatus.Completed, value: 8.0 },
+                        { name: "AGOSTO", status: PlanStatus.Completed, value: 8.0 },
+                        { name: "SEPTIEMBRE", status: PlanStatus.Missing, value: 0.0 },
+                        { name: "OCTUBRE", status: PlanStatus.Missing, value: 0.0 },
+                        { name: "NOVIEMBRE", status: PlanStatus.NotStarted, value: 0.0 },
+                        { name: "DICIEMBRE", status: PlanStatus.NotStarted, value: 0.0 },
+                    ],
+                    total: 67.0,
+                },
+            ],
+            trimestral: [
+                {
+                    title: "Reporte indicadores",
+                    items: [
+                        { name: "1 TRIMESTRE", status: PlanStatus.Completed, value: 33.1 },
+                        { name: "2 TRIMESTRE", status: PlanStatus.Completed, value: 33.1 },
+                        { name: "3 TRIMESTRE", status: PlanStatus.NotStarted, value: 0.0 },
+                    ],
+                    total: 66.2,
+                },
+            ],
+            cuatrimestral: [
+                {
+                    title: "Matriz de aspectos e impactos ambientales",
+                    items: [
+                        { name: "1 CAUTRIMESTRE", status: PlanStatus.Completed, value: 33.1 },
+                        { name: "2 CAUTRIMESTRE", status: PlanStatus.Missing, value: 0.0 },
+                        { name: "3 CUATRIMESTRE", status: PlanStatus.NotStarted, value: 0.0 },
+                    ],
+                    total: 33.1,
+                },
+                {
+                    title: "Matriz de riesgos y oportunidades",
+                    items: [
+                        { name: "1 CAUTRIMESTRE", status: PlanStatus.Missing, value: 0.0 },
+                        { name: "2 CAUTRIMESTRE", status: PlanStatus.Missing, value: 0.0 },
+                        { name: "3 CUATRIMESTRE", status: PlanStatus.NotStarted, value: 0.0 },
+                    ],
+                    total: 0.0,
+                },
+                {
+                    title: "Matriz IPVER",
+                    items: [
+                        { name: "1 CAUTRIMESTRE", status: PlanStatus.Completed, value: 33.1 },
+                        { name: "2 CAUTRIMESTRE", status: PlanStatus.Missing, value: 0.0 },
+                        { name: "3 CUATRIMESTRE", status: PlanStatus.NotStarted, value: 0.0 },
+                    ],
+                    total: 33.1,
+                },
+                {
+                    title: "Programa de transparencia y ética publica",
+                    items: [
+                        { name: "1 CAUTRIMESTRE", status: PlanStatus.Completed, value: 33.1 },
+                        { name: "2 CAUTRIMESTRE", status: PlanStatus.Completed, value: 33.1 },
+                        { name: "3 CUATRIMESTRE", status: PlanStatus.NotStarted, value: 0.0 },
+                    ],
+                    total: 66.2,
+                },
+            ],
+            semestral: [
+                {
+                    title: "Matriz de requisitos legales",
+                    items: [
+                        { name: "1 SEMESTRE", status: PlanStatus.Completed, value: 50.0 },
+                        { name: "2 SEMESTRE", status: PlanStatus.NotStarted, value: 0.0 },
+                    ],
+                    total: 50.0,
+                },
+            ],
+            anual: [
+                 {
+                    title: "Reporte del tratamiento producto o servicio no conforme",
+                    items: [{ name: "ANUAL", status: PlanStatus.Completed, value: 100.0 }],
+                    total: 100.0,
+                },
+                {
+                    title: "Gestion del cambio",
+                    items: [{ name: "ANUAL", status: PlanStatus.Completed, value: 100.0 }],
+                    total: 100.0,
+                },
+                {
+                    title: "Reporte FURAG",
+                    items: [{ name: "ANUAL", status: PlanStatus.Completed, value: 100.0 }],
+                    total: 100.0,
+                },
+                {
+                    title: "Reporte ITA",
+                    items: [{ name: "ANUAL", status: PlanStatus.Completed, value: 100.0 }],
+                    total: 100.0,
+                },
+                {
+                    title: "POAI",
+                    items: [{ name: "ANUAL", status: PlanStatus.Completed, value: 100.0 }],
+                    total: 100.0,
+                },
+                {
+                    title: "Programa De Transparencia Etica y Publica",
+                    items: [{ name: "ANUAL", status: PlanStatus.Missing, value: 0.0 }],
+                    total: 0.0,
+                },
+            ],
+        },
+        documentation: defaultDocumentation,
+        tracking: [
+            { name: "Plan de Acción", months: [true, true, true, true, true, true, true, true, false, false, false, false] },
+        ],
+        developmentPlanGoals: [],
+        improvementPlan: standardImprovementPlan,
+    },
     "default": defaultData,
 }

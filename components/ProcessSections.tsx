@@ -40,36 +40,119 @@ const deepSearch = (obj: any, query: string): boolean => {
 };
 
 // --- STYLE & ICON MAPPING ---
-const getProcessConfig = (name: string) => {
+interface ProcessStyleConfig {
+    icon: React.ElementType;
+    gradient: string;
+    shadow: string;
+}
+
+const getProcessConfig = (name: string): ProcessStyleConfig => {
     const n = normalizeStringForSearch(name);
 
     // Estratégicos
-    if (n.includes("estrategica")) return { from: "from-emerald-600", to: "to-teal-600", icon: Target, shadow: "shadow-emerald-500/20" };
-    if (n.includes("riesgos")) return { from: "from-rose-600", to: "to-pink-600", icon: ShieldCheck, shadow: "shadow-rose-500/20" };
-    if (n.includes("conocimiento")) return { from: "from-violet-600", to: "to-purple-600", icon: BookOpen, shadow: "shadow-violet-500/20" };
-    if (n.includes("sig")) return { from: "from-cyan-600", to: "to-blue-600", icon: FileCheck, shadow: "shadow-cyan-500/20" };
-    if (n.includes("comunicacion")) return { from: "from-orange-500", to: "to-amber-600", icon: Radio, shadow: "shadow-orange-500/20" };
-    if (n.includes("tecnologica")) return { from: "from-blue-600", to: "to-indigo-600", icon: Cpu, shadow: "shadow-blue-500/20" };
+    if (n.includes("estrategica")) return { 
+        icon: Target, 
+        gradient: "bg-gradient-to-r from-emerald-600 to-teal-600", 
+        shadow: "hover:shadow-emerald-500/30" 
+    };
+    if (n.includes("riesgos")) return { 
+        icon: ShieldCheck, 
+        gradient: "bg-gradient-to-r from-rose-600 to-pink-600", 
+        shadow: "hover:shadow-rose-500/30" 
+    };
+    if (n.includes("conocimiento")) return { 
+        icon: BookOpen, 
+        gradient: "bg-gradient-to-r from-violet-600 to-purple-600", 
+        shadow: "hover:shadow-violet-500/30" 
+    };
+    if (n.includes("sig")) return { 
+        icon: FileCheck, 
+        gradient: "bg-gradient-to-r from-cyan-600 to-blue-600", 
+        shadow: "hover:shadow-cyan-500/30" 
+    };
+    if (n.includes("comunicacion")) return { 
+        icon: Radio, 
+        gradient: "bg-gradient-to-r from-orange-500 to-amber-600", 
+        shadow: "hover:shadow-orange-500/30" 
+    };
+    if (n.includes("tecnologica")) return { 
+        icon: Cpu, 
+        gradient: "bg-gradient-to-r from-indigo-600 to-blue-700", 
+        shadow: "hover:shadow-indigo-500/30" 
+    };
 
     // Misionales
-    if (n.includes("ciudadano")) return { from: "from-sky-500", to: "to-blue-600", icon: Users, shadow: "shadow-sky-500/20" };
-    if (n.includes("operaciones financieras")) return { from: "from-blue-600", to: "to-blue-800", icon: Calculator, shadow: "shadow-blue-500/20" };
-    if (n.includes("promocion")) return { from: "from-fuchsia-600", to: "to-purple-700", icon: Rocket, shadow: "shadow-fuchsia-500/20" };
-    if (n.includes("esquemas")) return { from: "from-amber-500", to: "to-orange-600", icon: Briefcase, shadow: "shadow-amber-500/20" };
+    if (n.includes("ciudadano")) return { 
+        icon: Users, 
+        gradient: "bg-gradient-to-r from-sky-500 to-blue-600", 
+        shadow: "hover:shadow-sky-500/30" 
+    };
+    if (n.includes("operaciones financieras")) return { 
+        icon: Calculator, 
+        gradient: "bg-gradient-to-r from-blue-600 to-indigo-700", 
+        shadow: "hover:shadow-blue-500/30" 
+    };
+    if (n.includes("promocion")) return { 
+        icon: Rocket, 
+        gradient: "bg-gradient-to-r from-fuchsia-600 to-purple-700", 
+        shadow: "hover:shadow-fuchsia-500/30" 
+    };
+    if (n.includes("esquemas")) return { 
+        icon: Briefcase, 
+        gradient: "bg-gradient-to-r from-amber-500 to-orange-600", 
+        shadow: "hover:shadow-amber-500/30" 
+    };
 
     // Apoyo
-    if (n.includes("humana")) return { from: "from-pink-500", to: "to-rose-500", icon: UserCheck, shadow: "shadow-pink-500/20" };
-    if (n.includes("financiera")) return { from: "from-indigo-500", to: "to-violet-600", icon: Calculator, shadow: "shadow-indigo-500/20" };
-    if (n.includes("contractual")) return { from: "from-slate-500", to: "to-gray-600", icon: FileSignature, shadow: "shadow-slate-500/20" };
-    if (n.includes("juridica")) return { from: "from-red-700", to: "to-red-900", icon: Scale, shadow: "shadow-red-500/20" };
-    if (n.includes("recursos")) return { from: "from-lime-600", to: "to-green-700", icon: Building, shadow: "shadow-lime-500/20" };
-    if (n.includes("documental")) return { from: "from-yellow-500", to: "to-amber-600", icon: Archive, shadow: "shadow-yellow-500/20" };
-    if (n.includes("disciplinario")) return { from: "from-gray-600", to: "to-slate-700", icon: Gavel, shadow: "shadow-gray-500/20" };
+    if (n.includes("humana")) return { 
+        icon: UserCheck, 
+        gradient: "bg-gradient-to-r from-pink-500 to-rose-600", 
+        shadow: "hover:shadow-pink-500/30" 
+    };
+    if (n.includes("financiera")) return { 
+        icon: Calculator, 
+        gradient: "bg-gradient-to-r from-indigo-500 to-violet-600", 
+        shadow: "hover:shadow-indigo-500/30" 
+    };
+    if (n.includes("contractual")) return { 
+        icon: FileSignature, 
+        gradient: "bg-gradient-to-r from-slate-600 to-slate-700", 
+        shadow: "hover:shadow-slate-500/30" 
+    };
+    if (n.includes("juridica")) return { 
+        icon: Scale, 
+        gradient: "bg-gradient-to-r from-red-600 to-red-700", 
+        shadow: "hover:shadow-red-500/30" 
+    };
+    if (n.includes("recursos")) return { 
+        icon: Building, 
+        gradient: "bg-gradient-to-r from-lime-600 to-green-700", 
+        shadow: "hover:shadow-lime-500/30" 
+    };
+    if (n.includes("documental")) return { 
+        icon: Archive, 
+        gradient: "bg-gradient-to-r from-yellow-500 to-amber-600", 
+        shadow: "hover:shadow-yellow-500/30" 
+    };
+    if (n.includes("disciplinario")) return { 
+        icon: Gavel, 
+        gradient: "bg-gradient-to-r from-gray-600 to-gray-700", 
+        shadow: "hover:shadow-gray-500/30" 
+    };
 
     // Evaluación
-    if (n.includes("evaluacion")) return { from: "from-teal-500", to: "to-emerald-600", icon: ClipboardCheck, shadow: "shadow-teal-500/20" };
+    if (n.includes("evaluacion")) return { 
+        icon: ClipboardCheck, 
+        gradient: "bg-gradient-to-r from-teal-500 to-emerald-600", 
+        shadow: "hover:shadow-teal-500/30" 
+    };
 
-    return { from: "from-gray-700", to: "to-gray-800", icon: Activity, shadow: "shadow-gray-500/20" };
+    // Default
+    return { 
+        icon: Activity, 
+        gradient: "bg-gradient-to-r from-gray-600 to-slate-700", 
+        shadow: "hover:shadow-gray-500/30" 
+    };
 };
 
 interface ExpandableProcessButtonProps {
@@ -82,7 +165,7 @@ interface ExpandableProcessButtonProps {
 
 const ExpandableProcessButton: React.FC<ExpandableProcessButtonProps> = ({ process, subProcesses, onProcessClick, onSubProcessClick, searchQuery }) => {
     const [isExpanded, setIsExpanded] = useState(false);
-    const { from, to, icon: Icon, shadow } = getProcessConfig(process);
+    const { icon: Icon, gradient, shadow } = getProcessConfig(process);
 
     useEffect(() => {
         if (searchQuery) {
@@ -115,56 +198,54 @@ const ExpandableProcessButton: React.FC<ExpandableProcessButtonProps> = ({ proce
     }, [subProcesses, searchQuery]);
 
     return (
-        <div className={`relative overflow-hidden rounded-xl transition-all duration-300 w-full shadow-lg hover:scale-[1.02] hover:shadow-2xl ${shadow} group`}>
-            {/* Main Button Background */}
-            <div className={`absolute inset-0 bg-gradient-to-r ${from} ${to} opacity-90 group-hover:opacity-100 transition-opacity`}></div>
-            
-            {/* Watermark Icon */}
-            <Icon className="absolute -right-6 -bottom-6 w-32 h-32 text-white/10 rotate-12 group-hover:scale-110 transition-transform duration-500 ease-out pointer-events-none" />
+        <div className={`relative group rounded-xl transition-all duration-300 w-full hover:scale-[1.02] hover:shadow-xl shadow-lg ${shadow} overflow-hidden`}>
+            {/* Main Button Area */}
+            <div className={`${gradient} p-0`}>
+                {/* Watermark Icon */}
+                <Icon className="absolute -right-6 -bottom-6 w-32 h-32 text-white/10 rotate-12 group-hover:rotate-0 transition-transform duration-700 ease-out pointer-events-none" />
 
-            <div className="relative z-10">
-                <div className="flex items-stretch justify-between min-h-[80px]">
+                <div className="flex items-stretch justify-between min-h-[90px] relative z-10">
                     <button 
                         onClick={() => onProcessClick(process)}
-                        className="text-left flex-grow p-5 focus:outline-none flex items-center gap-4"
+                        className="text-left flex-grow p-5 focus:outline-none flex items-center gap-5"
                     >
-                        <div className="bg-white/20 backdrop-blur-sm p-2.5 rounded-lg shadow-inner">
-                            <Icon className="w-6 h-6 text-white" />
+                        <div className="p-3 rounded-xl bg-white/20 backdrop-blur-sm border border-white/10 shadow-inner group-hover:scale-110 transition-transform duration-300">
+                            <Icon className="w-7 h-7 text-white" />
                         </div>
-                        <p className="text-white font-bold text-lg leading-tight drop-shadow-md">{process}</p>
+                        <p className="text-white font-bold text-lg leading-tight drop-shadow-sm">{process}</p>
                     </button>
                     <button 
                         onClick={toggleExpansion}
-                        className="p-4 flex-shrink-0 hover:bg-black/10 transition-colors focus:outline-none border-l border-white/10 flex items-center"
+                        className="px-4 flex-shrink-0 hover:bg-black/10 transition-colors focus:outline-none border-l border-white/10 flex items-center"
                         aria-label={isExpanded ? 'Ocultar unidades de negocio' : 'Mostrar unidades de negocio'}
                         aria-expanded={isExpanded}
                     >
-                        <ChevronDown className={`w-5 h-5 text-white transition-transform duration-300 ${isExpanded ? 'rotate-180' : ''}`} />
+                        <ChevronDown className={`w-6 h-6 text-white transition-transform duration-300 ${isExpanded ? 'rotate-180' : ''}`} />
                     </button>
                 </div>
-                
-                <div className={`bg-gray-900/95 backdrop-blur-xl border-t border-white/10 transition-all duration-300 ease-in-out ${isExpanded ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'}`}>
-                    {filteredSubProcesses.length > 0 ? (
-                        <div className="py-3 px-4">
-                            <h4 className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-2 ml-2">Unidades de Negocio</h4>
-                            <ul className="space-y-1">
-                                {filteredSubProcesses.map(subProcessName => (
-                                    <li key={subProcessName}>
-                                        <button
-                                            onClick={() => onSubProcessClick(process, subProcessName)}
-                                            className="w-full text-left text-sm text-gray-300 p-3 rounded-lg hover:bg-white/10 hover:text-white transition-all flex items-center gap-3 group/sub"
-                                        >
-                                            <span className="text-gray-500 group-hover/sub:text-lime-400 transition-colors">↳</span> 
-                                            {subProcessName}
-                                        </button>
-                                    </li>
-                                ))}
-                            </ul>
-                        </div>
-                    ) : (
-                        searchQuery && <p className="text-xs text-gray-500 p-4 text-center">Ninguna unidad coincide.</p>
-                    )}
-                </div>
+            </div>
+            
+            {/* Sub-processes List */}
+            <div className={`bg-white border-t border-gray-100 transition-all duration-300 ease-in-out ${isExpanded ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'}`}>
+                {filteredSubProcesses.length > 0 ? (
+                    <div className="py-2 px-2 bg-gray-50">
+                        <ul className="space-y-1">
+                            {filteredSubProcesses.map(subProcessName => (
+                                <li key={subProcessName}>
+                                    <button
+                                        onClick={() => onSubProcessClick(process, subProcessName)}
+                                        className="w-full text-left text-sm text-gray-600 p-3 rounded-lg hover:bg-blue-50 hover:text-blue-700 transition-all flex items-center gap-3 group/sub font-medium"
+                                    >
+                                        <span className="text-gray-400 group-hover/sub:text-blue-500 transition-colors">↳</span> 
+                                        {subProcessName}
+                                    </button>
+                                </li>
+                            ))}
+                        </ul>
+                    </div>
+                ) : (
+                    searchQuery && <p className="text-xs text-gray-500 p-4 text-center">Ninguna unidad coincide.</p>
+                )}
             </div>
         </div>
     );
@@ -194,8 +275,8 @@ const ProcessCategory: React.FC<ProcessCategoryProps> = ({ id, title, processes,
         ref={ref}
         className={`mb-12 scroll-mt-28 scroll-fade-up ${isIntersecting ? 'is-visible' : ''}`}
       >
-        <h3 className={`font-heading text-2xl font-semibold mb-6 border-l-4 ${borderColor} pl-4 text-gray-200`}>{title}</h3>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+        <h3 className={`font-heading text-2xl font-bold mb-6 border-l-4 ${borderColor} pl-4 text-gray-100 tracking-wide`}>{title}</h3>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {processes.map((process) => {
             const processData = allData[process];
             const subProcesses = processData?.subProcesses;
@@ -213,26 +294,26 @@ const ProcessCategory: React.FC<ProcessCategoryProps> = ({ id, title, processes,
                 );
             }
             
-            const { from, to, icon: Icon, shadow } = getProcessConfig(process);
+            const { icon: Icon, gradient, shadow } = getProcessConfig(process);
 
             return (
                 <button 
                     key={process} 
                     onClick={() => onProcessClick(process)}
-                    className={`relative overflow-hidden rounded-xl w-full shadow-lg hover:scale-[1.02] hover:shadow-2xl ${shadow} group transition-all duration-300 min-h-[90px] text-left`}
+                    className={`relative group rounded-xl transition-all duration-300 w-full hover:scale-[1.02] hover:shadow-xl shadow-lg ${shadow} ${gradient} overflow-hidden min-h-[90px] text-left p-0`}
                 >
-                    {/* Background Gradient */}
-                    <div className={`absolute inset-0 bg-gradient-to-r ${from} ${to} opacity-90 group-hover:opacity-100 transition-opacity`}></div>
-                    
-                    {/* Watermark */}
-                    <Icon className="absolute -right-6 -bottom-6 w-32 h-32 text-white/10 rotate-12 group-hover:scale-110 transition-transform duration-500 ease-out" />
+                    {/* Watermark Icon */}
+                    <Icon className="absolute -right-6 -bottom-6 w-32 h-32 text-white/10 rotate-12 group-hover:rotate-0 transition-transform duration-700 ease-out pointer-events-none" />
 
-                    {/* Content */}
-                    <div className="relative z-10 p-5 flex items-center gap-4 h-full">
-                        <div className="bg-white/20 backdrop-blur-sm p-2.5 rounded-lg shadow-inner flex-shrink-0">
+                    {/* Main Content */}
+                    <div className="relative z-10 h-full p-5 flex items-center gap-5">
+                        {/* Icon Box */}
+                        <div className="p-3 rounded-xl bg-white/20 backdrop-blur-sm border border-white/10 shadow-inner flex-shrink-0 group-hover:scale-110 transition-transform duration-300">
                             <Icon className="w-7 h-7 text-white" />
                         </div>
-                        <p className="text-white font-bold text-lg leading-tight drop-shadow-md">{process}</p>
+                        
+                        {/* Text */}
+                        <p className="text-white font-bold text-lg leading-tight drop-shadow-sm">{process}</p>
                     </div>
                 </button>
             );
