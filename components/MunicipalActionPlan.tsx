@@ -1,3 +1,4 @@
+
 import React, { useState, useMemo } from 'react';
 import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
@@ -8,40 +9,12 @@ import {
 } from 'lucide-react';
 import { ArrowLeftIcon } from './icons/ArrowLeftIcon';
 
-/* ----------  TYPES  ---------- */
-interface ActivityData {
-  n: string; // nombre
-  p: number; // propuesto
-  e: number; // ejecutado
-  b: number; // budget (presupuesto)
-  f: number; // fisico
-  i: number; // inversion
-  efi: number; // eficiencia
-  m2?: number; // metros cuadrados (opcional)
-}
-
-interface ModuleTotal {
-  b: number;
-  ini: string;
-  fin: string;
-}
-
-interface RawData {
-  bicicletas: { act: ActivityData[]; tot: ModuleTotal };
-  panoptico: { act: ActivityData[]; tot: ModuleTotal };
-  parques: { proy: { n: string; act: ActivityData[] }[]; tot: ModuleTotal };
-}
-
-interface MunicipalActionPlanProps {
-    onGoBack: () => void;
-}
-
 /* ----------  HELPERS  ---------- */
 const COP = (v: number) => `$ ${v.toLocaleString('es-CO')}`;
 const M = (v: number) => `${(v / 1000000).toFixed(0)}M`;
 
 /* ----------  DATOS  ---------- */
-const raw: RawData = {
+const raw = {
   bicicletas: {
     act: [
       { n: 'Servicios mecánicos', p: 90, e: 85, b: 126000000, f: 94, i: 71, efi: 125 },
@@ -102,10 +75,10 @@ const raw: RawData = {
 
 /* ----------  COMPONENTES RE-UTILIZABLES  ---------- */
 const Card: React.FC<{ children: React.ReactNode; className?: string }> = ({ children, className = '' }) => (
-  <div className={`bg-white p-6 rounded-xl shadow-lg border border-slate-100 ${className}`}>{children}</div>
+  <div className={`bg-white p-6 rounded-xl shadow-lg border border-slate-100 relative ${className}`}>{children}</div>
 );
 
-const Indicadores: React.FC<{ a: ActivityData }> = ({ a }) => {
+const Indicadores: React.FC<{ a: any }> = ({ a }) => {
   const falta = a.p - a.e;
   const cumpl = a.p > 0 ? ((a.e / a.p) * 100).toFixed(0) : '0';
   const unit = a.m2 ? 'm²' : 'und';
@@ -178,7 +151,7 @@ const Info: React.FC<{ mod: any }> = ({ mod }) => (
 );
 
 /* ----------  VISTAS POR MÓDULO  ---------- */
-const Bicicletas: React.FC<{ data: { act: ActivityData[] } }> = ({ data }) => (
+const Bicicletas: React.FC<{ data: any }> = ({ data }) => (
   <div className="space-y-6 animate-fade-in">
     <div className="grid md:grid-cols-2 gap-6">
       <Card>
@@ -199,7 +172,7 @@ const Bicicletas: React.FC<{ data: { act: ActivityData[] } }> = ({ data }) => (
         <h3 className="flex items-center gap-2 font-bold mb-4 text-slate-700"><Activity className="w-5 h-5 text-purple-600" />Índices de Gestión</h3>
         <div className="h-[300px] w-full relative">
             <ResponsiveContainer width="100%" height="100%" minWidth={0} debounce={50}>
-            <RadialBarChart innerRadius="20%" outerRadius="100%" data={data.act.map((a, i) => ({ ...a, fill: ['#8b5cf6', '#ec4899', '#06b6d4', '#10b981', '#f59e0b', '#ef4444'][i % 6] }))} startAngle={180} endAngle={0}>
+            <RadialBarChart innerRadius="20%" outerRadius="100%" data={data.act.map((a: any, i: number) => ({ ...a, fill: ['#8b5cf6', '#ec4899', '#06b6d4', '#10b981', '#f59e0b', '#ef4444'][i % 6] }))} startAngle={180} endAngle={0}>
                 <RadialBar background dataKey="f" label={{ position: 'insideStart', fill: '#fff', fontSize: 10 }} />
                 <Legend iconSize={10} layout="vertical" verticalAlign="middle" wrapperStyle={{right: 0, fontSize: '10px'}} />
                 <Tooltip />
@@ -211,7 +184,7 @@ const Bicicletas: React.FC<{ data: { act: ActivityData[] } }> = ({ data }) => (
     <Card>
       <h3 className="font-bold mb-4 text-slate-700 border-b pb-2">Detalle de Actividades</h3>
       <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
-        {data.act.map((a, i) => (
+        {data.act.map((a: any, i: number) => (
           <div key={i} className="bg-white border border-blue-100 rounded-xl p-4 hover:shadow-md transition-all hover:border-blue-300 group">
             <h4 className="font-bold text-sm text-blue-900 mb-2 group-hover:text-blue-700">{a.n}</h4>
             <div className="text-xs text-gray-500 mb-2 font-mono bg-blue-50/50 inline-block px-2 py-1 rounded">Presupuesto: <span className="font-semibold text-slate-700">{COP(a.b)}</span></div>
@@ -223,7 +196,7 @@ const Bicicletas: React.FC<{ data: { act: ActivityData[] } }> = ({ data }) => (
   </div>
 );
 
-const Panoptico: React.FC<{ data: { act: ActivityData[] } }> = ({ data }) => (
+const Panoptico: React.FC<{ data: any }> = ({ data }) => (
   <div className="space-y-6 animate-fade-in">
     <div className="grid md:grid-cols-2 gap-6">
       <Card>
@@ -232,7 +205,7 @@ const Panoptico: React.FC<{ data: { act: ActivityData[] } }> = ({ data }) => (
             <ResponsiveContainer width="100%" height="100%" minWidth={0} debounce={50}>
             <PieChart>
                 <Pie data={data.act} dataKey="b" nameKey="n" cx="50%" cy="50%" outerRadius={100} label={({ n }) => n?.slice(0, 15) + '...'} paddingAngle={2}>
-                {data.act.map((_, i) => <Cell key={i} fill={['#8b5cf6', '#ec4899', '#06b6d4', '#10b981', '#f59e0b', '#ef4444'][i % 6]} />)}
+                {data.act.map((_: any, i: number) => <Cell key={i} fill={['#8b5cf6', '#ec4899', '#06b6d4', '#10b981', '#f59e0b', '#ef4444'][i % 6]} />)}
                 </Pie>
                 <Tooltip formatter={COP} contentStyle={{borderRadius: '8px', border: 'none'}} />
             </PieChart>
@@ -249,7 +222,7 @@ const Panoptico: React.FC<{ data: { act: ActivityData[] } }> = ({ data }) => (
                 <YAxis dataKey="n" type="category" width={120} fontSize={10} tick={{fill: '#64748b'}} />
                 <Tooltip formatter={(v: number) => `${v}%`} cursor={{fill: 'transparent'}} />
                 <Bar dataKey="efi" fill="#ec4899" radius={[0, 4, 4, 0]} name="Eficiencia">
-                     {data.act.map((entry, index) => (
+                     {data.act.map((entry: any, index: number) => (
                         <Cell key={`cell-${index}`} fill={entry.efi > 100 ? '#10b981' : '#ec4899'} />
                     ))}
                 </Bar>
@@ -261,7 +234,7 @@ const Panoptico: React.FC<{ data: { act: ActivityData[] } }> = ({ data }) => (
     <Card>
       <h3 className="font-bold mb-4 text-slate-700 border-b pb-2">Servicios del Complejo Cultural</h3>
       <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
-        {data.act.map((a, i) => (
+        {data.act.map((a: any, i: number) => (
           <div key={i} className="bg-white border border-purple-100 rounded-xl p-4 hover:shadow-md transition-all hover:border-purple-300 group">
             <h4 className="font-bold text-sm text-purple-900 mb-2 group-hover:text-purple-700">{a.n}</h4>
             <div className="text-xs text-gray-500 mb-2 font-mono bg-purple-50/50 inline-block px-2 py-1 rounded">Presupuesto: <span className="font-semibold text-slate-700">{COP(a.b)}</span></div>
@@ -273,16 +246,16 @@ const Panoptico: React.FC<{ data: { act: ActivityData[] } }> = ({ data }) => (
   </div>
 );
 
-const Parques: React.FC<{ data: { proy: { n: string; act: ActivityData[] }[] } }> = ({ data }) => (
+const Parques: React.FC<{ data: any }> = ({ data }) => (
   <div className="space-y-6 animate-fade-in">
-    {data.proy.map((p, i) => (
+    {data.proy.map((p: any, i: number) => (
       <Card key={i}>
         <h3 className="flex items-center gap-2 font-bold mb-4 text-green-800 border-b border-green-100 pb-2">
             <Trees className="w-6 h-6 text-green-600" />
             {p.n}
         </h3>
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
-          {p.act.map((a, j) => (
+          {p.act.map((a: any, j: number) => (
             <div key={j} className="bg-white border border-green-100 rounded-xl p-4 hover:shadow-md transition-all hover:border-green-300">
               <h4 className="font-bold text-sm text-green-900 mb-2">{a.n}</h4>
               {a.m2 && <div className="text-xs text-gray-500 mb-1">Área: <span className="font-bold text-slate-700">{a.m2} m²</span></div>}
@@ -297,7 +270,7 @@ const Parques: React.FC<{ data: { proy: { n: string; act: ActivityData[] }[] } }
       <h3 className="font-bold mb-4 text-slate-700">Comparativo de Proyectos</h3>
       <div className="h-[300px] w-full relative">
         <ResponsiveContainer width="100%" height="100%" minWidth={0} debounce={50}>
-            <BarChart data={data.proy.map(p => ({ n: p.n, b: p.act.reduce((s, x) => s + x.b, 0) }))}>
+            <BarChart data={data.proy.map((p: any) => ({ n: p.n, b: p.act.reduce((s: any, x: any) => s + x.b, 0) }))}>
             <CartesianGrid strokeDasharray="3 3" vertical={false} />
             <XAxis dataKey="n" angle={-15} textAnchor="end" height={60} fontSize={11} tick={{fill: '#64748b'}} interval={0} />
             <YAxis tickFormatter={M} width={40} tick={{fill: '#64748b'}} fontSize={11} />
@@ -311,6 +284,10 @@ const Parques: React.FC<{ data: { proy: { n: string; act: ActivityData[] }[] } }
 );
 
 /* ----------  MAIN  ---------- */
+interface MunicipalActionPlanProps {
+    onGoBack: () => void;
+}
+
 export default function PlanAccionMunicipal({ onGoBack }: MunicipalActionPlanProps) {
   const [mod, setMod] = useState('bicicletas');
 
