@@ -1,4 +1,3 @@
-
 import React, { useState, useCallback } from 'react';
 import HomePage from './components/HomePage';
 import Dashboard from './components/Dashboard';
@@ -14,7 +13,7 @@ import PiipReport from './piip-report';
 import LmsDashboard from './components/LmsDashboard';
 import CourseCard from './components/CourseCard';
 import InstitutionalActionPlan from './components/InstitutionalActionPlan';
-import PlanAccionMunicipal from './components/MunicipalActionPlan';
+import MunicipalActionPlan from './components/MunicipalActionPlan';
 
 const App: React.FC = () => {
     const [view, setView] = useState<'planning' | 'lms' | 'institutional-plan' | 'municipal-plan'>('planning');
@@ -97,18 +96,7 @@ const App: React.FC = () => {
         return (
             <>
                 <Spinner isLoading={isLoading} />
-                <Header 
-                    onGoHome={handleGoHome} 
-                    onShowPiipReport={handleShowPiipReport} 
-                    onShowLms={handleShowLms} 
-                    onShowInstitutionalPlan={handleShowInstitutionalPlan}
-                    onShowMunicipalPlan={handleShowMunicipalPlan}
-                />
-                <main className="pt-20">
-                    <PlanAccionMunicipal onGoBack={handleGoHome} />
-                </main>
-                <Footer onGoHome={handleGoHome} />
-                <ScrollToTopButton />
+                <MunicipalActionPlan onGoBack={handleGoHome} />
             </>
         )
     }

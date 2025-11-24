@@ -191,8 +191,8 @@ const InstitutionalActionPlanSubset: React.FC<InstitutionalActionPlanSubsetProps
             <div className="space-y-8">
                 <div>
                 <h3 className="text-lg font-semibold text-white mb-4">Comparativo: Programado vs Ejecutado</h3>
-                <div className="h-[400px] w-full">
-                    <ResponsiveContainer width="100%" height="100%">
+                <div className="h-[400px] w-full relative">
+                    <ResponsiveContainer width="100%" height="100%" minWidth={0} debounce={1}>
                         <BarChart data={dataCantidades} layout="vertical" margin={{ left: 50, right: 50 }}>
                         <CartesianGrid strokeDasharray="3 3" stroke="#374151" horizontal={false} />
                         <XAxis type="number" stroke="#9CA3AF" tick={{fill: '#9CA3AF'}} />
@@ -217,8 +217,8 @@ const InstitutionalActionPlanSubset: React.FC<InstitutionalActionPlanSubsetProps
             <div className="space-y-8">
                 <div>
                 <h3 className="text-lg font-semibold text-white mb-4">Inversión: Programada vs Ejecutada (Millones)</h3>
-                <div className="h-[400px] w-full">
-                    <ResponsiveContainer width="100%" height="100%">
+                <div className="h-[400px] w-full relative">
+                    <ResponsiveContainer width="100%" height="100%" minWidth={0} debounce={1}>
                         <BarChart data={dataInversion}>
                         <CartesianGrid strokeDasharray="3 3" stroke="#374151" />
                         <XAxis dataKey="nombre" stroke="#9CA3AF" tick={{fill: '#9CA3AF'}} />
@@ -243,8 +243,8 @@ const InstitutionalActionPlanSubset: React.FC<InstitutionalActionPlanSubsetProps
                 <div className="flex justify-center">
                 <div className="w-full max-w-lg">
                     <h3 className="text-lg font-semibold text-white mb-4 text-center">Distribución de Eficiencia</h3>
-                    <div className="h-[350px] w-full">
-                        <ResponsiveContainer width="100%" height="100%">
+                    <div className="h-[350px] w-full relative">
+                        <ResponsiveContainer width="100%" height="100%" minWidth={0} debounce={1}>
                         <PieChart>
                             <Pie
                             data={dataEficiencia}

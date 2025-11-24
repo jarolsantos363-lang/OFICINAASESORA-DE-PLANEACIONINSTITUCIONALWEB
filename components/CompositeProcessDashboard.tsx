@@ -4,6 +4,7 @@ import { ProcessData } from '../types';
 import ActivityTracking from './ActivityTracking';
 import DocumentationChecklist from './DocumentationChecklist';
 import PlanningDashboard from './PlanningDashboard';
+import ImprovementPlanDashboard from './ImprovementPlanDashboard';
 import { CardContainer, CardBody, CardItem } from './ThreeDCard';
 import { ChevronDown } from './icons/ChevronDown';
 
@@ -14,7 +15,7 @@ interface CompositeProcessDashboardProps {
 }
 
 const CompositeProcessDashboard: React.FC<CompositeProcessDashboardProps> = ({ processData, onSelectSubProcess, processName }) => {
-  type ActiveCompositeTab = 'planning' | 'documentation' | 'businessUnits';
+  type ActiveCompositeTab = 'planning' | 'documentation' | 'businessUnits' | 'improvement';
 
   if (!processData.subProcesses) return null;
 
@@ -22,12 +23,14 @@ const CompositeProcessDashboard: React.FC<CompositeProcessDashboardProps> = ({ p
   const hasPlanningData = (processData.planning && Object.values(processData.planning).some(arr => Array.isArray(arr) && arr.length > 0)) || (processData.tracking && processData.tracking.length > 0);
   const hasDocumentation = processData.documentation && processData.documentation.length > 0;
   const hasBusinessUnits = processData.subProcesses && Object.keys(processData.subProcesses).length > 0;
+  const hasImprovementPlan = !!processData.improvementPlan;
 
-  const showTabs = (hasPlanningData || hasDocumentation) && hasBusinessUnits;
+  const showTabs = (hasPlanningData || hasDocumentation || hasImprovementPlan) && hasBusinessUnits;
   
   const getDefaultTab = (): ActiveCompositeTab => {
       if (hasPlanningData) return 'planning';
       if (hasDocumentation) return 'documentation';
+      if (hasImprovementPlan) return 'improvement';
       return 'businessUnits';
   }
   const [activeTab, setActiveTab] = useState<ActiveCompositeTab>(getDefaultTab());
@@ -109,6 +112,14 @@ const CompositeProcessDashboard: React.FC<CompositeProcessDashboardProps> = ({ p
                 Alistamiento Auditoria 2026
             </button>
         )}
+        {hasImprovementPlan && (
+            <button
+            onClick={() => setActiveTab('improvement')}
+            className={`w-full sm:w-auto text-sm md:text-base flex-1 sm:flex-none px-4 sm:px-8 py-3 rounded-lg font-semibold transition-all duration-300 transform focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-black/50 focus:ring-blue-500 ${activeTab === 'improvement' ? 'bg-blue-600 text-white shadow-lg scale-105' : 'bg-slate-800 text-gray-300 hover:bg-slate-700'}`}
+            >
+            Plan de Mejoramiento
+            </button>
+        )}
         {hasBusinessUnits && (
           <button
             onClick={() => setActiveTab('businessUnits')}
@@ -130,6 +141,11 @@ const CompositeProcessDashboard: React.FC<CompositeProcessDashboardProps> = ({ p
           <DocumentationChecklist data={processData.documentation} />
         </div>
       )}
+      {activeTab === 'improvement' && processData.improvementPlan && (
+        <div className="animate-fade-in">
+         <ImprovementPlanDashboard data={processData.improvementPlan} />
+       </div>
+     )}
       {activeTab === 'businessUnits' && hasBusinessUnits && (
         <section className="my-8 animate-fade-in">
           <h2 className="text-3xl font-bold mb-4">Unidades de Negocio</h2>

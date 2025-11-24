@@ -139,10 +139,10 @@ const Header: React.FC<HeaderProps> = ({ onGoHome, onShowPiipReport, onShowLms, 
                 Reporte de la PIIP
               </a>
               <a href="#" onClick={handleInstitutionalPlanClick} className="px-3 py-2 rounded-md text-sm font-medium text-gray-300 hover:text-white hover:bg-gray-800 transition-colors">
-                Plan de Acción Inst. 2025
+                Plan Inst. 2025
               </a>
               <a href="#" onClick={handleMunicipalPlanClick} className="px-3 py-2 rounded-md text-sm font-medium text-gray-300 hover:text-white hover:bg-gray-800 transition-colors">
-                Plan de Acción Municipal
+                Plan Municipal
               </a>
               <a href="#" onClick={handleLmsClick} className="px-3 py-2 rounded-md text-sm font-medium text-lime-400 hover:text-black hover:bg-lime-400 transition-all font-bold">
                 Campus Virtual
