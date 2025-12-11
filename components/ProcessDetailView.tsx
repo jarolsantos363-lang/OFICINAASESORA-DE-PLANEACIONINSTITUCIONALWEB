@@ -84,7 +84,7 @@ const ProcessDetailView: React.FC<ProcessDetailViewProps> = ({ processData, proc
               {activeTab === 'planning' && (
                 <div className="animate-fade-in">
                   <ActivityTracking data={processData.tracking} processName={processName} />
-                  <PlanningDashboard data={processData.planning} />
+                  <PlanningDashboard data={processData.planning} processName={processName} />
                 </div>
               )}
               {activeTab === 'documentation' && (
@@ -104,7 +104,7 @@ const ProcessDetailView: React.FC<ProcessDetailViewProps> = ({ processData, proc
               )}
               {activeTab === 'improvement' && processData.improvementPlan && (
                  <div className="animate-fade-in">
-                  <ImprovementPlanDashboard data={processData.improvementPlan} />
+                  <ImprovementPlanDashboard data={processData.improvementPlan} processName={processName} />
                 </div>
               )}
         </div>

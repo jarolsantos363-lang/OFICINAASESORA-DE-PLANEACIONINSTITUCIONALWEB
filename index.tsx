@@ -8,13 +8,9 @@ if (!rootElement) {
   throw new Error("Could not find root element to mount to");
 }
 
-import { BrowserRouter } from 'react-router-dom';
-
 const root = ReactDOM.createRoot(rootElement);
 root.render(
   <React.StrictMode>
-    <BrowserRouter>
-      <App />
-    </BrowserRouter>
+    <App />
   </React.StrictMode>
 );

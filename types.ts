@@ -82,3 +82,26 @@ export interface ProcessData {
 export interface AllProcessData {
   [key: string]: ProcessData;
 }
+
+// --- Database Types ---
+
+export interface Seguimiento {
+  id: string;
+  proceso_id: string; // Slugified process name
+  tipo_seguimiento: 'plan_accion' | 'instrumentos' | 'alertas' | 'tracking';
+  datos: any; // JSONB
+  version: number;
+  created_at?: string;
+  updated_at?: string;
+}
+
+export interface HistorialCambio {
+  id: string;
+  seguimiento_id: string;
+  campo_modificado: string;
+  valor_anterior: any;
+  valor_nuevo: any;
+  usuario: string;
+  timestamp: string;
+  descripcion: string;
+}

@@ -1,15 +1,19 @@
 
 import React, { useState } from 'react';
 import { ArrowLeftIcon } from './icons/ArrowLeftIcon';
-import { BarChart, Bar, LineChart, Line, PieChart, Pie, Cell, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
-import { TrendingUp, DollarSign, Activity, CheckCircle } from 'lucide-react';
+import { 
+  BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, 
+  ReferenceLine, Cell 
+} from 'recharts';
+import { TrendingUp, DollarSign, Activity, CheckCircle, LayoutDashboard, Table as TableIcon } from 'lucide-react';
 
 interface InstitutionalActionPlanProps {
     onGoBack: () => void;
 }
 
 const InstitutionalActionPlan: React.FC<InstitutionalActionPlanProps> = ({ onGoBack }) => {
-  const [activeView, setActiveView] = useState('tabla');
+  // Changed default viewMode to 'table'
+  const [viewMode, setViewMode] = useState<'table' | 'dashboard'>('table');
 
   const formatCOP = (valor: number) => {
     return new Intl.NumberFormat('es-CO', {
@@ -23,366 +27,340 @@ const InstitutionalActionPlan: React.FC<InstitutionalActionPlanProps> = ({ onGoB
   const actividades = [
     {
       id: 1,
-      nombre: "Mejoramiento de parques para nuestros constructores del mañana",
+      nombre: "Mejoramiento de parques",
+      descripcionCompleta: "Mejoramiento de parques para nuestros constructores del mañana",
       unidad: "Mts2",
-      cantidad: [266, 125],
-      inversion: [355000000, 135085747],
-      indiceFisico: "47%",
-      indiceInversion: "38%",
-      eficencia: "47%"
+      cantidad: [266, 125], // [Programado, Ejecutado]
+      inversion: [355000000, 135085747], // [Programado, Ejecutado]
+      indiceFisico: 47,
+      indiceInversion: 38,
+      eficencia: 47
     },
     {
       id: 2,
-      nombre: "Realizar mantenimiento y/o adecuacion de parques",
+      nombre: "Mantenimiento de parques",
+      descripcionCompleta: "Realizar mantenimiento y/o adecuacion de parques",
       unidad: "Unidad",
       cantidad: [129, 32],
       inversion: [355000000, 85763667],
-      indiceFisico: "25%",
-      indiceInversion: "24%",
-      eficencia: "25%"
+      indiceFisico: 25,
+      indiceInversion: 24,
+      eficencia: 25
     },
     {
       id: 3,
-      nombre: "Realizar adecuaciones de zonas verdes",
+      nombre: "Adecuación zonas verdes",
+      descripcionCompleta: "Realizar adecuaciones de zonas verdes",
       unidad: "Mts2",
       cantidad: [433, 370],
       inversion: [245000000, 14270000],
-      indiceFisico: "85%",
-      indiceInversion: "6%",
-      eficencia: "85%"
+      indiceFisico: 85,
+      indiceInversion: 6,
+      eficencia: 85
     },
     {
       id: 4,
-      nombre: "Realizar mantenimiento de zonas verdes",
+      nombre: "Mantenimiento zonas verdes",
+      descripcionCompleta: "Realizar mantenimiento de zonas verdes",
       unidad: "Mts2",
       cantidad: [433, 370],
       inversion: [245000000, 8135461],
-      indiceFisico: "85%",
-      indiceInversion: "3%",
-      eficencia: "85%"
+      indiceFisico: 85,
+      indiceInversion: 3,
+      eficencia: 85
     },
     {
       id: 5,
-      nombre: "Funcionamiento y/o Dotacion del complejo cultural Panoptico de",
+      nombre: "Complejo Cultural Panóptico",
+      descripcionCompleta: "Funcionamiento y/o Dotacion del complejo cultural Panoptico",
       unidad: "Porcentaje",
-      cantidad: ["100%", "83%"],
+      cantidad: [100, 83], 
       inversion: [1300000000, 793327109],
-      indiceFisico: "83%",
-      indiceInversion: "61%",
-      eficencia: "83%"
+      indiceFisico: 83,
+      indiceInversion: 61,
+      eficencia: 83
     },
     {
       id: 6,
-      nombre: "Operación sistema piloto de bicicletas compartidas",
+      nombre: "Sistema de Bicicletas",
+      descripcionCompleta: "Operación sistema piloto de bicicletas compartidas",
       unidad: "Porcentaje",
-      cantidad: ["100%", "83%"],
+      cantidad: [100, 83], 
       inversion: [656000000, 463538400],
-      indiceFisico: "83%",
-      indiceInversion: "71%",
-      eficencia: "83%"
+      indiceFisico: 83,
+      indiceInversion: 71,
+      eficencia: 83
     }
   ];
 
-  const dataCantidades = actividades.map(act => ({
-    nombre: `Act. ${act.id}`,
-    fullName: act.nombre,
-    programado: typeof act.cantidad[0] === 'number' ? act.cantidad[0] : 100,
-    ejecutado: typeof act.cantidad[1] === 'number' ? act.cantidad[1] : parseInt(String(act.cantidad[1]).replace('%', '')),
-    porcentaje: parseInt(act.indiceFisico.replace('%', ''))
+  // Preparar datos para gráficos
+  const chartData = actividades.map(act => ({
+    name: act.nombre,
+    inversionProg: act.inversion[0],
+    inversionEjec: act.inversion[1],
+    avanceFisico: act.indiceFisico,
+    eficiencia: act.eficencia
   }));
 
-  const dataInversion = actividades.map(act => ({
-    nombre: `Act. ${act.id}`,
-    fullName: act.nombre,
-    programado: act.inversion[0] / 1000000,
-    ejecutado: act.inversion[1] / 1000000,
-    porcentaje: parseInt(act.indiceInversion.replace('%', ''))
-  }));
+  // Cálculos de Resumen
+  const totalInversionProg = actividades.reduce((acc, curr) => acc + curr.inversion[0], 0);
+  const totalInversionEjec = actividades.reduce((acc, curr) => acc + curr.inversion[1], 0);
+  const promedioAvance = Math.round(actividades.reduce((acc, curr) => acc + curr.indiceFisico, 0) / actividades.length);
+  const promedioInversion = Math.round((totalInversionEjec / totalInversionProg) * 100);
 
-  const dataEficiencia = actividades.map(act => ({
-    name: `Act. ${act.id}`,
-    value: parseInt(act.eficencia.replace('%', ''))
-  }));
-
-  const COLORS = ['#3b82f6', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6', '#ec4899'];
+  // Custom Tooltip para Inversión
+  const CustomTooltipInversion = ({ active, payload, label }: any) => {
+    if (active && payload && payload.length) {
+      return (
+        <div className="bg-gray-900 border border-gray-700 p-3 rounded-lg shadow-xl">
+          <p className="text-white font-bold mb-2">{label}</p>
+          <p className="text-blue-400 text-sm">
+            Programado: {formatCOP(payload[0].value)}
+          </p>
+          <p className="text-emerald-400 text-sm">
+            Ejecutado: {formatCOP(payload[1].value)}
+          </p>
+        </div>
+      );
+    }
+    return null;
+  };
 
   return (
     <div className="animate-slide-right pb-12">
-        <div className="mb-6">
+        {/* Header Section */}
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
             <button 
                 onClick={onGoBack} 
-                className="inline-flex items-center gap-2 px-4 py-2 text-sm font-semibold text-gray-300 bg-gray-800/50 hover:bg-gray-700/50 rounded-lg transition-colors border border-gray-700"
+                className="inline-flex items-center gap-2 px-4 py-2 text-sm font-semibold text-gray-300 bg-gray-800/50 hover:bg-gray-700/50 rounded-lg transition-colors border border-gray-700 w-fit"
             >
                 <ArrowLeftIcon className="w-4 h-4" />
-                Volver al Inicio
+                Volver
             </button>
+            <div className="flex bg-gray-800/50 p-1 rounded-lg border border-gray-700 w-fit self-end md:self-auto">
+                <button
+                    onClick={() => setViewMode('table')}
+                    className={`flex items-center gap-2 px-4 py-2 rounded-md text-sm font-medium transition-all ${
+                        viewMode === 'table' ? 'bg-blue-600 text-white shadow-lg' : 'text-gray-400 hover:text-white'
+                    }`}
+                >
+                    <TableIcon className="w-4 h-4" />
+                    Vista Detallada
+                </button>
+                <button
+                    onClick={() => setViewMode('dashboard')}
+                    className={`flex items-center gap-2 px-4 py-2 rounded-md text-sm font-medium transition-all ${
+                        viewMode === 'dashboard' ? 'bg-blue-600 text-white shadow-lg' : 'text-gray-400 hover:text-white'
+                    }`}
+                >
+                    <LayoutDashboard className="w-4 h-4" />
+                    Vista Gráfica
+                </button>
+            </div>
         </div>
 
         <section className="animate-fade-in">
-            <h2 className="text-3xl md:text-4xl font-bold font-heading text-gradient mb-8">Plan de Acción Institucional 2025</h2>
+            <div className="text-center mb-10">
+                <h2 className="text-3xl md:text-5xl font-black text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-emerald-400 mb-3">
+                    Plan de Acción Institucional 2025
+                </h2>
+                <p className="text-gray-400">Seguimiento a la Gestión, Inversión y Eficiencia</p>
+            </div>
             
             {/* Cards Summary */}
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-            <div className="bg-gray-900/70 border border-gray-800 rounded-lg shadow p-6">
-                <div className="flex items-center justify-between">
-                <div>
-                    <p className="text-sm text-gray-400">Total Actividades</p>
-                    <p className="text-2xl font-bold text-white">{actividades.length}</p>
-                </div>
-                <Activity className="text-blue-500" size={32} />
-                </div>
-            </div>
-            <div className="bg-gray-900/70 border border-gray-800 rounded-lg shadow p-6">
-                <div className="flex items-center justify-between">
-                <div>
-                    <p className="text-sm text-gray-400">Inversión Total</p>
-                    <p className="text-xl font-bold text-white">$ 3.156 M</p>
-                </div>
-                <DollarSign className="text-green-500" size={32} />
-                </div>
-            </div>
-            <div className="bg-gray-900/70 border border-gray-800 rounded-lg shadow p-6">
-                <div className="flex items-center justify-between">
-                <div>
-                    <p className="text-sm text-gray-400">Avance Promedio</p>
-                    <p className="text-2xl font-bold text-white">68%</p>
-                </div>
-                <TrendingUp className="text-orange-500" size={32} />
-                </div>
-            </div>
-            <div className="bg-gray-900/70 border border-gray-800 rounded-lg shadow p-6">
-                <div className="flex items-center justify-between">
-                <div>
-                    <p className="text-sm text-gray-400">Eficiencia</p>
-                    <p className="text-2xl font-bold text-white">68%</p>
-                </div>
-                <CheckCircle className="text-purple-500" size={32} />
-                </div>
-            </div>
-            </div>
-
-            {/* Tabs */}
-            <div className="bg-gray-900/70 border border-gray-800 rounded-lg shadow mb-6 overflow-hidden">
-            <div className="border-b border-gray-700 bg-gray-800/50">
-                <div className="flex flex-wrap gap-4 px-6">
-                <button
-                    onClick={() => setActiveView('tabla')}
-                    className={`py-4 px-1 border-b-2 font-medium text-sm transition-colors ${
-                    activeView === 'tabla'
-                        ? 'border-green-500 text-green-400'
-                        : 'border-transparent text-gray-400 hover:text-gray-200'
-                    }`}
-                >
-                    Tabla de Actividades
-                </button>
-                <button
-                    onClick={() => setActiveView('cantidades')}
-                    className={`py-4 px-1 border-b-2 font-medium text-sm transition-colors ${
-                    activeView === 'cantidades'
-                        ? 'border-green-500 text-green-400'
-                        : 'border-transparent text-gray-400 hover:text-gray-200'
-                    }`}
-                >
-                    Avance en Cantidades
-                </button>
-                <button
-                    onClick={() => setActiveView('inversion')}
-                    className={`py-4 px-1 border-b-2 font-medium text-sm transition-colors ${
-                    activeView === 'inversion'
-                        ? 'border-green-500 text-green-400'
-                        : 'border-transparent text-gray-400 hover:text-gray-200'
-                    }`}
-                >
-                    Avance en Inversión
-                </button>
-                <button
-                    onClick={() => setActiveView('eficiencia')}
-                    className={`py-4 px-1 border-b-2 font-medium text-sm transition-colors ${
-                    activeView === 'eficiencia'
-                        ? 'border-green-500 text-green-400'
-                        : 'border-transparent text-gray-400 hover:text-gray-200'
-                    }`}
-                >
-                    Eficiencia
-                </button>
-                </div>
-            </div>
-
-            <div className="p-6 text-gray-200">
-                {/* Vista de Tabla */}
-                {activeView === 'tabla' && (
-                <div className="overflow-x-auto">
-                    <table className="min-w-full divide-y divide-gray-700">
-                    <thead className="bg-gray-800/50">
-                        <tr>
-                        <th className="px-4 py-3 text-left text-xs font-medium text-lime-400 uppercase">Actividades</th>
-                        <th className="px-4 py-3 text-left text-xs font-medium text-lime-400 uppercase">Unidad</th>
-                        <th className="px-4 py-3 text-left text-xs font-medium text-lime-400 uppercase">Cantidad</th>
-                        <th className="px-4 py-3 text-left text-xs font-medium text-lime-400 uppercase">Inversión</th>
-                        <th className="px-4 py-3 text-left text-xs font-medium text-lime-400 uppercase">Índice Físico</th>
-                        <th className="px-4 py-3 text-left text-xs font-medium text-lime-400 uppercase">Índice Inversión</th>
-                        <th className="px-4 py-3 text-left text-xs font-medium text-lime-400 uppercase">Eficiencia</th>
-                        </tr>
-                    </thead>
-                    <tbody className="divide-y divide-gray-700">
-                        {actividades.map((act) => (
-                        <React.Fragment key={act.id}>
-                            <tr className="hover:bg-gray-700/50 transition-colors">
-                            <td rowSpan={2} className="px-4 py-4 text-sm text-gray-300 border-r border-gray-700/50 max-w-xs">{act.id}. {act.nombre}</td>
-                            <td rowSpan={2} className="px-4 py-4 text-sm text-gray-400 border-r border-gray-700/50">{act.unidad}</td>
-                            <td className="px-4 py-2 text-sm text-gray-300">Prog: {act.cantidad[0]}</td>
-                            <td className="px-4 py-2 text-sm text-gray-300">{formatCOP(act.inversion[0])}</td>
-                            <td rowSpan={2} className="px-4 py-4 text-sm font-semibold text-blue-400 border-l border-gray-700/50 text-center">{act.indiceFisico}</td>
-                            <td rowSpan={2} className="px-4 py-4 text-sm font-semibold text-green-400 border-l border-gray-700/50 text-center">{act.indiceInversion}</td>
-                            <td rowSpan={2} className="px-4 py-4 text-sm font-semibold text-purple-400 border-l border-gray-700/50 text-center">{act.eficencia}</td>
-                            </tr>
-                            <tr className="hover:bg-gray-700/50 transition-colors border-b border-gray-700">
-                            <td className="px-4 py-2 text-sm text-gray-500">Ejec: {act.cantidad[1]}</td>
-                            <td className="px-4 py-2 text-sm text-gray-500">{formatCOP(act.inversion[1])}</td>
-                            </tr>
-                        </React.Fragment>
-                        ))}
-                    </tbody>
-                    </table>
-                </div>
-                )}
-
-                {/* Vista de Cantidades */}
-                {activeView === 'cantidades' && (
-                <div className="space-y-8">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-10">
+                <div className="bg-gradient-to-br from-gray-800 to-gray-900 border border-gray-700/50 rounded-xl p-5 shadow-lg flex items-center justify-between hover:border-blue-500/30 transition-colors">
                     <div>
-                    <h3 className="text-lg font-semibold text-white mb-4">Comparativo: Programado vs Ejecutado</h3>
-                    <div className="h-[400px] w-full relative">
-                        <ResponsiveContainer width="100%" height="100%" minWidth={0} debounce={1}>
-                            <BarChart data={dataCantidades} layout="vertical" margin={{ left: 50, right: 50 }}>
-                            <CartesianGrid strokeDasharray="3 3" stroke="#374151" horizontal={false} />
-                            <XAxis type="number" stroke="#9CA3AF" tick={{fill: '#9CA3AF'}} />
-                            <YAxis type="category" dataKey="nombre" stroke="#9CA3AF" tick={{fill: '#9CA3AF'}} width={80} />
-                            <Tooltip 
-                                contentStyle={{ backgroundColor: '#1F2937', borderColor: '#374151', color: '#F3F4F6' }}
-                                itemStyle={{ color: '#F3F4F6' }}
-                                cursor={{fill: 'rgba(255,255,255,0.05)'}}
-                            />
-                            <Legend wrapperStyle={{ color: '#9CA3AF' }} />
-                            <Bar dataKey="programado" fill="#3b82f6" name="Programado" barSize={20} />
-                            <Bar dataKey="ejecutado" fill="#10b981" name="Ejecutado" barSize={20} />
-                            </BarChart>
-                        </ResponsiveContainer>
+                        <p className="text-sm text-gray-400 font-medium">Actividades Totales</p>
+                        <p className="text-3xl font-bold text-white mt-1">{actividades.length}</p>
                     </div>
-                    </div>
-                    <div>
-                    <h3 className="text-lg font-semibold text-white mb-4">Porcentaje de Avance Físico</h3>
-                    <div className="h-[300px] w-full relative">
-                        <ResponsiveContainer width="100%" height="100%" minWidth={0} debounce={1}>
-                            <LineChart data={dataCantidades}>
-                            <CartesianGrid strokeDasharray="3 3" stroke="#374151" />
-                            <XAxis dataKey="nombre" stroke="#9CA3AF" tick={{fill: '#9CA3AF'}} />
-                            <YAxis stroke="#9CA3AF" tick={{fill: '#9CA3AF'}} />
-                            <Tooltip 
-                                contentStyle={{ backgroundColor: '#1F2937', borderColor: '#374151', color: '#F3F4F6' }}
-                                itemStyle={{ color: '#F3F4F6' }}
-                            />
-                            <Legend />
-                            <Line type="monotone" dataKey="porcentaje" stroke="#8b5cf6" strokeWidth={3} name="% Avance" dot={{ r: 6 }} activeDot={{ r: 8 }} />
-                            </LineChart>
-                        </ResponsiveContainer>
-                    </div>
+                    <div className="p-3 bg-blue-500/10 rounded-lg">
+                        <Activity className="text-blue-400 w-8 h-8" />
                     </div>
                 </div>
-                )}
-
-                {/* Vista de Inversión */}
-                {activeView === 'inversion' && (
-                <div className="space-y-8">
+                <div className="bg-gradient-to-br from-gray-800 to-gray-900 border border-gray-700/50 rounded-xl p-5 shadow-lg flex items-center justify-between hover:border-emerald-500/30 transition-colors">
                     <div>
-                    <h3 className="text-lg font-semibold text-white mb-4">Inversión: Programada vs Ejecutada (Millones)</h3>
-                    <div className="h-[400px] w-full relative">
-                        <ResponsiveContainer width="100%" height="100%" minWidth={0} debounce={1}>
-                            <BarChart data={dataInversion}>
-                            <CartesianGrid strokeDasharray="3 3" stroke="#374151" />
-                            <XAxis dataKey="nombre" stroke="#9CA3AF" tick={{fill: '#9CA3AF'}} />
-                            <YAxis stroke="#9CA3AF" tick={{fill: '#9CA3AF'}} />
-                            <Tooltip 
-                                contentStyle={{ backgroundColor: '#1F2937', borderColor: '#374151', color: '#F3F4F6' }}
-                                itemStyle={{ color: '#F3F4F6' }}
-                            />
-                            <Legend />
-                            <Bar dataKey="programado" fill="#f59e0b" name="Programado (M)" />
-                            <Bar dataKey="ejecutado" fill="#10b981" name="Ejecutado (M)" />
-                            </BarChart>
-                        </ResponsiveContainer>
+                        <p className="text-sm text-gray-400 font-medium">Ejecución Presupuestal</p>
+                        <p className="text-3xl font-bold text-white mt-1">{formatCOP(totalInversionEjec)}</p>
+                        <p className="text-xs text-gray-500 mt-1">de {formatCOP(totalInversionProg)} Programados</p>
                     </div>
-                    </div>
-                    <div>
-                    <h3 className="text-lg font-semibold text-white mb-4">Índice de Inversión (%)</h3>
-                    <div className="h-[300px] w-full relative">
-                        <ResponsiveContainer width="100%" height="100%" minWidth={0} debounce={1}>
-                            <LineChart data={dataInversion}>
-                            <CartesianGrid strokeDasharray="3 3" stroke="#374151" />
-                            <XAxis dataKey="nombre" stroke="#9CA3AF" tick={{fill: '#9CA3AF'}} />
-                            <YAxis stroke="#9CA3AF" tick={{fill: '#9CA3AF'}} />
-                            <Tooltip 
-                                contentStyle={{ backgroundColor: '#1F2937', borderColor: '#374151', color: '#F3F4F6' }}
-                                itemStyle={{ color: '#F3F4F6' }}
-                            />
-                            <Legend />
-                            <Line type="monotone" dataKey="porcentaje" stroke="#ef4444" strokeWidth={3} name="% Inversión" dot={{ r: 6 }} activeDot={{ r: 8 }} />
-                            </LineChart>
-                        </ResponsiveContainer>
-                    </div>
+                    <div className="p-3 bg-emerald-500/10 rounded-lg">
+                        <DollarSign className="text-emerald-400 w-8 h-8" />
                     </div>
                 </div>
-                )}
+                <div className="bg-gradient-to-br from-gray-800 to-gray-900 border border-gray-700/50 rounded-xl p-5 shadow-lg flex items-center justify-between hover:border-orange-500/30 transition-colors">
+                    <div>
+                        <p className="text-sm text-gray-400 font-medium">Avance Físico Prom.</p>
+                        <p className="text-3xl font-bold text-white mt-1">{promedioAvance}%</p>
+                    </div>
+                    <div className="p-3 bg-orange-500/10 rounded-lg">
+                        <TrendingUp className="text-orange-400 w-8 h-8" />
+                    </div>
+                </div>
+                <div className="bg-gradient-to-br from-gray-800 to-gray-900 border border-gray-700/50 rounded-xl p-5 shadow-lg flex items-center justify-between hover:border-purple-500/30 transition-colors">
+                    <div>
+                        <p className="text-sm text-gray-400 font-medium">Eficiencia Global</p>
+                        <p className="text-3xl font-bold text-white mt-1">{promedioInversion}%</p>
+                    </div>
+                    <div className="p-3 bg-purple-500/10 rounded-lg">
+                        <CheckCircle className="text-purple-400 w-8 h-8" />
+                    </div>
+                </div>
+            </div>
 
-                {/* Vista de Eficiencia */}
-                {activeView === 'eficiencia' && (
-                <div className="space-y-8">
-                    <div className="flex justify-center">
-                    <div className="w-full max-w-lg">
-                        <h3 className="text-lg font-semibold text-white mb-4 text-center">Distribución de Eficiencia por Actividad</h3>
-                        <div className="h-[400px] w-full relative">
-                            <ResponsiveContainer width="100%" height="100%" minWidth={0} debounce={1}>
-                            <PieChart>
-                                <Pie
-                                data={dataEficiencia}
-                                cx="50%"
-                                cy="50%"
-                                labelLine={true}
-                                label={({ name, value }) => `${name}: ${value}%`}
-                                outerRadius={120}
-                                fill="#8884d8"
-                                dataKey="value"
-                                stroke="none"
+            {/* DASHBOARD VIEW */}
+            {viewMode === 'dashboard' && (
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 animate-fade-in">
+                    
+                    {/* Gráfico 1: Inversión */}
+                    <div className="bg-gray-900/80 border border-gray-800 rounded-2xl p-6 shadow-xl">
+                        <div className="mb-6">
+                            <h3 className="text-xl font-bold text-white flex items-center gap-2">
+                                <DollarSign className="w-5 h-5 text-emerald-400" />
+                                Ejecución Financiera por Actividad
+                            </h3>
+                            <p className="text-sm text-gray-400">Comparativo Programado vs. Ejecutado</p>
+                        </div>
+                        <div className="h-[400px] w-full">
+                            <ResponsiveContainer width="100%" height="100%">
+                                <BarChart
+                                    data={chartData}
+                                    layout="vertical"
+                                    margin={{ top: 5, right: 30, left: 40, bottom: 5 }}
                                 >
-                                {dataEficiencia.map((entry, index) => (
-                                    <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-                                ))}
-                                </Pie>
-                                <Tooltip 
-                                    contentStyle={{ backgroundColor: '#1F2937', borderColor: '#374151', color: '#F3F4F6' }}
-                                    itemStyle={{ color: '#F3F4F6' }}
-                                />
-                            </PieChart>
+                                    <CartesianGrid strokeDasharray="3 3" stroke="#374151" horizontal={false} />
+                                    <XAxis type="number" hide />
+                                    <YAxis 
+                                        dataKey="name" 
+                                        type="category" 
+                                        width={150} 
+                                        tick={{fill: '#9CA3AF', fontSize: 11}} 
+                                        interval={0}
+                                    />
+                                    <Tooltip content={<CustomTooltipInversion />} cursor={{fill: 'rgba(255,255,255,0.05)'}} />
+                                    <Legend wrapperStyle={{ paddingTop: '20px' }} />
+                                    <Bar dataKey="inversionProg" name="Programado" fill="#3b82f6" barSize={12} radius={[0, 4, 4, 0]} />
+                                    <Bar dataKey="inversionEjec" name="Ejecutado" fill="#10b981" barSize={12} radius={[0, 4, 4, 0]} />
+                                </BarChart>
                             </ResponsiveContainer>
                         </div>
                     </div>
-                    </div>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    {actividades.map((act, index) => (
-                        <div key={act.id} className="bg-gray-800/50 rounded-lg p-4 border-l-4 border-gray-700" style={{ borderColor: COLORS[index] }}>
-                        <h4 className="font-semibold text-white text-sm mb-2">Actividad {act.id}</h4>
-                        <p className="text-xs text-gray-400 mb-2">{act.nombre}</p>
-                        <div className="flex justify-between items-center">
-                            <span className="text-sm text-gray-300">Eficiencia:</span>
-                            <span className="text-lg font-bold" style={{ color: COLORS[index] }}>{act.eficencia}</span>
+
+                    {/* Gráfico 2: Avance Físico */}
+                    <div className="bg-gray-900/80 border border-gray-800 rounded-2xl p-6 shadow-xl">
+                        <div className="mb-6">
+                            <h3 className="text-xl font-bold text-white flex items-center gap-2">
+                                <TrendingUp className="w-5 h-5 text-orange-400" />
+                                Avance Físico (%)
+                            </h3>
+                            <p className="text-sm text-gray-400">Porcentaje de cumplimiento de metas físicas</p>
                         </div>
+                        <div className="h-[400px] w-full">
+                            <ResponsiveContainer width="100%" height="100%">
+                                <BarChart
+                                    data={chartData}
+                                    layout="vertical"
+                                    margin={{ top: 5, right: 30, left: 40, bottom: 5 }}
+                                >
+                                    <CartesianGrid strokeDasharray="3 3" stroke="#374151" horizontal={true} vertical={true} />
+                                    <XAxis type="number" domain={[0, 100]} tick={{fill: '#9CA3AF'}} />
+                                    <YAxis 
+                                        dataKey="name" 
+                                        type="category" 
+                                        width={150} 
+                                        tick={{fill: '#9CA3AF', fontSize: 11}} 
+                                        interval={0}
+                                    />
+                                    <Tooltip 
+                                        cursor={{fill: 'rgba(255,255,255,0.05)'}}
+                                        contentStyle={{ backgroundColor: '#111827', borderColor: '#374151', color: '#fff' }}
+                                        itemStyle={{ color: '#fbbf24' }}
+                                        formatter={(value: number) => `${value}%`}
+                                    />
+                                    <ReferenceLine x={100} stroke="#4B5563" strokeDasharray="3 3" />
+                                    <Bar dataKey="avanceFisico" name="Avance Físico" barSize={20} radius={[0, 4, 4, 0]}>
+                                        {chartData.map((entry, index) => (
+                                            <Cell key={`cell-${index}`} fill={entry.avanceFisico >= 80 ? '#10b981' : entry.avanceFisico >= 50 ? '#f59e0b' : '#ef4444'} />
+                                        ))}
+                                    </Bar>
+                                </BarChart>
+                            </ResponsiveContainer>
                         </div>
-                    ))}
                     </div>
                 </div>
-                )}
-            </div>
-            </div>
+            )}
+
+            {/* TABLE VIEW */}
+            {viewMode === 'table' && (
+                <div className="bg-gray-900/80 border border-gray-800 rounded-2xl shadow-xl overflow-hidden animate-fade-in">
+                    <div className="overflow-x-auto">
+                        <table className="min-w-full divide-y divide-gray-800">
+                            <thead className="bg-gray-800">
+                                <tr>
+                                    <th className="px-6 py-4 text-left text-xs font-bold text-gray-400 uppercase tracking-wider">Actividad</th>
+                                    <th className="px-6 py-4 text-center text-xs font-bold text-blue-400 uppercase tracking-wider">Metas Físicas (Und)</th>
+                                    <th className="px-6 py-4 text-center text-xs font-bold text-emerald-400 uppercase tracking-wider">Inversión ($)</th>
+                                    <th className="px-6 py-4 text-center text-xs font-bold text-orange-400 uppercase tracking-wider">Índices (%)</th>
+                                </tr>
+                            </thead>
+                            <tbody className="divide-y divide-gray-800/50">
+                                {actividades.map((act) => (
+                                    <tr key={act.id} className="hover:bg-gray-800/30 transition-colors">
+                                        <td className="px-6 py-4">
+                                            <div className="text-sm font-bold text-white mb-1">{act.id}. {act.nombre}</div>
+                                            <div className="text-xs text-gray-400 line-clamp-2">{act.descripcionCompleta}</div>
+                                            <span className="inline-block mt-2 px-2 py-0.5 rounded text-[10px] font-mono bg-gray-800 text-gray-400 border border-gray-700">
+                                                {act.unidad}
+                                            </span>
+                                        </td>
+                                        <td className="px-6 py-4">
+                                            <div className="flex flex-col gap-2 text-sm">
+                                                <div className="flex justify-between">
+                                                    <span className="text-gray-500">Prog:</span>
+                                                    <span className="text-gray-300 font-mono">{act.cantidad[0]}</span>
+                                                </div>
+                                                <div className="flex justify-between">
+                                                    <span className="text-gray-500">Ejec:</span>
+                                                    <span className="text-white font-bold font-mono">{act.cantidad[1]}</span>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td className="px-6 py-4">
+                                            <div className="flex flex-col gap-2 text-sm">
+                                                <div className="flex justify-between gap-4">
+                                                    <span className="text-gray-500">Prog:</span>
+                                                    <span className="text-gray-300 font-mono">{formatCOP(act.inversion[0])}</span>
+                                                </div>
+                                                <div className="flex justify-between gap-4">
+                                                    <span className="text-gray-500">Ejec:</span>
+                                                    <span className="text-emerald-400 font-bold font-mono">{formatCOP(act.inversion[1])}</span>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td className="px-6 py-4">
+                                            <div className="flex items-center justify-center gap-4">
+                                                <div className="text-center">
+                                                    <div className={`text-lg font-bold ${act.indiceFisico >= 80 ? 'text-emerald-400' : 'text-orange-400'}`}>
+                                                        {act.indiceFisico}%
+                                                    </div>
+                                                    <div className="text-[10px] text-gray-500 uppercase">Físico</div>
+                                                </div>
+                                                <div className="w-px h-8 bg-gray-700"></div>
+                                                <div className="text-center">
+                                                    <div className="text-lg font-bold text-blue-400">
+                                                        {act.indiceInversion}%
+                                                    </div>
+                                                    <div className="text-[10px] text-gray-500 uppercase">Financiero</div>
+                                                </div>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            )}
         </section>
     </div>
   );

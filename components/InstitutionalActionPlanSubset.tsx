@@ -46,7 +46,6 @@ const InstitutionalActionPlanSubset: React.FC<InstitutionalActionPlanSubsetProps
 
   // Calculate summaries
   const totalInversion = activities.reduce((acc, curr) => acc + curr.inversion[0], 0);
-  const totalInversionMillions = (totalInversion / 1000000).toLocaleString('es-CO', { maximumFractionDigits: 0 });
   
   const promedioAvance = Math.round(
     activities.reduce((acc, curr) => acc + parseInt(curr.indiceFisico.replace('%', '')), 0) / activities.length
@@ -75,7 +74,7 @@ const InstitutionalActionPlanSubset: React.FC<InstitutionalActionPlanSubsetProps
                 <div className="flex items-center justify-between">
                 <div>
                     <p className="text-sm text-gray-400">Inversión Programada</p>
-                    <p className="text-xl font-bold text-white">$ {totalInversionMillions} M</p>
+                    <p className="text-xl font-bold text-white">{formatCOP(totalInversion)}</p>
                 </div>
                 <DollarSign className="text-green-500" size={32} />
                 </div>

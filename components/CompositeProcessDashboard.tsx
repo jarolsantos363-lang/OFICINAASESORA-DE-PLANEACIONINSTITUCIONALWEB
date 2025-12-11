@@ -133,7 +133,7 @@ const CompositeProcessDashboard: React.FC<CompositeProcessDashboardProps> = ({ p
       {activeTab === 'planning' && hasPlanningData && (
         <div className="animate-fade-in">
           <ActivityTracking data={processData.tracking} processName={processName} />
-          <PlanningDashboard data={processData.planning} />
+          <PlanningDashboard data={processData.planning} processName={processName} />
         </div>
       )}
       {activeTab === 'documentation' && hasDocumentation && (
@@ -143,7 +143,7 @@ const CompositeProcessDashboard: React.FC<CompositeProcessDashboardProps> = ({ p
       )}
       {activeTab === 'improvement' && processData.improvementPlan && (
         <div className="animate-fade-in">
-         <ImprovementPlanDashboard data={processData.improvementPlan} />
+         <ImprovementPlanDashboard data={processData.improvementPlan} processName={processName} />
        </div>
      )}
       {activeTab === 'businessUnits' && hasBusinessUnits && (
