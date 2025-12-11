@@ -1,0 +1,127 @@
+
+import React, { useState, useMemo } from 'react';
+import MissionVision from './MissionVision';
+import ProcessSections from './ProcessSections';
+import { strategicProcesses, misionalProcesses, supportProcesses, evaluationProcesses } from '../constants';
+import { SearchIcon } from './icons/SearchIcon';
+import { XCircleIcon } from './icons/XCircleIcon';
+import { AllProcessData } from '../types';
+import { useIntersectionObserver } from '../hooks/useIntersectionObserver';
+
+interface HomePageProps {
+  onProcessClick: (processName: string) => void;
+  onGoHome: () => void;
+  allData: AllProcessData;
+  onSubProcessClick: (processName: string, subProcessName: string) => void;
+}
+
+const normalizeStringForSearch = (str: string) => 
+  str.toString().toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+
+const deepSearch = (obj: any, query: string): boolean => {
+    if (!query) return false;
+    const normalizedQuery = normalizeStringForSearch(query);
+
+    const search = (current: any): boolean => {
+        if (current === null || current === undefined) {
+            return false;
+        }
+        if (typeof current === 'string' || typeof current === 'number' || typeof current === 'boolean') {
+            return normalizeStringForSearch(String(current)).includes(normalizedQuery);
+        }
+        if (Array.isArray(current)) {
+            return current.some(item => search(item));
+        }
+        if (typeof current === 'object') {
+            return Object.entries(current).some(([key, value]) => {
+                if (normalizeStringForSearch(key).includes(normalizedQuery)) return true;
+                return search(value);
+            });
+        }
+        return false;
+    };
+    
+    return search(obj);
+};
+
+
+const HomePage: React.FC<HomePageProps> = ({ onProcessClick, allData, onSubProcessClick }) => {
+    const [searchQuery, setSearchQuery] = useState('');
+    const [mapRef, isMapIntersecting] = useIntersectionObserver({ freezeOnceVisible: true, threshold: 0.05 });
+
+    const filteredProcesses = useMemo(() => {
+        if (!searchQuery) {
+            return {
+                strategic: strategicProcesses,
+                misional: misionalProcesses,
+                support: supportProcesses,
+                evaluation: evaluationProcesses,
+            };
+        }
+
+        const allProcesses = [...strategicProcesses, ...misionalProcesses, ...supportProcesses, ...evaluationProcesses];
+        
+        const normalizedQuery = normalizeStringForSearch(searchQuery);
+
+        const matchingProcesses = allProcesses.filter(name => {
+            if (normalizeStringForSearch(name).includes(normalizedQuery)) return true;
+            const processData = allData[name] || allData['default'];
+            return deepSearch(processData, searchQuery);
+        });
+
+        return {
+            strategic: strategicProcesses.filter(p => matchingProcesses.includes(p)),
+            misional: misionalProcesses.filter(p => matchingProcesses.includes(p)),
+            support: supportProcesses.filter(p => matchingProcesses.includes(p)),
+            evaluation: evaluationProcesses.filter(p => matchingProcesses.includes(p)),
+        };
+
+    }, [searchQuery, allData]);
+
+
+    return (
+    <>
+        <MissionVision />
+
+        <div 
+          ref={mapRef}
+          className={`my-16 scroll-fade-up ${isMapIntersecting ? 'is-visible' : ''}`}
+        >
+        <h2 className="text-4xl font-bold text-center mb-6 text-white font-heading text-gradient">Mapa de Procesos</h2>
+        <div className="max-w-xl mx-auto mb-10 flex justify-center">
+            <div className="input__container">
+                <div className="shadow__input"></div>
+                <button className="input__button__shadow" aria-label="Buscar" type="button">
+                    <SearchIcon className="w-6 h-6 text-slate-800" />
+                </button>
+                <input
+                    type="search"
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    placeholder="Buscar proceso, documento, meta..."
+                    className="input__search"
+                />
+                {searchQuery && (
+                    <button onClick={() => setSearchQuery('')} className="input__button__shadow" aria-label="Limpiar búsqueda" type="button">
+                        <XCircleIcon className="w-6 h-6 text-slate-600 hover:text-slate-800 transition-colors" />
+                    </button>
+                )}
+            </div>
+        </div>
+
+        <ProcessSections 
+            onProcessClick={onProcessClick} 
+            strategicProcesses={filteredProcesses.strategic}
+            misionalProcesses={filteredProcesses.misional}
+            supportProcesses={filteredProcesses.support}
+            evaluationProcesses={filteredProcesses.evaluation}
+            onSubProcessClick={onSubProcessClick}
+            allData={allData}
+            searchQuery={searchQuery}
+        />
+        </div>
+    </>
+  );
+}
+
+export default HomePage;
